@@ -63,7 +63,7 @@ The paths given are relative to the file being parsed.
 Type: `String`
 Default value: `null`
 
-A string value that is determines the location of the JSON file used to parse the includes with.
+A string value that determines the location of the JSON file used to parse the includes with.
 
 #### options.verbose
 Type: `Boolean`
@@ -197,4 +197,4 @@ watch: {
 ```
 
 ## Release History
-_(Nothing yet)_
+* 2013-02-27      v0.0.1      Initial Release
