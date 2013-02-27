@@ -25,12 +25,14 @@ In your project's Gruntfile, add a section named `bake` to the data object passe
 ```js
 grunt.initConfig( {
 	bake: {
-		options: {
-			// Task-specific options go here.
-		},
-
 		your_target: {
-			// Target-specific file lists and/or options go here.
+			options: {
+				// Task-specific options go here.
+			},
+
+			files: {
+				// files to parse
+			}
 		},
 	},
 } )
@@ -40,7 +42,7 @@ grunt.initConfig( {
 
 #### options.content
 Type: `String`
-Default value: `""`
+Default value: `null`
 
 A string value that is determines the location of the JSON file used to parse the includes with.
 
@@ -54,7 +56,7 @@ A string value that determines weather the grunt-bake should give extra console 
 Type: `String`
 Default value: `""`
 
-A string that determines which subsection of the JSON passed as `content` should be used. If no section is passed (or and empty string) the entire JSON will be used for templating.
+A string that determines which subsection of the JSON passed as `content` should be used. If no section is passed the entire JSON will be used for templating.
 
 Given a content JSON like such:
 
@@ -70,7 +72,17 @@ Given a content JSON like such:
 }
 ```
 
-If `"en"` is passed as section only `{ "title": "Book" }` will be passed to the include. If no section is specified the entire JSON will be passed.
+If `"en"` is passed as section, only `{ "title": "Book" }` will be passed to the include. If no section is specified the entire JSON will be passed.
+
+
+#### options.process
+Type: `Function`
+Default value: `null`
+
+A Function which is used to process the template before putting it into the file. If no process given or `null` given the default process is used.
+The function gets passed to arguments:
+* template: `String`: representing the template to parse.
+* content: `Object`: the section of the content file.
 
 
 ### Usage Examples
@@ -82,6 +94,66 @@ This example shows a simple baking process with all default options.
 grunt.initConfig( {
 	bake: {
 		build: {
+			files: {
+				"app/index.html": "app/base.html"
+			}
+		}
+	}
+} )
+```
+
+#### Advanced bake
+This example shows how to use the bake process to parse the templates with a provided JSON and a section.
+
+```js
+grunt.initConfig( {
+	bake: {
+		build: {
+			options: {
+				content: "app/content.json",
+				section: "en"
+			}
+
+			files: {
+				"app/index.html": "app/base.html"
+			}
+		}
+	}
+} )
+```
+
+As an example for the `content.json`:
+
+```javascript
+{
+	"en": {
+		"title": "Hello World"
+	},
+
+	"de": {
+		"title": "Hallo Welt"
+	}
+}
+```
+
+#### Costum process
+This example shows the use of a costum process funtion.
+
+```js
+
+var processFunction( source, content ) {
+	return ...
+}
+
+grunt.initConfig( {
+	bake: {
+		build: {
+			options: {
+				content: "app/content.json",
+				section: "en",
+				process: processFunction
+			}
+
 			files: {
 				"app/index.html": "app/base.html"
 			}
