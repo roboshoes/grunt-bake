@@ -31,12 +31,31 @@ grunt.initConfig( {
 			},
 
 			files: {
-				// files to parse
+				// files go here, like so:
+
+				"dist/file.html": "app/file.html",
+				"dist/mobile.html": "app/mobile.html"
+
+				// etc ...
 			}
 		},
 	},
 } )
 ```
+
+The file to be parsed includes placeholders in this form:
+
+```html
+<html>
+	<head></head>
+	<body>
+		<!--(bake includes/file.html)-->
+		<!--(bake includes/mobile.html)-->
+	</body>
+</html>
+```
+
+The paths given are relative to the file being parsed.
 
 ### Options
 
@@ -80,9 +99,13 @@ Type: `Function`
 Default value: `null`
 
 A Function which is used to process the template before putting it into the file. If no process given or `null` given the default process is used.
+
 The function gets passed to arguments:
 * template: `String`: representing the template to parse.
 * content: `Object`: the section of the content file.
+
+The default process parses the include looking for `{{title}}` and replaces the content with the value passed in the JSON.
+If no match is found, it simply removes the placeholder.
 
 
 ### Usage Examples
