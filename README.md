@@ -162,5 +162,16 @@ grunt.initConfig( {
 } )
 ```
 
+### Continues Development
+
+For ease of development just add the the `bake` task to your watch list. The static page will be baked everytime you change the template.
+
+```javascript
+watch: {
+	files: [ "app/includes/**" ],
+	tasks: "bake:build"
+}
+```
+
 ## Release History
 _(Nothing yet)_
