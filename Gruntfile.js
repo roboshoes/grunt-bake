@@ -61,6 +61,17 @@ module.exports = function(grunt) {
 				files: {
 					"tmp/costum-process.html": "test/fixtures/language.html"
 				}
+			},
+
+			recursive_process: {
+				options: {
+					content: "test/fixtures/content.json",
+					section: "en",
+				},
+
+				files: {
+					"tmp/recursive.html": "test/fixtures/recursive.html"
+				}
 			}
 		},
 

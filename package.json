@@ -41,6 +41,8 @@
 		"gruntplugin",
 		"bake",
 		"static page",
-		"templates"
+		"templates",
+		"static",
+		"include"
 	]
 }

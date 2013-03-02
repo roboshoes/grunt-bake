@@ -65,12 +65,6 @@ Default value: `null`
 
 A string value that determines the location of the JSON file used to parse the includes with.
 
-#### options.verbose
-Type: `Boolean`
-Default value: `false`
-
-A string value that determines weather the grunt-bake should give extra console output. This can be used to track and debug which files have been created.
-
 #### options.section
 Type: `String`
 Default value: `""`
