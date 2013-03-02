@@ -42,9 +42,14 @@ module.exports = function( grunt ) {
 		// -- UTILS --
 		// ===========
 
-		// Regex to parse bake tags.
+		// Regex to parse bake tags. The regex returns file path as match.
 
-		var regex = /<!--\([ ]?bake[ ]+([\S]+)[ ]?\)-->/g;
+		var regex = /<!--\(\s?bake\s+([\S]+)\s?([\S ]*)\)-->/g;
+
+
+		// Regex to parse attributes.
+
+		var attributesRegex = /([\S]+)=["|']([\w ]+)["|']/g;
 
 
 		// Method to check wether file exists and warn if not.
@@ -69,6 +74,21 @@ module.exports = function( grunt ) {
 			return directory.join( "/" );
 		}
 
+
+		// Parses attribute string.
+
+
+		var parseInlineOptions = function( string ) {
+			var match;
+			var values = {};
+
+			while( match = attributesRegex.exec( string ) ) {
+				values[ match[ 0 ] ] = match[ 2 ];
+			}
+
+			return values;
+		}
+
 		// =====================
 		// -- RECURSIVE PARSE --
 		// =====================
@@ -77,7 +97,11 @@ module.exports = function( grunt ) {
 
 		var parse = function( fileContent, filePath, values ) {
 
-			return fileContent.replace( regex, function( match, includePath ) {
+			return fileContent.replace( regex, function( match, includePath, attributes ) {
+
+				var inlineOptions = parseInlineOptions( attributes );
+
+				grunt.util._.merge( values, inlineOptions );
 
 				var includePath = directory( filePath ) + "/" + includePath;
 				var includeContent = grunt.file.read( includePath );

@@ -72,6 +72,17 @@ module.exports = function(grunt) {
 				files: {
 					"tmp/recursive.html": "test/fixtures/recursive.html"
 				}
+			},
+
+			inline_content: {
+				options: {
+					content: "test/fixtures/content.json",
+					section: "en"
+				},
+
+				files: {
+					"tmp/inline.html": "test/fixtures/inline.html"
+				}
 			}
 		},
 
