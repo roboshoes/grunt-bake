@@ -77,7 +77,6 @@ module.exports = function( grunt ) {
 
 		// Parses attribute string.
 
-
 		var parseInlineOptions = function( string ) {
 			var match;
 			var values = {};

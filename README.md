@@ -1,6 +1,7 @@
 # grunt-bake
 
-> Bake external includes into the file to create static pages with no compilation time
+> Bake static pages for production while using modular files while in development.
+
 
 ## Getting Started
 This plugin requires Grunt `~0.4.0`
@@ -20,7 +21,14 @@ grunt.loadNpmTasks( "grunt-bake" );
 ## The "bake" task
 
 ### Overview
-In your project's Gruntfile, add a section named `bake` to the data object passed into `grunt.initConfig()`.
+This module helps creating static pages while still having the coding comfort of multiple small files. It also helps not to repeat yourself as includes can be used at multiple places.
+
+The module parses the files recursivly, meaning it allows for nested includes. While parsing the includes it also performs a simple find and replace on placeholders. The replacements are supplied in a JSON file but more an [here](#advanced-bake).
+
+When `grunt-bake` parses files it looks for anchors like this: `<!--(bake path/to/file.html)-->`.
+
+Setup the `bake` task like so:
+
 
 ```js
 grunt.initConfig( {
@@ -33,7 +41,7 @@ grunt.initConfig( {
 			files: {
 				// files go here, like so:
 
-				"dist/file.html": "app/file.html",
+				"dist/index.html": "app/index.html",
 				"dist/mobile.html": "app/mobile.html"
 
 				// etc ...
@@ -43,14 +51,14 @@ grunt.initConfig( {
 } )
 ```
 
-The file to be parsed includes placeholders in this form:
+With a `app/index.html` file like this one:
 
 ```html
 <html>
 	<head></head>
 	<body>
-		<!--(bake includes/file.html)-->
-		<!--(bake includes/mobile.html)-->
+		<!--(bake includes/container.html)-->
+		<!--(bake includes/footer.html)-->
 	</body>
 </html>
 ```
@@ -63,7 +71,7 @@ The paths given are relative to the file being parsed.
 Type: `String`
 Default value: `null`
 
-A string value that determines the location of the JSON file used to parse the includes with.
+A string value that determines the location of the JSON file that is used to fill the place holders.
 
 #### options.section
 Type: `String`
@@ -99,17 +107,14 @@ Default value: `null`
 
 A Function which is used to process the template before putting it into the file. If no process given or `null` given the default process is used.
 
-The function gets passed to arguments:
-* template: `String`: representing the template to parse.
-* content: `Object`: the section of the content file.
-
-The default process parses the include looking for `{{title}}` and replaces the content with the value passed in the JSON.
-If no match is found, it simply removes the placeholder.
+The function gets passed two arguments:
+* `String`: representing the template to parse.
+* `Object`: the content from the JSON file as object.
 
 
 ### Usage Examples
 
-#### Default Options
+#### Simple bake
 This example shows a simple baking process with all default options.
 
 ```js
@@ -123,8 +128,31 @@ grunt.initConfig( {
 	}
 } )
 ```
+_app/base.html_:
+```html
+<html>
+	<body>
+		<!--(bake includes/container.html)-->
+	</body>
+</html>
+```
 
-#### Advanced bake
+_app/includes/container.html_:
+```html
+<div id="container"></div>
+```
+
+This bake task will create _app/index.html_:
+```html
+<html>
+	<body>
+		<div id="container"></div>
+	</body>
+</html>
+```
+
+
+#### Bake with content
 This example shows how to use the bake process to parse the templates with a provided JSON and a section.
 
 ```js
@@ -144,9 +172,9 @@ grunt.initConfig( {
 } )
 ```
 
-As an example for the `content.json`:
+_app/content.json_:
 
-```javascript
+```json
 {
 	"en": {
 		"title": "Hello World"
@@ -158,13 +186,68 @@ As an example for the `content.json`:
 }
 ```
 
+_app/base.html_:
+```html
+<html>
+	<body>
+		<!--(bake includes/container.html)-->
+	</body>
+</html>
+```
+
+_app/includes/container.html_:
+```html
+<div id="container">{{title}}</div>
+```
+
+This bake task will create _app/index.html_:
+```html
+<html>
+	<body>
+		<div id="container">Hello World</div>
+	</body>
+</html>
+```
+
+#### Inline attributes
+
+In addition to the file the bake anchor tag also allows for inline attributs which will override the content from the JSON file.
+
+Same scenario as above.
+
+_app/base.html_:
+```html
+<html>
+	<body>
+		<!--(bake includes/container.html title="Salut Monde" name="Mathias")-->
+	</body>
+</html>
+```
+
+_app/includes/container.html_:
+```html
+<div id="container">{{title}}</div>
+<span>{{name}}</span>
+```
+
+This bake task will create _app/index.html_:
+```html
+<html>
+	<body>
+		<div id="container">Salut monde</div>
+		<span>Mathias</span>
+	</body>
+</html>
+```
+
+
 #### Costum process
 This example shows the use of a costum process funtion.
 
 ```js
 
 var processFunction( source, content ) {
-	return ...
+	return source + "<br>";
 }
 
 grunt.initConfig( {
@@ -184,7 +267,7 @@ grunt.initConfig( {
 } )
 ```
 
-### Continues Development
+### Continues development
 
 For ease of development just add the `bake` task to your watch list. The static page will be baked everytime you change the template.
 
@@ -196,4 +279,5 @@ watch: {
 ```
 
 ## Release History
+* 2013-03-01      v0.0.3      Adding support for recursive parsing and inline attributes
 * 2013-02-27      v0.0.1      Initial Release
