@@ -84,11 +84,21 @@ Given a content JSON like such:
 ```json
 {
 	"en": {
-		"title": "Book"
+		"title": "Book",
+
+		"info": {
+			"author": "Joe Do",
+			"job": "Writer"
+		}
 	},
 
 	"de": {
-		"title": "Buch"
+		"title": "Buch",
+
+		"info": {
+			"author": "Joe Do",
+			"job": "Schreiber"
+		}
 	}
 }
 ```
@@ -99,6 +109,10 @@ This could be used to parse a template like such:
 
 ```html
 <div>{{title}}</div>
+<div>
+	<span>{{info.author}}</span>
+	<span>{{info.job}}</span>
+</div>
 ```
 
 #### options.process

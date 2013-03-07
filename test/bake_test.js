@@ -42,5 +42,15 @@ exports.bake = {
 
 		test.equal( actual, expected, "recursive process" );
 		test.done();
+	},
+
+	inlineBake: function( test ) {
+		test.expect( 1 );
+
+		var actual = grunt.file.read( "tmp/inline.html" );
+		var expected = grunt.file.read( "test/expected/inline.html" );
+
+		test.equal( actual, expected, "inline attributes" );
+		test.done();
 	}
 };

@@ -1,9 +1,15 @@
 {
 	"en": {
-		"title": "Apple Pie"
+		"title": "Apple Pie",
+		"info": {
+			"author": "Mathias"
+		}
 	},
 
 	"de": {
-		"title": "Apfelstrudel"
+		"title": "Apfelstrudel",
+		"info": {
+			"author": "Mathias"
+		}
 	}
 }

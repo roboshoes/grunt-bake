@@ -9,8 +9,8 @@
 "use strict";
 
 var parseFunction = function( source, object ) {
-	return source.replace( /{{(\w*)}}/g, function( match, key ) {
-		return ( key in object ) ? object[ key ].toUpperCase() : "";
+	return source.replace( /{{([.-\w]*)}}/g, function( match, key ) {
+		return "";
 	} );
 }
 

@@ -20,9 +20,31 @@ module.exports = function( grunt ) {
 		// This process method is used when no process function is supplied.
 
 		var defaultProcess = function( template, content ) {
-			return template.replace( /{{(\w*)}}/g, function( match, key ) {
-				return ( key in content ) ? content[ key ] : "";
+			return template.replace( /{{([.-\w]*)}}/g, function( match, key ) {
+				return resolveName( key, content );
 			} );
+		}
+
+
+		// Helper method to resolve nested placeholder names like: "home.footer.text"
+
+		var resolveName = function( name, values ) {
+			var names = name.split( "." );
+			var current = values;
+			var next;
+
+			while ( names.length ) {
+				next = names.shift();
+
+				if ( ! current.hasOwnProperty( next ) ) {
+					grunt.log.warn( "can't find " + name );
+					return "";
+				}
+
+				current = current[ next ];
+			}
+
+			return current || "";
 		}
 
 
@@ -82,7 +104,7 @@ module.exports = function( grunt ) {
 			var values = {};
 
 			while( match = attributesRegex.exec( string ) ) {
-				values[ match[ 0 ] ] = match[ 2 ];
+				values[ match[ 1 ] ] = match[ 2 ];
 			}
 
 			return values;
@@ -96,6 +118,10 @@ module.exports = function( grunt ) {
 
 		var parse = function( fileContent, filePath, values ) {
 
+			if ( typeof options.process === "function" ) {
+				fileContent = options.process( fileContent, values );
+			}
+
 			return fileContent.replace( regex, function( match, includePath, attributes ) {
 
 				var inlineOptions = parseInlineOptions( attributes );
@@ -104,10 +130,6 @@ module.exports = function( grunt ) {
 
 				var includePath = directory( filePath ) + "/" + includePath;
 				var includeContent = grunt.file.read( includePath );
-
-				if ( typeof options.process === "function" ) {
-					includeContent = options.process( includeContent, values );
-				}
 
 				return parse( includeContent, includePath, values );
 			} );
@@ -147,5 +169,4 @@ module.exports = function( grunt ) {
 
 		} );
 	} );
-
 };
