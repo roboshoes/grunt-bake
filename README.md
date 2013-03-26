@@ -103,7 +103,7 @@ Given a content JSON like such:
 }
 ```
 
-If `"en"` is passed as section, only `{ "title": "Book" }` will be passed to the include. If no section is specified the entire JSON will be passed.
+If `"en"` is passed as section,  `{ "title": "Book", "info": { ... } }` will be passed to the include. If no section is specified the entire JSON will be passed.
 
 This could be used to parse a template like such:
 

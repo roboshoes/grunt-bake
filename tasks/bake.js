@@ -71,7 +71,7 @@ module.exports = function( grunt ) {
 
 		// Regex to parse attributes.
 
-		var attributesRegex = /([\S]+)=["|']([\w ]+)["|']/g;
+		var attributesRegex = /([\S]+)=["|']([\w -]+)["|']/g;
 
 
 		// Method to check wether file exists and warn if not.
