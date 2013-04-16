@@ -66,7 +66,7 @@ module.exports = function( grunt ) {
 
 		// Regex to parse bake tags. The regex returns file path as match.
 
-		var regex = /<!--\(\s?bake\s+([\S]+)\s?([\S ]*)\)-->/g;
+		var regex = /<!--\(\s?bake\s+([\w\/.-]+)\s?([\w\."=\- ]*)\)-->/g;
 
 
 		// Regex to parse attributes.
