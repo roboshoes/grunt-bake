@@ -226,6 +226,7 @@ This bake task will create _app/index.html_:
 #### Inline attributes
 
 In addition to the file the bake anchor tag also allows for inline attributs which will override the content from the JSON file.
+_Note: Please note that the parsing of inline attributes requires double quotes in the definition as shown in the example_
 
 Same scenario as above.
 
@@ -287,11 +288,14 @@ For ease of development just add the `bake` task to your watch list. The static 
 
 ```javascript
 watch: {
-	files: [ "app/includes/**" ],
-	tasks: "bake:build"
+	bake: {
+		files: [ "app/includes/**" ],
+		tasks: "bake:build"
+	}
 }
 ```
 
 ## Release History
+* 2013-04-23      v0.0.7      Support for a wider range of characters in inline arguments
 * 2013-03-01      v0.0.3      Adding support for recursive parsing and inline attributes
 * 2013-02-27      v0.0.1      Initial Release

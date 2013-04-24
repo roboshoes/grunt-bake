@@ -66,12 +66,12 @@ module.exports = function( grunt ) {
 
 		// Regex to parse bake tags. The regex returns file path as match.
 
-		var regex = /<!--\(\s?bake\s+([\w\/.-]+)\s?([\w\."=\- ]*)\)-->/g;
+		var regex = /<!--\(\s?bake\s+([\w\/.-]+)\s?([^>]*)\)-->/g;
 
 
 		// Regex to parse attributes.
 
-		var attributesRegex = /([\S]+)=["|']([\w -]+)["|']/g;
+		var attributesRegex = /([\S]+)="([^"]+)"/g;
 
 
 		// Method to check wether file exists and warn if not.
