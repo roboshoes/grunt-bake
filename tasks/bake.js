@@ -26,28 +26,6 @@ module.exports = function( grunt ) {
 		}
 
 
-		// Helper method to resolve nested placeholder names like: "home.footer.text"
-
-		var resolveName = function( name, values ) {
-			var names = name.split( "." );
-			var current = values;
-			var next;
-
-			while ( names.length ) {
-				next = names.shift();
-
-				if ( ! current.hasOwnProperty( next ) ) {
-					grunt.log.warn( "can't find " + name );
-					return "";
-				}
-
-				current = current[ next ];
-			}
-
-			return current || "";
-		}
-
-
 		// =============
 		// -- OPTIONS --
 		// =============
@@ -109,6 +87,29 @@ module.exports = function( grunt ) {
 
 			return values;
 		}
+
+
+		// Helper method to resolve nested placeholder names like: "home.footer.text"
+
+		var resolveName = function( name, values ) {
+			var names = name.split( "." );
+			var current = values;
+			var next;
+
+			while ( names.length ) {
+				next = names.shift();
+
+				if ( ! current.hasOwnProperty( next ) ) {
+					grunt.log.warn( "can't find " + name );
+					return "";
+				}
+
+				current = current[ next ];
+			}
+
+			return current || "";
+		}
+
 
 		// =====================
 		// -- RECURSIVE PARSE --
