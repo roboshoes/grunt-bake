@@ -23,7 +23,7 @@ grunt.loadNpmTasks( "grunt-bake" );
 ### Overview
 This module helps creating static pages while still having the coding comfort of multiple small files. It also helps not to repeat yourself as includes can be used at multiple places.
 
-The module parses the files recursivly, meaning it allows for nested includes. While parsing the includes it also performs a simple find and replace on placeholders. The replacements are supplied in a JSON file but more an [here](#advanced-bake).
+The module parses the files recursivly, meaning it allows for nested includes. While parsing the includes it also performs a simple find and replace on placeholders. The replacements are supplied in a JSON file but more an [here](#bake-with-content).
 
 When `grunt-bake` parses files it looks for anchors like this: `<!--(bake path/to/file.html)-->`.
 
@@ -124,6 +124,16 @@ A Function which is used to process the template before putting it into the file
 The function gets passed two arguments:
 * `String`: representing the template to parse.
 * `Object`: the content from the JSON file as object.
+
+
+#### options.basePath
+Type: `String`
+Default value: ""
+
+Determines the base directory for includes that are specified with an absolute path. All paths starting with an `/` are absolute while other paths starting with folder or file names are relative to the include being parsed.
+
+`<!--(bake includes/footer.html)-->` relative to the file
+`<!--(bake /includes/footer.html)-->` relative to the basePath (level of Gruntfile by default)
 
 
 ### Usage Examples
@@ -296,6 +306,7 @@ watch: {
 ```
 
 ## Release History
+* 2013-04-30      v0.0.8      Support for absolute paths and basePath
 * 2013-04-23      v0.0.7      Support for a wider range of characters in inline arguments
 * 2013-03-01      v0.0.3      Adding support for recursive parsing and inline attributes
 * 2013-02-27      v0.0.1      Initial Release

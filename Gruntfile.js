@@ -82,6 +82,16 @@ module.exports = function(grunt) {
 				files: {
 					"tmp/inline_bake.html": "test/fixtures/inline_bake.html"
 				}
+			},
+
+			absolute_path_bake: {
+				options: {
+					basePath: "test/fixtures/includes"
+				},
+
+				files: {
+					"tmp/absolute_path_bake.html": "test/fixtures/absolute_path_bake.html"
+				}
 			}
 		},
 

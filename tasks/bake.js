@@ -35,6 +35,7 @@ module.exports = function( grunt ) {
 		var options = this.options( {
 			content: null,
 			section: null,
+			basePath: "",
 			process: defaultProcess
 		} );
 
@@ -129,7 +130,16 @@ module.exports = function( grunt ) {
 
 				grunt.util._.merge( values, inlineOptions );
 
-				var includePath = directory( filePath ) + "/" + includePath;
+				if ( includePath.substr( 0, 1 ) === "/" ) {
+
+					includePath = options.basePath + includePath;
+
+				} else {
+
+					includePath = directory( filePath ) + "/" + includePath;
+
+				}
+
 				var includeContent = grunt.file.read( includePath );
 
 				return parse( includeContent, includePath, values );
@@ -140,6 +150,16 @@ module.exports = function( grunt ) {
 		// ==========
 		// -- BAKE --
 		// ==========
+
+		// normalize options
+
+		var basePath = options.basePath;
+
+		if ( basePath.substr( -1 , 1 ) === "/" ) {
+
+			options.basePath = basePath.substr( 0, basePath.length - 1 );
+
+		}
 
 		// Loop over files and create baked files.
 

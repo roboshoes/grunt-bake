@@ -52,5 +52,15 @@ exports.bake = {
 
 		test.equal( actual, expected, "inline bake" );
 		test.done();
+	},
+
+	absolutePathBake: function( test ) {
+		test.expect( 1 );
+
+		var actual = grunt.file.read( "tmp/absolute_path_bake.html" );
+		var expected = grunt.file.read( "test/expected/default_bake.html" );
+
+		test.equal( actual, expected, "absolute path bake" );
+		test.done();
 	}
 };
