@@ -35,23 +35,22 @@ module.exports = function(grunt) {
 		bake: {
 			default_bake: {
 				files: {
-					"tmp/index.html": "test/fixtures/index.html"
+					"tmp/default_bake.html": "test/fixtures/default_bake.html"
 				},
 			},
 
 			advanced_bake: {
 				options: {
 					content: "test/fixtures/content.json",
-					section: "en",
-					verbose: false
+					section: "en"
 				},
 
 				files: {
-					"tmp/advanced-bake.html": "test/fixtures/language.html"
+					"tmp/advanced_bake.html": "test/fixtures/advanced_bake.html"
 				}
 			},
 
-			costum_process: {
+			costum_process_bake: {
 				options: {
 					content: "test/fixtures/content.json",
 					section: "de",
@@ -59,29 +58,29 @@ module.exports = function(grunt) {
 				},
 
 				files: {
-					"tmp/costum-process.html": "test/fixtures/language.html"
+					"tmp/costum_process_bake.html": "test/fixtures/advanced_bake.html"
 				}
 			},
 
-			recursive_process: {
+			recursive_bake: {
 				options: {
 					content: "test/fixtures/content.json",
 					section: "en",
 				},
 
 				files: {
-					"tmp/recursive.html": "test/fixtures/recursive.html"
+					"tmp/recursive_bake.html": "test/fixtures/recursive_bake.html"
 				}
 			},
 
-			inline_content: {
+			inline_bake: {
 				options: {
 					content: "test/fixtures/content.json",
 					section: "en"
 				},
 
 				files: {
-					"tmp/inline.html": "test/fixtures/inline.html"
+					"tmp/inline_bake.html": "test/fixtures/inline_bake.html"
 				}
 			}
 		},
