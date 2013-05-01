@@ -92,6 +92,12 @@ module.exports = function(grunt) {
 				files: {
 					"tmp/absolute_path_bake.html": "test/fixtures/absolute_path_bake.html"
 				}
+			},
+
+			default_absolute_path_bake: {
+				files: {
+					"tmp/default_absolute_path_bake.html": "test/fixtures/default_absolute_path_bake.html"
+				}
 			}
 		},
 

@@ -132,7 +132,7 @@ module.exports = function( grunt ) {
 
 				if ( includePath.substr( 0, 1 ) === "/" ) {
 
-					includePath = options.basePath + includePath;
+					includePath = options.basePath + includePath.substr( 1 );
 
 				} else {
 
@@ -155,9 +155,9 @@ module.exports = function( grunt ) {
 
 		var basePath = options.basePath;
 
-		if ( basePath.substr( -1 , 1 ) === "/" ) {
+		if ( basePath.substr( -1 , 1 ) !== "/" && basePath.length > 0 ) {
 
-			options.basePath = basePath.substr( 0, basePath.length - 1 );
+			options.basePath = basePath + "/";
 
 		}
 

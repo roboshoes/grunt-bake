@@ -133,6 +133,7 @@ Default value: ""
 Determines the base directory for includes that are specified with an absolute path. All paths starting with an `/` are absolute while other paths starting with folder or file names are relative to the include being parsed.
 
 `<!--(bake includes/footer.html)-->` relative to the file
+
 `<!--(bake /includes/footer.html)-->` relative to the basePath (level of Gruntfile by default)
 
 
@@ -306,6 +307,7 @@ watch: {
 ```
 
 ## Release History
+* 2013-05-01      v0.0.9      Fixes default basePath
 * 2013-04-30      v0.0.8      Support for absolute paths and basePath
 * 2013-04-23      v0.0.7      Support for a wider range of characters in inline arguments
 * 2013-03-01      v0.0.3      Adding support for recursive parsing and inline attributes
