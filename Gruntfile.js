@@ -98,6 +98,17 @@ module.exports = function(grunt) {
 				files: {
 					"tmp/default_absolute_path_bake.html": "test/fixtures/default_absolute_path_bake.html"
 				}
+			},
+
+			if_bake: {
+				options: {
+					content: "test/fixtures/content.json",
+					section: "en"
+				},
+
+				files: {
+					"tmp/if_bake.html": "test/fixtures/if_bake.html"
+				}
 			}
 		},
 

@@ -3,7 +3,8 @@
 		"title": "Apple Pie",
 		"info": {
 			"author": "Mathias"
-		}
+		},
+		"bar": false
 	},
 
 	"de": {

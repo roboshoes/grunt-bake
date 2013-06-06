@@ -72,5 +72,15 @@ exports.bake = {
 
 		test.equal( actual, expected, "default absolute path bake" );
 		test.done();
+	},
+
+	ifBake: function( test ) {
+		test.expect( 1 );
+
+		var actual = grunt.file.read( "tmp/if_bake.html" );
+		var expected = grunt.file.read( "test/expected/if_bake.html" );
+
+		test.equal( actual, expected, "if bake" );
+		test.done();
 	}
 };

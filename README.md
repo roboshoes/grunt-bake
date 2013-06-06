@@ -267,6 +267,38 @@ This bake task will create _app/index.html_:
 ```
 
 
+#### IF Statement
+
+The __bake__ task also allows a simple `if` conditional. Inline attributes named `_if` are treated as such. If the value that `_if` holds can't be found in the content.json or if found equals to the value `false` the include will be ignored.
+
+_app/base.html_:
+```html
+<html>
+	<body>
+		<!--(bake includes/container.html _if="name")-->
+	</body>
+</html>
+```
+
+_app/content.json_:
+
+```json
+{
+	"foo": "bar"
+}
+```
+
+This bake task will create _app/index.html_:
+```html
+<html>
+	<body>
+
+	</body>
+</html>
+```
+
+
+
 #### Costum process
 This example shows the use of a costum process funtion.
 

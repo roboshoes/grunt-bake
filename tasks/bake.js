@@ -50,7 +50,7 @@ module.exports = function( grunt ) {
 
 		// Regex to parse attributes.
 
-		var attributesRegex = /([\S]+)="([^"]+)"/g;
+		var attributesRegex = /([\S_]+)="([^"]+)"/g;
 
 
 		// Method to check wether file exists and warn if not.
@@ -112,6 +112,27 @@ module.exports = function( grunt ) {
 		}
 
 
+		// Helper that simply checks weather a value exists and is not `false`
+
+		var hasValue = function( name, values ) {
+			var names = name.split( "." );
+			var current = values;
+			var next;
+
+			while ( names.length ) {
+				next = names.shift();
+
+				if ( ! current.hasOwnProperty( next ) ) {
+					return false;
+				}
+
+				current = current[ next ];
+			}
+
+			return current === false ? false : true;
+		}
+
+
 		// =====================
 		// -- RECURSIVE PARSE --
 		// =====================
@@ -127,6 +148,14 @@ module.exports = function( grunt ) {
 			return fileContent.replace( regex, function( match, includePath, attributes ) {
 
 				var inlineOptions = parseInlineOptions( attributes );
+
+				if ( "_if" in inlineOptions ) {
+					var value = inlineOptions[ "_if" ];
+
+					if ( ! hasValue( value, values ) ) return "";
+
+					delete inlineOptions[ "_if" ];
+				}
 
 				grunt.util._.merge( values, inlineOptions );
 
