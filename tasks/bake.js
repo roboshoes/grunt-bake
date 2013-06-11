@@ -45,7 +45,7 @@ module.exports = function( grunt ) {
 
 		// Regex to parse bake tags. The regex returns file path as match.
 
-		var regex = /<!--\(\s?bake\s+([\w\/.-]+)\s?([^>]*)\)-->/g;
+		var regex = /([ |\t]*)<!--\(\s?bake\s+([\w\/.-]+)\s?([^>]*)\)-->/g;
 
 
 		// Regex to parse attributes.
@@ -133,6 +133,21 @@ module.exports = function( grunt ) {
 		}
 
 
+		// Helper method to apply indent
+
+		var applyIndent = function( indent, content ) {
+			if ( ! indent || indent.length < 1 ) return content;
+
+			var lines = content.split( "\n" );
+
+			var prepedLines = lines.map( function( line ) {
+				return indent + line;
+			} );
+
+			return prepedLines.join( "\n" );
+		}
+
+
 		// =====================
 		// -- RECURSIVE PARSE --
 		// =====================
@@ -145,7 +160,7 @@ module.exports = function( grunt ) {
 				fileContent = options.process( fileContent, values );
 			}
 
-			return fileContent.replace( regex, function( match, includePath, attributes ) {
+			return fileContent.replace( regex, function( match, indent, includePath, attributes ) {
 
 				var inlineOptions = parseInlineOptions( attributes );
 
@@ -159,17 +174,14 @@ module.exports = function( grunt ) {
 
 				grunt.util._.merge( values, inlineOptions );
 
-				if ( includePath.substr( 0, 1 ) === "/" ) {
-
+				if ( includePath[ 0 ] === "/" ) {
 					includePath = options.basePath + includePath.substr( 1 );
-
 				} else {
-
 					includePath = directory( filePath ) + "/" + includePath;
-
 				}
 
 				var includeContent = grunt.file.read( includePath );
+				includeContent = applyIndent( indent, includeContent );
 
 				return parse( includeContent, includePath, values );
 			} );

@@ -109,6 +109,12 @@ module.exports = function(grunt) {
 				files: {
 					"tmp/if_bake.html": "test/fixtures/if_bake.html"
 				}
+			},
+
+			format_bake: {
+				files: {
+					"tmp/format_bake.html": "test/fixtures/format_bake.html"
+				}
 			}
 		},
 

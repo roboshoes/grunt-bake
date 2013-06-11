@@ -82,5 +82,15 @@ exports.bake = {
 
 		test.equal( actual, expected, "if bake" );
 		test.done();
+	},
+
+	formatBake: function( test ) {
+		test.expect( 1 );
+
+		var actual = grunt.file.read( "tmp/format_bake.html" );
+		var expected = grunt.file.read( "test/expected/format_bake.html" );
+
+		test.equal( actual, expected, "format bake" );
+		test.done();
 	}
 };
