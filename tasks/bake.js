@@ -19,8 +19,8 @@ module.exports = function( grunt ) {
 
 		// This process method is used when no process function is supplied.
 
-		var defaultProcess = function( template, content ) {
-			return template.replace( /{{([.-\w]*)}}/g, function( match, key ) {
+		function defaultProcess( template, content ) {
+			return template.replace( /\{\{([.\-\w]*)\}\}/g, function( match, key ) {
 				return resolveName( key, content );
 			} );
 		}
@@ -45,7 +45,7 @@ module.exports = function( grunt ) {
 
 		// Regex to parse bake tags. The regex returns file path as match.
 
-		var regex = /([ |\t]*)<!--\(\s?bake\s+([\w\/.-]+)\s?([^>]*)\)-->/g;
+		var regex = /([ |\t]*)<!\-\-\(\s?bake\s+([\w\/.\-]+)\s?([^>]*)\)\-\->/g;
 
 
 		// Regex to parse attributes.
@@ -55,7 +55,7 @@ module.exports = function( grunt ) {
 
 		// Method to check wether file exists and warn if not.
 
-		var checkFile = function( src ) {
+		function checkFile( src ) {
 			if ( ! grunt.file.exists( src ) ) {
 				grunt.log.error( "Source file \"" + src + "\" not fount." );
 				return false;
@@ -67,18 +67,18 @@ module.exports = function( grunt ) {
 
 		// Returns the directory path from a file path
 
-		var directory = function( path ) {
-			var directory = path.split( "/" );
+		function directory( path ) {
+			var segments = path.split( "/" );
 
-			directory.pop();
+			segments.pop();
 
-			return directory.join( "/" );
+			return segments.join( "/" );
 		}
 
 
 		// Parses attribute string.
 
-		var parseInlineOptions = function( string ) {
+		function parseInlineOptions( string ) {
 			var match;
 			var values = {};
 
@@ -92,7 +92,7 @@ module.exports = function( grunt ) {
 
 		// Helper method to resolve nested placeholder names like: "home.footer.text"
 
-		var resolveName = function( name, values ) {
+		function resolveName( name, values ) {
 			var names = name.split( "." );
 			var current = values;
 			var next;
@@ -114,7 +114,7 @@ module.exports = function( grunt ) {
 
 		// Helper that simply checks weather a value exists and is not `false`
 
-		var hasValue = function( name, values ) {
+		function hasValue( name, values ) {
 			var names = name.split( "." );
 			var current = values;
 			var next;
@@ -135,8 +135,10 @@ module.exports = function( grunt ) {
 
 		// Helper method to apply indent
 
-		var applyIndent = function( indent, content ) {
-			if ( ! indent || indent.length < 1 ) return content;
+		function applyIndent( indent, content ) {
+			if ( ! indent || indent.length < 1 ) {
+				return content;
+			}
 
 			var lines = content.split( "\n" );
 
@@ -154,7 +156,7 @@ module.exports = function( grunt ) {
 
 		// Recursivly search for includes and create one file.
 
-		var parse = function( fileContent, filePath, values ) {
+		function parse( fileContent, filePath, values ) {
 
 			if ( typeof options.process === "function" ) {
 				fileContent = options.process( fileContent, values );
@@ -167,7 +169,9 @@ module.exports = function( grunt ) {
 				if ( "_if" in inlineOptions ) {
 					var value = inlineOptions[ "_if" ];
 
-					if ( ! hasValue( value, values ) ) return "";
+					if ( ! hasValue( value, values ) ) {
+						return "";
+					}
 
 					delete inlineOptions[ "_if" ];
 				}
@@ -208,7 +212,6 @@ module.exports = function( grunt ) {
 
 			var src = file.src[ 0 ];
 			var dest = file.dest;
-			var directory;
 
 			checkFile( src );
 

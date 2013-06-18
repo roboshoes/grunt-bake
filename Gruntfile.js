@@ -1,15 +1,14 @@
 /*
  * grunt-bake
  *
- *
  * Copyright (c) 2013 Mathias Paumgarten
  * Licensed under the MIT license.
  */
 
 "use strict";
 
-var parseFunction = function( source, object ) {
-	return source.replace( /{{([.-\w]*)}}/g, function( match, key ) {
+function parseFunction( source ) {
+	return source.replace( /\{\{([.\-\w]*)\}\}/g, function() {
 		return "";
 	} );
 }
@@ -122,13 +121,32 @@ module.exports = function(grunt) {
 			tests: [ "test/*_test.js" ],
 		},
 
+		watch: {
+			jshint: {
+				files: [
+					"Gruntfile.js",
+					"tasks/*.js",
+					"<%= nodeunit.tests %>",
+				],
+				tasks: [ "jshint" ]
+			},
+			test: {
+				files: [
+					"tasks/*.js",
+					"<%= nodeunit.tests %>",
+				],
+				tasks: [ "jshint", "test" ]
+			}
+		}
+
 	} );
 
 	grunt.loadTasks( "tasks" );
 
-	grunt.loadNpmTasks("grunt-contrib-jshint");
-	grunt.loadNpmTasks("grunt-contrib-clean");
-	grunt.loadNpmTasks("grunt-contrib-nodeunit");
+	grunt.loadNpmTasks( "grunt-contrib-jshint" );
+	grunt.loadNpmTasks( "grunt-contrib-clean" );
+	grunt.loadNpmTasks( "grunt-contrib-nodeunit" );
+	grunt.loadNpmTasks( "grunt-contrib-watch" );
 
 	grunt.registerTask( "test", [ "clean", "bake", "nodeunit" ] );
 	grunt.registerTask( "default", [ "jshint", "test" ] );
