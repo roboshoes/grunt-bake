@@ -4,7 +4,13 @@
 		"info": {
 			"author": "Mathias"
 		},
-		"bar": false
+		"bar": false,
+		"items": [
+			"foo",
+			"bar",
+			"baz",
+			"superman"
+		]
 	},
 
 	"de": {

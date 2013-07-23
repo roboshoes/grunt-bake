@@ -53,6 +53,11 @@ module.exports = function( grunt ) {
 		var attributesRegex = /([\S_]+)="([^"]+)"/g;
 
 
+		// Regex to detect array syntax.
+
+		var arrayRegex = /\[([\w\.\,\-]*)\]/;
+
+
 		// Method to check wether file exists and warn if not.
 
 		function checkFile( src ) {
@@ -150,6 +155,21 @@ module.exports = function( grunt ) {
 		}
 
 
+		// Helper to either find values from JSON or inline values
+
+		function getArrayValues( string, values ) {
+
+			string = string.split( " " ).join( "" );
+
+			if ( arrayRegex.test( string ) ) {
+				return string.match( arrayRegex )[ 1 ].split( "," );
+			} else {
+				return resolveName( string, values );
+			}
+
+		}
+
+
 		// =====================
 		// -- RECURSIVE PARSE --
 		// =====================
@@ -165,6 +185,8 @@ module.exports = function( grunt ) {
 			return fileContent.replace( regex, function( match, indent, includePath, attributes ) {
 
 				var inlineOptions = parseInlineOptions( attributes );
+				var array = [];
+				var name = "";
 
 				if ( "_if" in inlineOptions ) {
 					var value = inlineOptions[ "_if" ];
@@ -174,6 +196,16 @@ module.exports = function( grunt ) {
 					}
 
 					delete inlineOptions[ "_if" ];
+
+				}
+
+				if ( "_foreach" in inlineOptions ) {
+					var pair = inlineOptions[ "_foreach" ].split( ":" );
+
+					name = pair[ 0 ];
+					array = getArrayValues( pair[ 1 ], values );
+
+					delete inlineOptions[ "_foreach" ];
 				}
 
 				grunt.util._.merge( values, inlineOptions );
@@ -187,7 +219,33 @@ module.exports = function( grunt ) {
 				var includeContent = grunt.file.read( includePath );
 				includeContent = applyIndent( indent, includeContent );
 
-				return parse( includeContent, includePath, values );
+				if ( array.length > 0 ) {
+
+					var fragment = "";
+					var newline = "";
+					var oldValue = values[ name ];
+
+					array.forEach( function( value, index ) {
+						values[ name ] = value;
+						newline = index > 0 ? "\n" : "";
+
+						fragment += newline + parse( includeContent, includePath, values );
+					} );
+
+					if ( oldValue ) {
+						values[ name ] = oldValue;
+					} else {
+						delete values[ name ];
+					}
+
+					return fragment;
+
+				} else {
+
+					return parse( includeContent, includePath, values );
+
+				}
+
 			} );
 		}
 

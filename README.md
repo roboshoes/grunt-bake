@@ -297,7 +297,59 @@ This bake task will create _app/index.html_:
 </html>
 ```
 
+#### Foreach Loop
 
+Another special inline attribute is the `_foreach` attribute. This keyword expects a specific syntax and can be used both inline as well as pulling
+content from the json. This allows to loop over a set of values and using that value in the partial.
+It accepts an inline syntax: `_foreach="name:[mike, drew, steve]"` as well as a reference to an array in the json: `_foreach="name:authors.names"`. The values from the array can then be used with the key `name`. This key can be chosen arbitrarily.
+
+_app/base.html_:
+```html
+<html>
+	<body>
+		<ul class="first">
+			<!--(bake includes/li.html _foreach="name:[mike, drew, steve]")-->
+		</ul>
+
+		<ul class="second">
+			<!--(bake includes/li.html _foreach="name:authors.names")-->
+		</ul>
+	</body>
+</html>
+```
+
+_app/includes/li.html_:
+```html
+<li>{{name}}</li>
+```
+
+_app/content.json_:
+```json
+{
+	"authors: {
+		"names": [ "jenna", "carla", "susy" ]
+	}
+}
+```
+
+This bake task will create _app/index.html_:
+```html
+<html>
+	<body>
+		<ul class="first">
+			<li>mike</li>
+			<li>drew</li>
+			<li>steve</li>
+		</ul>
+
+		<ul class="second">
+			<li>jenna</li>
+			<li>carla</li>
+			<li>susy</li>
+		</ul>
+	</body>
+</html>
+```
 
 #### Costum process
 This example shows the use of a costum process funtion.

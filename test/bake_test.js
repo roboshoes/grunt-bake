@@ -92,5 +92,15 @@ exports.bake = {
 
 		test.equal( actual, expected, "format bake" );
 		test.done();
+	},
+
+	foreachBake: function( test ) {
+		test.expect( 1 );
+
+		var actual = grunt.file.read( "tmp/foreach_bake.html" );
+		var expected = grunt.file.read( "test/expected/foreach_bake.html" );
+
+		test.equal( actual, expected, "foreach bake" );
+		test.done();
 	}
 };

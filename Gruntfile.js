@@ -114,6 +114,17 @@ module.exports = function(grunt) {
 				files: {
 					"tmp/format_bake.html": "test/fixtures/format_bake.html"
 				}
+			},
+
+			foreach_bake: {
+				options: {
+					content: "test/fixtures/content.json",
+					section: "en"
+				},
+
+				files: {
+					"tmp/foreach_bake.html": "test/fixtures/foreach_bake.html"
+				}
 			}
 		},
 
