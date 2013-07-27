@@ -326,7 +326,7 @@ _app/includes/li.html_:
 _app/content.json_:
 ```json
 {
-	"authors: {
+	"authors": {
 		"names": [ "jenna", "carla", "susy" ]
 	}
 }
