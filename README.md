@@ -1,6 +1,8 @@
-# grunt-bake
+# grunt-bake [![Build Status](https://travis-ci.org/MathiasPaumgarten/grunt-bake.png?branch=master)](https://travis-ci.org/MathiasPaumgarten/grunt-bake)
 
 > Bake static pages for production while using modular files while in development.
+
+
 
 
 ## Getting Started
