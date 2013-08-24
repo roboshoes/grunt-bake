@@ -102,5 +102,15 @@ exports.bake = {
 
 		test.equal( actual, expected, "foreach bake" );
 		test.done();
+	},
+
+	noProcessBake: function( test ) {
+		test.expect( 1 );
+
+		var actual = grunt.file.read( "tmp/no_process_bake.html" );
+		var expected = grunt.file.read( "test/expected/no_process_bake.html" );
+
+		test.equal( actual, expected, "no process bake" );
+		test.done();
 	}
 };

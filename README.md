@@ -117,9 +117,10 @@ This could be used to parse a template like such:
 
 #### options.process
 Type: `Function`
-Default value: `null`
+Default value: default process procedure
 
-A Function which is used to process the template before putting it into the file. If no process given or `null` given the default process is used.
+A Function which is used to process the template before putting it into the file. If `process` is defined as `null` or `false` the includes won't be processed at all.
+The default process uses two curly braces as marker, such as `{{json.value.name}}`.
 
 The function gets passed two arguments:
 * `String`: representing the template to parse.

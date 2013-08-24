@@ -125,6 +125,16 @@ module.exports = function(grunt) {
 				files: {
 					"tmp/foreach_bake.html": "test/fixtures/foreach_bake.html"
 				}
+			},
+
+			no_process_bake: {
+				options: {
+					process: false
+				},
+
+				files: {
+					"tmp/no_process_bake.html": "test/fixtures/no_process_bake.html"
+				}
 			}
 		},
 
