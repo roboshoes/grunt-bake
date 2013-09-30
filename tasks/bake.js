@@ -8,6 +8,8 @@
 
 "use strict";
 
+var mout = require( "mout" );
+
 module.exports = function( grunt ) {
 
 	grunt.registerMultiTask( "bake", "Bake templates into a file.", function() {
@@ -98,43 +100,15 @@ module.exports = function( grunt ) {
 		// Helper method to resolve nested placeholder names like: "home.footer.text"
 
 		function resolveName( name, values ) {
-			var names = name.split( "." );
-			var current = values;
-			var next;
-
-			while ( names.length ) {
-				next = names.shift();
-
-				if ( ! current.hasOwnProperty( next ) ) {
-					grunt.log.warn( "can't find " + name );
-					return "";
-				}
-
-				current = current[ next ];
-			}
-
-			return current || "";
+			return mout.object.get( values, name ) || "";
 		}
 
 
 		// Helper that simply checks weather a value exists and is not `false`
 
 		function hasValue( name, values ) {
-			var names = name.split( "." );
-			var current = values;
-			var next;
-
-			while ( names.length ) {
-				next = names.shift();
-
-				if ( ! current.hasOwnProperty( next ) ) {
-					return false;
-				}
-
-				current = current[ next ];
-			}
-
-			return current === false ? false : true;
+			var current = mout.object.get( values, name );
+			return current === false || current === undefined ? false : true;
 		}
 
 

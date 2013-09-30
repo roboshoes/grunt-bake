@@ -33,7 +33,8 @@
 		"grunt-contrib-clean": "~0.4.0",
 		"grunt-contrib-nodeunit": "~0.1.2",
 		"grunt-contrib-watch": "~0.4.3",
-		"grunt": "~0.4.0"
+		"grunt": "~0.4.0",
+		"mout": "~0.7.1"
 	},
 	"peerDependencies": {
 		"grunt": "~0.4.0"
