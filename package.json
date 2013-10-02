@@ -1,7 +1,7 @@
 {
 	"name": "grunt-bake",
 	"description": "Bake external includes into files to create static pages with no server-side compilation time",
-	"version": "0.2.1",
+	"version": "0.3.0",
 	"homepage": "https://github.com/MathiasPaumgarten/grunt-bake",
 	"author": {
 		"name": "Mathias Paumgarten",
@@ -28,13 +28,15 @@
 	"scripts": {
 		"test": "grunt test"
 	},
+	"dependencies": {
+		"mout": "~0.7.1"
+	},
 	"devDependencies": {
 		"grunt-contrib-jshint": "~0.1.1",
 		"grunt-contrib-clean": "~0.4.0",
 		"grunt-contrib-nodeunit": "~0.1.2",
 		"grunt-contrib-watch": "~0.4.3",
 		"grunt": "~0.4.0",
-		"mout": "~0.7.1"
 	},
 	"peerDependencies": {
 		"grunt": "~0.4.0"

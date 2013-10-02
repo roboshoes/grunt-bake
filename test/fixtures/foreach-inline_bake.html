@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	<head></head>
+	<body>
+		<ul>
+		<!--(bake-start _foreach="name:[robert, susan, magen]")-->
+			<li>{{name}}</li>
+		<!--(bake-end)-->
+
+		<!--(bake-start _foreach="name:[shurly, mattie, steven]")-->
+			<li>
+				<span>{{name}}</span>
+			</li>
+		<!--(bake-end)-->
+		</ul>
+
+		<!--(bake-start _if="test")-->
+		<div>Test area</div>
+		<!--(bake-end)-->
+
+		<!--(bake-start _if="title")-->
+		<div>Should be visible</div>
+		<!--(bake-end)-->
+	</body>
+</html>

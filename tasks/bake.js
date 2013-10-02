@@ -41,6 +41,10 @@ module.exports = function( grunt ) {
 			process: defaultProcess
 		} );
 
+		if ( options.basePath.substr( -1 , 1 ) !== "/" && options.basePath.length > 0 ) {
+			options.basePath = options.basePath + "/";
+		}
+
 		// ===========
 		// -- UTILS --
 		// ===========
@@ -48,7 +52,7 @@ module.exports = function( grunt ) {
 		// Regex to parse bake tags. The regex returns file path as match.
 
 		var regex = /([ |\t]*)<!\-\-\(\s?bake\s+([\w\/.\-]+)\s?([^>]*)\)\-\->/g;
-
+		var regexInline = /[ |\t]*<!\-\-\(\s?bake\-start\s+([^>]*)\)\-\->\n?([^!]*)[ |\t]*<!\-\-\(\s?bake\-end\s?\)\-\->/g;
 
 		// Regex to parse attributes.
 
@@ -120,7 +124,6 @@ module.exports = function( grunt ) {
 			}
 
 			var lines = content.split( "\n" );
-
 			var prepedLines = lines.map( function( line ) {
 				return indent + line;
 			} );
@@ -143,6 +146,130 @@ module.exports = function( grunt ) {
 
 		}
 
+		function replaceMatch( indent, includePath, attributes, filePath, values ) {
+
+			var inlineOptions = parseInlineOptions( attributes );
+			var array = [];
+			var name = "";
+
+			if ( "_if" in inlineOptions ) {
+				var value = inlineOptions[ "_if" ];
+
+				if ( ! hasValue( value, values ) ) {
+					return "";
+				}
+
+				delete inlineOptions[ "_if" ];
+
+			}
+
+			if ( "_foreach" in inlineOptions ) {
+				var pair = inlineOptions[ "_foreach" ].split( ":" );
+
+				name = pair[ 0 ];
+				array = getArrayValues( pair[ 1 ], values );
+
+				delete inlineOptions[ "_foreach" ];
+			}
+
+			grunt.util._.merge( values, inlineOptions );
+
+			if ( includePath[ 0 ] === "/" ) {
+				includePath = options.basePath + includePath.substr( 1 );
+			} else {
+				includePath = directory( filePath ) + "/" + includePath;
+			}
+
+			var includeContent = grunt.file.read( includePath );
+			includeContent = applyIndent( indent, includeContent );
+
+			if ( array.length > 0 ) {
+
+				var fragment = "";
+				var newline = "";
+				var oldValue = values[ name ];
+
+				array.forEach( function( value, index ) {
+					values[ name ] = value;
+					newline = index > 0 ? "\n" : "";
+
+					fragment += newline + parse( includeContent, includePath, values );
+				} );
+
+				if ( oldValue ) {
+					values[ name ] = oldValue;
+				} else {
+					delete values[ name ];
+				}
+
+				return fragment;
+
+			} else {
+
+				return parse( includeContent, includePath, values );
+
+			}
+
+		}
+
+		function replaceInlineMatch( attributes, content, filePath, values ) {
+			var inlineOptions = parseInlineOptions( attributes );
+			var name = "";
+			var array = [];
+
+			if ( "_if" in inlineOptions ) {
+				var value = inlineOptions[ "_if" ];
+
+				if ( ! hasValue( value, values ) ) {
+					return "";
+				}
+
+				delete inlineOptions[ "_if" ];
+
+			}
+
+			if ( "_foreach" in inlineOptions ) {
+				var pair = inlineOptions[ "_foreach" ].split( ":" );
+
+				name = pair[ 0 ];
+				array = getArrayValues( pair[ 1 ], values );
+
+				delete inlineOptions[ "_foreach" ];
+			}
+
+			grunt.util._.merge( values, inlineOptions );
+
+			var includeContent = mout.string.rtrim( content, [ " ", "\n", "\t", "\r" ] );
+
+			if ( array.length > 0 ) {
+
+				var fragment = "";
+				var newline = "";
+				var oldValue = values[ name ];
+
+				array.forEach( function( value, index ) {
+					values[ name ] = value;
+
+					newline = typeof options.process === "function" ? options.process( includeContent, values ) : includeContent;
+
+					fragment += ( index > 0 ? "\n" : "" ) + newline;
+				} );
+
+				if ( oldValue ) {
+					values[ name ] = oldValue;
+				} else {
+					delete values[ name ];
+				}
+
+				return fragment;
+
+			} else {
+
+				return parse( includeContent, filePath, values );
+
+			}
+		}
+
 
 		// =====================
 		// -- RECURSIVE PARSE --
@@ -152,75 +279,20 @@ module.exports = function( grunt ) {
 
 		function parse( fileContent, filePath, values ) {
 
+			fileContent = fileContent.replace( regexInline, function( match, attributes, content ) {
+				return replaceInlineMatch( attributes, content, filePath, values );
+			} );
+
 			if ( typeof options.process === "function" ) {
 				fileContent = options.process( fileContent, values );
 			}
 
-			return fileContent.replace( regex, function( match, indent, includePath, attributes ) {
-
-				var inlineOptions = parseInlineOptions( attributes );
-				var array = [];
-				var name = "";
-
-				if ( "_if" in inlineOptions ) {
-					var value = inlineOptions[ "_if" ];
-
-					if ( ! hasValue( value, values ) ) {
-						return "";
-					}
-
-					delete inlineOptions[ "_if" ];
-
-				}
-
-				if ( "_foreach" in inlineOptions ) {
-					var pair = inlineOptions[ "_foreach" ].split( ":" );
-
-					name = pair[ 0 ];
-					array = getArrayValues( pair[ 1 ], values );
-
-					delete inlineOptions[ "_foreach" ];
-				}
-
-				grunt.util._.merge( values, inlineOptions );
-
-				if ( includePath[ 0 ] === "/" ) {
-					includePath = options.basePath + includePath.substr( 1 );
-				} else {
-					includePath = directory( filePath ) + "/" + includePath;
-				}
-
-				var includeContent = grunt.file.read( includePath );
-				includeContent = applyIndent( indent, includeContent );
-
-				if ( array.length > 0 ) {
-
-					var fragment = "";
-					var newline = "";
-					var oldValue = values[ name ];
-
-					array.forEach( function( value, index ) {
-						values[ name ] = value;
-						newline = index > 0 ? "\n" : "";
-
-						fragment += newline + parse( includeContent, includePath, values );
-					} );
-
-					if ( oldValue ) {
-						values[ name ] = oldValue;
-					} else {
-						delete values[ name ];
-					}
-
-					return fragment;
-
-				} else {
-
-					return parse( includeContent, includePath, values );
-
-				}
-
+			fileContent = fileContent.replace( regex, function( match, indent, includePath, attributes ) {
+				return replaceMatch( indent, includePath, attributes, filePath, values );
 			} );
+
+
+			return fileContent;
 		}
 
 
@@ -228,15 +300,6 @@ module.exports = function( grunt ) {
 		// -- BAKE --
 		// ==========
 
-		// normalize options
-
-		var basePath = options.basePath;
-
-		if ( basePath.substr( -1 , 1 ) !== "/" && basePath.length > 0 ) {
-
-			options.basePath = basePath + "/";
-
-		}
 
 		// Loop over files and create baked files.
 

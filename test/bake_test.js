@@ -104,6 +104,16 @@ exports.bake = {
 		test.done();
 	},
 
+	foreachInlineBack: function( test ) {
+		test.expect( 1 );
+
+		var actual = grunt.file.read( "tmp/foreach-inline_bake.html" );
+		var expected = grunt.file.read( "test/expected/foreach-inline_bake.html" );
+
+		test.equal( actual, expected, "foreach-inline bake" );
+		test.done();
+	},
+
 	noProcessBake: function( test ) {
 		test.expect( 1 );
 

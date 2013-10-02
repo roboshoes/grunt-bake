@@ -127,6 +127,17 @@ module.exports = function(grunt) {
 				}
 			},
 
+			foreach_inline_bake: {
+				options: {
+					content: "test/fixtures/content.json",
+					section: "en"
+				},
+
+				files: {
+					"tmp/foreach-inline_bake.html": "test/fixtures/foreach-inline_bake.html"
+				}
+			},
+
 			no_process_bake: {
 				options: {
 					process: false

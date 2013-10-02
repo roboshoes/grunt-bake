@@ -300,6 +300,18 @@ This bake task will create _app/index.html_:
 </html>
 ```
 
+Additionally the the `_if` statement also works with inlining the bake content.
+
+```html
+<html>
+	<body>
+		<!--(bake-start _if="name")-->
+		<h1>{{name}}</h1>
+		<!--(bake-end)-->
+	</body>
+</html>
+```
+
 #### Foreach Loop
 
 Another special inline attribute is the `_foreach` attribute. This keyword expects a specific syntax and can be used both inline as well as pulling
@@ -349,6 +361,20 @@ This bake task will create _app/index.html_:
 			<li>jenna</li>
 			<li>carla</li>
 			<li>susy</li>
+		</ul>
+	</body>
+</html>
+```
+
+Just like the `_if` statement the `_foreach` also works with inlined content:
+
+```html
+<html>
+	<body>
+		<ul>
+		<!--(bake-start _foreach="name:[robert, susan, carl]")-->
+			<li>{{name}}</li>
+		<!--(bake-end)-->
 		</ul>
 	</body>
 </html>
