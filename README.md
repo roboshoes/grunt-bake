@@ -418,12 +418,3 @@ watch: {
 	}
 }
 ```
-
-## Release History
-* 2013-06-11      v0.0.11     Preserves indentation to create prettier markup
-* 2013-06-07      v0.0.10     Adds IF statement
-* 2013-05-01      v0.0.9      Fixes default basePath
-* 2013-04-30      v0.0.8      Support for absolute paths and basePath
-* 2013-04-23      v0.0.7      Support for a wider range of characters in inline arguments
-* 2013-03-01      v0.0.3      Adding support for recursive parsing and inline attributes
-* 2013-02-27      v0.0.1      Initial Release
