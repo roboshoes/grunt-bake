@@ -12,6 +12,8 @@ var mout = require( "mout" );
 
 module.exports = function( grunt ) {
 
+	var _ = grunt.util._;
+
 	grunt.registerMultiTask( "bake", "Bake templates into a file.", function() {
 
 
@@ -89,7 +91,7 @@ module.exports = function( grunt ) {
 
 		// Parses attribute string.
 
-		function parseInlineOptions( string ) {
+		function parseInlineValues( string ) {
 			var match;
 			var values = {};
 
@@ -138,69 +140,84 @@ module.exports = function( grunt ) {
 
 			string = string.split( " " ).join( "" );
 
-			if ( arrayRegex.test( string ) ) {
+			if ( arrayRegex.test( string ) )
 				return string.match( arrayRegex )[ 1 ].split( "," );
-			} else {
-				return resolveName( string, values );
+
+			else {
+				var array = resolveName( string, values );
+				if ( array === "" ) array = [];
+
+				return array;
 			}
 
 		}
 
-		function replaceMatch( indent, includePath, attributes, filePath, values ) {
+		function validateIf( inlineValues, values ) {
+			if ( "_if" in inlineValues ) {
 
-			var inlineOptions = parseInlineOptions( attributes );
-			var array = [];
-			var name = "";
+				var value = inlineValues[ "_if" ];
+				delete inlineValues[ "_if" ];
 
-			if ( "_if" in inlineOptions ) {
-				var value = inlineOptions[ "_if" ];
-
-				if ( ! hasValue( value, values ) ) {
-					return "";
-				}
-
-				delete inlineOptions[ "_if" ];
-
+				if ( ! hasValue( value, values ) ) return true;
 			}
 
-			if ( "_foreach" in inlineOptions ) {
-				var pair = inlineOptions[ "_foreach" ].split( ":" );
+			return false;
+		}
 
-				name = pair[ 0 ];
-				array = getArrayValues( pair[ 1 ], values );
+		function validateForEach( inlineValues, values, array ) {
 
-				delete inlineOptions[ "_foreach" ];
+			if ( "_foreach" in inlineValues ) {
+
+				var pair = inlineValues[ "_foreach" ].split( ":" );
+				delete inlineValues[ "_foreach" ];
+
+				getArrayValues( pair[ 1 ], values ).forEach( function( value ) {
+					array.push( value );
+				} );
+
+				return pair[ 0 ];
 			}
 
-			grunt.util._.merge( values, inlineOptions );
+			return null;
+		}
 
-			if ( includePath[ 0 ] === "/" ) {
-				includePath = options.basePath + includePath.substr( 1 );
-			} else {
-				includePath = directory( filePath ) + "/" + includePath;
-			}
+		function preparePath( includePath, filePath ) {
+			if ( includePath[ 0 ] === "/" )
+				return options.basePath + includePath.substr( 1 );
+			else return directory( filePath ) + "/" + includePath;
+		}
 
+		function replace( indent, includePath, attributes, filePath, values ) {
+
+			includePath = preparePath( includePath, filePath );
+
+			var inlineValues = parseInlineValues( attributes );
+
+			if ( validateIf( inlineValues, values ) ) return "";
+
+			var forEachValues = [];
+			var forEachName = validateForEach( inlineValues, values, forEachValues );
 			var includeContent = grunt.file.read( includePath );
+
+			_.merge( values, inlineValues );
+
 			includeContent = applyIndent( indent, includeContent );
 
-			if ( array.length > 0 ) {
+			if ( forEachValues.length > 0 ) {
 
 				var fragment = "";
 				var newline = "";
-				var oldValue = values[ name ];
+				var oldValue = values[ forEachName ];
 
-				array.forEach( function( value, index ) {
-					values[ name ] = value;
+				forEachValues.forEach( function( value, index ) {
+					values[ forEachName ] = value;
 					newline = index > 0 ? "\n" : "";
 
 					fragment += newline + parse( includeContent, includePath, values );
 				} );
 
-				if ( oldValue ) {
-					values[ name ] = oldValue;
-				} else {
-					delete values[ name ];
-				}
+				if ( oldValue === undefined ) values[ forEachName ] = oldValue;
+				else delete values[ forEachName ];
 
 				return fragment;
 
@@ -212,54 +229,34 @@ module.exports = function( grunt ) {
 
 		}
 
-		function replaceInlineMatch( attributes, content, filePath, values ) {
-			var inlineOptions = parseInlineOptions( attributes );
-			var name = "";
-			var array = [];
+		function inlineReplace( attributes, content, filePath, values ) {
 
-			if ( "_if" in inlineOptions ) {
-				var value = inlineOptions[ "_if" ];
+			var inlineValues = parseInlineValues( attributes );
 
-				if ( ! hasValue( value, values ) ) {
-					return "";
-				}
+			if ( validateIf( inlineValues, values ) ) return "";
 
-				delete inlineOptions[ "_if" ];
-
-			}
-
-			if ( "_foreach" in inlineOptions ) {
-				var pair = inlineOptions[ "_foreach" ].split( ":" );
-
-				name = pair[ 0 ];
-				array = getArrayValues( pair[ 1 ], values );
-
-				delete inlineOptions[ "_foreach" ];
-			}
-
-			grunt.util._.merge( values, inlineOptions );
-
+			var forEachValues = [];
+			var forEachName = validateForEach( inlineValues, values, forEachValues );
 			var includeContent = mout.string.rtrim( content, [ " ", "\n", "\t", "\r" ] );
 
-			if ( array.length > 0 ) {
+			_.merge( values, inlineValues );
+
+			if ( forEachValues.length > 0 ) {
 
 				var fragment = "";
 				var newline = "";
-				var oldValue = values[ name ];
+				var oldValue = values[ forEachName ];
 
-				array.forEach( function( value, index ) {
-					values[ name ] = value;
+				forEachValues.forEach( function( value, index ) {
+					values[ forEachName ] = value;
 
 					newline = typeof options.process === "function" ? options.process( includeContent, values ) : includeContent;
 
 					fragment += ( index > 0 ? "\n" : "" ) + newline;
 				} );
 
-				if ( oldValue ) {
-					values[ name ] = oldValue;
-				} else {
-					delete values[ name ];
-				}
+				if ( oldValue === undefined ) values[ forEachName ] = oldValue;
+				else delete values[ forEachName ];
 
 				return fragment;
 
@@ -280,7 +277,7 @@ module.exports = function( grunt ) {
 		function parse( fileContent, filePath, values ) {
 
 			fileContent = fileContent.replace( regexInline, function( match, attributes, content ) {
-				return replaceInlineMatch( attributes, content, filePath, values );
+				return inlineReplace( attributes, content, filePath, values );
 			} );
 
 			if ( typeof options.process === "function" ) {
@@ -288,7 +285,7 @@ module.exports = function( grunt ) {
 			}
 
 			fileContent = fileContent.replace( regex, function( match, indent, includePath, attributes ) {
-				return replaceMatch( indent, includePath, attributes, filePath, values );
+				return replace( indent, includePath, attributes, filePath, values );
 			} );
 
 
@@ -314,7 +311,7 @@ module.exports = function( grunt ) {
 
 			if ( options.section ) {
 
-				if ( !values[ options.section ] ) {
+				if ( ! values[ options.section ] ) {
 					grunt.log.error( "content doesn't have section " + options.section );
 				}
 
