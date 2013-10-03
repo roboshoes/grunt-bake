@@ -27,8 +27,40 @@ module.exports = function(grunt) {
 			},
 		},
 
+		jsonlint: {
+			config: {
+				src: [ "package.json" ]
+			}
+		},
+
 		clean: {
 			tests: [ "tmp" ],
+		},
+
+		nodeunit: {
+			tests: [ "test/*_test.js" ],
+		},
+
+		watch: {
+			jshint: {
+				files: [
+					"Gruntfile.js",
+					"tasks/*.js",
+					"<%= nodeunit.tests %>",
+				],
+				tasks: [ "jshint" ]
+			},
+			jsonlint: {
+				files: [ "package.json" ],
+				tasks: [ "jsonlint" ]
+			},
+			test: {
+				files: [
+					"tasks/*.js",
+					"<%= nodeunit.tests %>",
+				],
+				tasks: [ "jshint", "test" ]
+			}
 		},
 
 		bake: {
@@ -147,28 +179,6 @@ module.exports = function(grunt) {
 					"tmp/no_process_bake.html": "test/fixtures/no_process_bake.html"
 				}
 			}
-		},
-
-		nodeunit: {
-			tests: [ "test/*_test.js" ],
-		},
-
-		watch: {
-			jshint: {
-				files: [
-					"Gruntfile.js",
-					"tasks/*.js",
-					"<%= nodeunit.tests %>",
-				],
-				tasks: [ "jshint" ]
-			},
-			test: {
-				files: [
-					"tasks/*.js",
-					"<%= nodeunit.tests %>",
-				],
-				tasks: [ "jshint", "test" ]
-			}
 		}
 
 	} );
@@ -179,8 +189,9 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks( "grunt-contrib-clean" );
 	grunt.loadNpmTasks( "grunt-contrib-nodeunit" );
 	grunt.loadNpmTasks( "grunt-contrib-watch" );
+	grunt.loadNpmTasks( "grunt-jsonlint" );
 
 	grunt.registerTask( "test", [ "clean", "bake", "nodeunit" ] );
-	grunt.registerTask( "default", [ "jshint", "test" ] );
+	grunt.registerTask( "default", [ "jsonlint", "jshint", "test" ] );
 
 };

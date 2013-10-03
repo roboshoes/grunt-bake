@@ -24,7 +24,7 @@ module.exports = function( grunt ) {
 		// This process method is used when no process function is supplied.
 
 		function defaultProcess( template, content ) {
-			return template.replace( /\{\{([.\-\w]*)\}\}/g, function( match, key ) {
+			return template.replace( /\{\{([\.\-\w]*)\}\}/g, function( match, key ) {
 				return resolveName( key, content );
 			} );
 		}
@@ -34,7 +34,7 @@ module.exports = function( grunt ) {
 		// -- OPTIONS --
 		// =============
 
-		// Merging the passed otions with the default settingss
+		// Merging the passed options with the default settingss
 
 		var options = this.options( {
 			content: null,
@@ -152,6 +152,9 @@ module.exports = function( grunt ) {
 
 		}
 
+
+		// Handle _if attributes in inline arguments
+
 		function validateIf( inlineValues, values ) {
 			if ( "_if" in inlineValues ) {
 
@@ -163,6 +166,9 @@ module.exports = function( grunt ) {
 
 			return false;
 		}
+
+
+		// Handle _foreach attributes in inline arguments
 
 		function validateForEach( inlineValues, values, array ) {
 
