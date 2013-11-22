@@ -16,20 +16,6 @@ module.exports = function( grunt ) {
 
 	grunt.registerMultiTask( "bake", "Bake templates into a file.", function() {
 
-
-		// =======================
-		// -- DEFAULT PROCESSOR --
-		// =======================
-
-		// This process method is used when no process function is supplied.
-
-		function defaultProcess( template, content ) {
-			return template.replace( /\{\{([\.\-\w]*)\}\}/g, function( match, key ) {
-				return resolveName( key, content );
-			} );
-		}
-
-
 		// =============
 		// -- OPTIONS --
 		// =============
@@ -40,11 +26,28 @@ module.exports = function( grunt ) {
 			content: null,
 			section: null,
 			basePath: "",
-			process: defaultProcess
+			parsePattern: /\{\{\s*([\.\-\w]*)\s*\}\}/g
 		} );
 
 		if ( options.basePath.substr( -1 , 1 ) !== "/" && options.basePath.length > 0 ) {
 			options.basePath = options.basePath + "/";
+		}
+
+
+		// =======================
+		// -- DEFAULT PROCESSOR --
+		// =======================
+
+		// This process method is used when no process function is supplied.
+
+		function defaultProcess( template, content ) {
+			return template.replace( options.parsePattern, function( match, key ) {
+				return resolveName( key, content );
+			} );
+		}
+
+		if ( ! options.hasOwnProperty( "process" ) ) {
+			options.process = defaultProcess;
 		}
 
 		// ===========

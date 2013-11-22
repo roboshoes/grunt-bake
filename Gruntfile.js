@@ -8,7 +8,7 @@
 "use strict";
 
 function parseFunction( source ) {
-	return source.replace( /\{\{([.\-\w]*)\}\}/g, function() {
+	return source.replace( /\{\{\s?([\.\-\w]*)\s?\}\}/g, function() {
 		return "";
 	} );
 }

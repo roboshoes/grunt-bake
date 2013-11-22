@@ -117,12 +117,18 @@ This could be used to parse a template like such:
 </div>
 ```
 
+#### options.parsePattern
+Type: `Regex`
+Default value: `/\{\{\s?([\.\-\w]*)\s?\}\}/g`
+
+Determines the regex to parse the files in order to insert the content from the JSON file. The default pattern allows place holders such as: `{{value}}`.
+
 #### options.process
 Type: `Function`
 Default value: default process procedure
 
 A Function which is used to process the template before putting it into the file. If `process` is defined as `null` or `false` the includes won't be processed at all.
-The default process uses two curly braces as marker, such as `{{json.value.name}}`.
+The default process uses two curly braces as marker, such as `{{json.value.name}}`. However the the parse regex is costumizable using `options.parsePattern`.
 
 The function gets passed two arguments:
 * `String`: representing the template to parse.
