@@ -12,8 +12,6 @@ var mout = require( "mout" );
 
 module.exports = function( grunt ) {
 
-	var _ = grunt.util._;
-
 	grunt.registerMultiTask( "bake", "Bake templates into a file.", function() {
 
 		// =============
@@ -208,7 +206,7 @@ module.exports = function( grunt ) {
 			var forEachName = validateForEach( inlineValues, values, forEachValues );
 			var includeContent = grunt.file.read( includePath );
 
-			_.merge( values, inlineValues );
+			values = mout.object.merge( values, inlineValues );
 
 			includeContent = applyIndent( indent, includeContent );
 
@@ -246,9 +244,9 @@ module.exports = function( grunt ) {
 
 			var forEachValues = [];
 			var forEachName = validateForEach( inlineValues, values, forEachValues );
-			var includeContent = mout.string.rtrim( content, [ " ", "\n", "\t", "\r" ] );
+			var includeContent = content.trimRight();
 
-			_.merge( values, inlineValues );
+			values = mout.object.merge( values, inlineValues );
 
 			if ( forEachValues.length > 0 ) {
 
