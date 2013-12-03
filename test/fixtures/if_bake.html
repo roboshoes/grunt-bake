@@ -5,5 +5,10 @@
 		<!--(bake includes/include-one.html _if="title")-->
 		<!--(bake includes/include-two.html _if="foo")-->
 		<!--(bake includes/include-two.html _if="bar")-->
+
+		<!--(bake-start _if="title")-->
+		<!-- Here is a comment -->
+		<div>Here is some content</div>
+		<!--(bake-end)-->
 	</body>
 </html>

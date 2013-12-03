@@ -1,7 +1,7 @@
 "use strict";
 
 var mout = require( "mout" );
-var grunt = require( "grunt" );
+var fs = require( "fs" );
 
 exports.bake = {
 
@@ -26,8 +26,8 @@ exports.bake = {
 
 		mout.object.forOwn( files, function( value, key ) {
 			var name = key.split( "/" )[ 1 ];
-			var actual = grunt.file.read( key );
-			var expected = grunt.file.read( value );
+			var actual = fs.readFileSync( key, { encoding: "utf-8" } );
+			var expected = fs.readFileSync( value, { encoding: "utf-8" } );
 
 			test.equal( actual, expected, name );
 		} );

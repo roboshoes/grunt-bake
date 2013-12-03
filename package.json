@@ -1,7 +1,7 @@
 {
 	"name": "grunt-bake",
 	"description": "Bake external includes into files to create static pages with no server-side compilation time",
-	"version": "0.3.4",
+	"version": "0.3.5",
 	"homepage": "https://github.com/MathiasPaumgarten/grunt-bake",
 	"author": {
 		"name": "Mathias Paumgarten",
