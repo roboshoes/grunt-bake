@@ -314,7 +314,12 @@ module.exports = function( grunt ) {
 
 			checkFile( src );
 
-			var values = options.content ? grunt.file.readJSON( options.content ) : {};
+			var values;
+			if ( typeof options.content === "string" ) {
+				values = grunt.file.readJSON( options.content );
+			} else {
+				values = options.content ? options.content : {};
+			}
 
 			if ( options.section ) {
 
