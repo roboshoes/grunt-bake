@@ -81,6 +81,21 @@ module.exports = function(grunt) {
 				}
 			},
 
+			object_bake: {
+				options: {
+					content: {
+						"title": "A Title",
+						"info": {
+							"author": "Mike"
+						}
+					}
+				},
+
+				files: {
+					"tmp/object_bake.html": "test/fixtures/advanced_bake.html"
+				}
+			},
+
 			costum_process_bake: {
 				options: {
 					content: "test/fixtures/content.json",

@@ -257,7 +257,7 @@ module.exports = function( grunt ) {
 				forEachValues.forEach( function( value, index ) {
 					values[ forEachName ] = value;
 
-					newline = typeof options.process === "function" ? options.process( includeContent, values ) : includeContent;
+					newline = mout.lang.isFunction( options.process ) ? options.process( includeContent, values ) : includeContent;
 
 					fragment += ( index > 0 ? "\n" : "" ) + newline;
 				} );
@@ -287,7 +287,7 @@ module.exports = function( grunt ) {
 				return inlineReplace( attributes, content, filePath, values );
 			} );
 
-			if ( typeof options.process === "function" ) {
+			if ( mout.lang.isFunction( options.process ) ) {
 				fileContent = options.process( fileContent, values );
 			}
 
@@ -312,10 +312,10 @@ module.exports = function( grunt ) {
 			var src = file.src[ 0 ];
 			var dest = file.dest;
 
-			checkFile( src );
+			if ( ! checkFile( src ) ) return;
 
 			var values;
-			if ( typeof options.content === "string" ) {
+			if ( mout.lang.isString( options.content ) ) {
 				values = grunt.file.readJSON( options.content );
 			} else {
 				values = options.content ? options.content : {};

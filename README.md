@@ -70,10 +70,10 @@ The paths given are relative to the file being parsed.
 ### Options
 
 #### options.content
-Type: `String`
+Type: `String` or `Object`
 Default value: `null`
 
-A string value that determines the location of the JSON file that is used to fill the place holders.
+A string value that determines the location of the JSON file that is used to fill the place holders. If a `Object` is specified it will be used as content.
 
 #### options.section
 Type: `String`
