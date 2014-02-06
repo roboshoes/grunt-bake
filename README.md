@@ -386,6 +386,53 @@ Just like the `_if` statement the `_foreach` also works with inlined content:
 </html>
 ```
 
+
+#### Inline Section statement
+
+The `_section` attribute, when used inline, allows to use a specific subcontent of the values.
+
+_app/base.html_:
+```html
+<html>
+	<body>
+		<!--(bake includes/file.html _section="home")-->
+		<!--(bake includes/file.html _section="about")-->
+	</body>
+</html>
+```
+
+_app/includes/file.html_:
+```html
+<h1>{{title}}</h1>
+<p>{{content}}</p>
+```
+
+With the following content file
+```json
+{
+	"home": {
+		"title": "Home",
+		"content": "This is home"
+	},
+	"about": {
+		"title": "About",
+		"content": "This is about"
+	}
+}
+```
+
+This will render the following:
+```html
+<html>
+	<body>
+		<h1>Home</h1>
+		<p>This is home</p>
+		<h1>About</h1>
+		<p>This is about</p>
+	</body>
+</html>
+```
+
 #### Costum process
 This example shows the use of a costum process funtion.
 

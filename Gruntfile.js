@@ -193,6 +193,23 @@ module.exports = function(grunt) {
 				files: {
 					"tmp/no_process_bake.html": "test/fixtures/no_process_bake.html"
 				}
+			},
+
+			section_bake: {
+				options: {
+					content: {
+						home: {
+							title: "Home"
+						},
+						about: {
+							title: "About"
+						}
+					}
+				},
+
+				files: {
+					"tmp/section_bake.html": "test/fixtures/section_bake.html"
+				}
 			}
 		}
 

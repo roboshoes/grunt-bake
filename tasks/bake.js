@@ -169,6 +169,21 @@ module.exports = function( grunt ) {
 		}
 
 
+		// Handle _section attributes in inline arguments
+
+		function validateSection( inlineValues ) {
+			if ( "_section" in inlineValues ) {
+
+				var value = inlineValues[ "_section" ];
+				delete inlineValues[ "_section" ];
+
+				return value;
+			}
+
+			return null;
+		}
+
+
 		// Handle _foreach attributes in inline arguments
 
 		function validateForEach( inlineValues, values, array ) {
@@ -199,6 +214,11 @@ module.exports = function( grunt ) {
 			includePath = preparePath( includePath, filePath );
 
 			var inlineValues = parseInlineValues( attributes );
+			var section = validateSection( inlineValues, values );
+
+			if ( section !== null ) {
+				values = values[ section ];
+			}
 
 			if ( validateIf( inlineValues, values ) ) return "";
 
@@ -245,6 +265,11 @@ module.exports = function( grunt ) {
 			var forEachValues = [];
 			var forEachName = validateForEach( inlineValues, values, forEachValues );
 			var includeContent = content.trimRight();
+			var section = validateSection( inlineValues, values );
+
+			if ( section !== null ) {
+				values = values[ section ];
+			}
 
 			values = mout.object.merge( values, inlineValues );
 
@@ -303,7 +328,6 @@ module.exports = function( grunt ) {
 		// ==========
 		// -- BAKE --
 		// ==========
-
 
 		// Loop over files and create baked files.
 
