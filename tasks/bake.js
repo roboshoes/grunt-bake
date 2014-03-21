@@ -114,8 +114,20 @@ module.exports = function( grunt ) {
 		// Helper that simply checks weather a value exists and is not `false`
 
 		function hasValue( name, values ) {
+
+			name = name.replace( / /g, "" );
+
+			var invert = false;
+
+			if ( name[ 0 ] === "!" ) {
+				name = name.substr( 1 );
+				invert = true;
+			}
+
 			var current = mout.object.get( values, name );
-			return current === false || current === undefined ? false : true;
+			var returnValue = current === false || current === undefined ? false : true;
+
+			return invert ? ! returnValue : returnValue;
 		}
 
 

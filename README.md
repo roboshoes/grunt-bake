@@ -278,7 +278,7 @@ This bake task will create _app/index.html_:
 
 #### IF Statement
 
-The __bake__ task also allows a simple `if` conditional. Inline attributes named `_if` are treated as such. If the value that `_if` holds can't be found in the content.json or if found equals to the value `false` the include will be ignored.
+The __bake__ task also allows a simple `if` conditional. Inline attributes named `_if` are treated as such. If the value that `_if` holds can't be found in the content.json or if found equals to the value `false` the include will be ignored. The `_if` can also be used inverted to create a `_else` effect in a way. A definition as `_if="!name"` would mean the template will be rendered when `name` cannot be found or is `false`.
 
 _app/base.html_:
 ```html
