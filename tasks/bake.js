@@ -54,7 +54,7 @@ module.exports = function( grunt ) {
 
 		// Regex to parse bake tags. The regex returns file path as match.
 
-		var regex = /([ |\t]*)<!--\(\s?bake\s+([\w\/.\-]+)\s?([^>]*)\)-->/g;
+		var regex = /(\n?)([ |\t]*)<!--\(\s?bake\s+([\w\/.\-]+)\s?([^>]*)\)-->/g;
 		var regexInline = /(?:[ |\t]*<!--\(\s?bake-start\s+([^>]*)\)-->)\n?([\s\S]+?)(?:[ |\t]*<!--\(\s?bake-end\s?\)-->)/g;
 
 		// Regex to parse attributes.
@@ -221,7 +221,7 @@ module.exports = function( grunt ) {
 			else return directory( filePath ) + "/" + includePath;
 		}
 
-		function replace( indent, includePath, attributes, filePath, values ) {
+		function replace( linebreak, indent, includePath, attributes, filePath, values ) {
 
 			includePath = preparePath( includePath, filePath );
 
@@ -258,11 +258,11 @@ module.exports = function( grunt ) {
 				if ( oldValue === undefined ) values[ forEachName ] = oldValue;
 				else delete values[ forEachName ];
 
-				return fragment;
+				return linebreak + fragment;
 
 			} else {
 
-				return parse( includeContent, includePath, values );
+				return linebreak + parse( includeContent, includePath, values );
 
 			}
 
@@ -328,8 +328,8 @@ module.exports = function( grunt ) {
 				fileContent = options.process( fileContent, values );
 			}
 
-			fileContent = fileContent.replace( regex, function( match, indent, includePath, attributes ) {
-				return replace( indent, includePath, attributes, filePath, values );
+			fileContent = fileContent.replace( regex, function( match, linebreak, indent, includePath, attributes ) {
+				return replace( linebreak, indent, includePath, attributes, filePath, values );
 			} );
 
 
