@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+	<head></head>
+	<body>
+		<!--(bake includes/include-one.html _render="foo")-->
+		<!--(bake includes/include-two.html _render="bar")-->
+
+		<!--(bake-start _render="foo")-->
+		Foo
+		<!--(bake-end)-->
+
+		<!--(bake-start _render="bar")-->
+		Bar
+		<!--(bake-end)-->
+	</body>
+</html>
