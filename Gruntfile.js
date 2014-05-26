@@ -210,6 +210,17 @@ module.exports = function(grunt) {
 				files: {
 					"tmp/section_bake.html": "test/fixtures/section_bake.html"
 				}
+			},
+
+			skip_bake: {
+				options: {
+					foo: false,
+					bar: true
+				},
+
+				files: {
+					"tmp/skip_bake.html": "test/fixtures/skip_bake.html"
+				}
 			}
 		}
 

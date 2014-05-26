@@ -146,6 +146,7 @@ Determines the base directory for includes that are specified with an absolute p
 `<!--(bake /includes/footer.html)-->` relative to the basePath (level of Gruntfile by default)
 
 
+
 ### Usage Examples
 
 #### Simple bake
@@ -432,6 +433,51 @@ This will render the following:
 	</body>
 </html>
 ```
+
+
+#### Inline _options statement
+
+The `_options` statement simular to the `_if` statement determines whether or not the include is parsed.
+However the `_options` statement looks for it's counterpart in the options not in the content JSON. It then
+determines whether or not the field exists and if so, if the field has a truthy value.
+If the field doesnt exist the `_options` will be ignored. If it does existes a `true` value will render the template
+and a `false` value will skip the template.
+
+_app/base.html_:
+```html
+<html>
+	<body>
+		<!--(bake includes/file.html _options="baseline")-->
+	</body>
+</html>
+```
+
+With the following grunt task:
+```js
+bake: {
+	your_target: {
+		options: {
+			baseline: false
+		},
+
+		files: {
+			"dist/index.html": "app/base.html"
+		}
+	},
+}
+```
+
+This will create:
+
+_dist/index.html_:
+```html
+<html>
+	<body>
+	</body>
+</html>
+```
+
+
 
 #### Costum process
 This example shows the use of a costum process funtion.

@@ -180,21 +180,19 @@ module.exports = function( grunt ) {
 			return false;
 		}
 
-	    // Handle _skip attributes in inline arguments
-		function doSkip(inlineValues) {
-		    if ("_skip" in inlineValues) {
-		        var skipValue = inlineValues["_skip"];
-		        var taskOptions = grunt.task.current.data.options;
-		        if (skipValue in taskOptions) {
-		            var doSkip = taskOptions[skipValue];
-		            console.log("Skip value "+skipValue+" result is: "+doSkip);
-		            return doSkip;
-		        }
-		        else
-		            console.log("Skip value "+skipValue+" not found on task Options.");
-		    }
-		    console.log("Leave validateSkip with false");
-		    return false;
+		// Handle _skip attributes in inline arguments
+
+		function validateOptions( inlineValues ) {
+			if ( "_options" in inlineValues ) {
+
+				var skipValue = inlineValues[ "_options" ];
+
+				if ( skipValue in options ) {
+					return ! options[ skipValue ];
+				}
+			}
+
+			return false;
 		}
 
 
@@ -250,6 +248,7 @@ module.exports = function( grunt ) {
 			}
 
 			if ( validateIf( inlineValues, values ) ) return "";
+			if ( validateOptions( inlineValues ) ) return "";
 
 			var forEachValues = [];
 			var forEachName = validateForEach( inlineValues, values, forEachValues );
@@ -289,9 +288,7 @@ module.exports = function( grunt ) {
 
 			var inlineValues = parseInlineValues( attributes );
 
-			if ( doSkip(inlineValues)) return "";
-
-
+			if ( validateOptions( inlineValues ) ) return "";
 			if ( validateIf( inlineValues, values ) ) return "";
 
 			var forEachValues = [];

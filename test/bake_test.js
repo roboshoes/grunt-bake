@@ -21,7 +21,8 @@ exports.bake = {
 			"tmp/foreach-inline_bake.html": "test/expected/foreach-inline_bake.html",
 			"tmp/no_process_bake.html": "test/expected/no_process_bake.html",
 			"tmp/object_bake.html": "test/expected/object_bake.html",
-			"tmp/section_bake.html": "test/expected/section_bake.html"
+			"tmp/section_bake.html": "test/expected/section_bake.html",
+			"tmp/skip_bake.html": "test/expected/skip_bake.html"
 		};
 
 		test.expect( mout.object.size( files ) );
