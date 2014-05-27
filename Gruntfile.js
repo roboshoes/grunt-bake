@@ -212,14 +212,14 @@ module.exports = function(grunt) {
 				}
 			},
 
-			skip_bake: {
+			render_bake: {
 				options: {
 					foo: false,
 					bar: true
 				},
 
 				files: {
-					"tmp/skip_bake.html": "test/fixtures/skip_bake.html"
+					"tmp/render_bake.html": "test/fixtures/render_bake.html"
 				}
 			}
 		}

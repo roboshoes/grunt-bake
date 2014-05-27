@@ -435,19 +435,19 @@ This will render the following:
 ```
 
 
-#### Inline _options statement
+#### Inline _render statement
 
-The `_options` statement simular to the `_if` statement determines whether or not the include is parsed.
-However the `_options` statement looks for it's counterpart in the options not in the content JSON. It then
+The `_render` statement simular to the `_if` statement determines whether or not the include is parsed.
+However the `_render` statement looks for it's counterpart in the options not in the content JSON. It then
 determines whether or not the field exists and if so, if the field has a truthy value.
-If the field doesnt exist the `_options` will be ignored. If it does existes a `true` value will render the template
+If the field doesnt exist the `_render` will be ignored. If it does existes a `true` value will render the template
 and a `false` value will skip the template.
 
 _app/base.html_:
 ```html
 <html>
 	<body>
-		<!--(bake includes/file.html _options="baseline")-->
+		<!--(bake includes/file.html _render="baseline")-->
 	</body>
 </html>
 ```
