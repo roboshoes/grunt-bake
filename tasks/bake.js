@@ -180,6 +180,21 @@ module.exports = function( grunt ) {
 			return false;
 		}
 
+		// Handle _render attributes in inline arguments
+
+		function validateRender( inlineValues ) {
+			if ( "_render" in inlineValues ) {
+
+				var skipValue = inlineValues[ "_render" ];
+
+				if ( skipValue in options ) {
+					return ! options[ skipValue ];
+				}
+			}
+
+			return false;
+		}
+
 
 		// Handle _section attributes in inline arguments
 
@@ -233,6 +248,7 @@ module.exports = function( grunt ) {
 			}
 
 			if ( validateIf( inlineValues, values ) ) return "";
+			if ( validateRender( inlineValues ) ) return "";
 
 			var forEachValues = [];
 			var forEachName = validateForEach( inlineValues, values, forEachValues );
@@ -272,6 +288,7 @@ module.exports = function( grunt ) {
 
 			var inlineValues = parseInlineValues( attributes );
 
+			if ( validateRender( inlineValues ) ) return "";
 			if ( validateIf( inlineValues, values ) ) return "";
 
 			var forEachValues = [];

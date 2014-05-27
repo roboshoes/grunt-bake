@@ -210,6 +210,17 @@ module.exports = function(grunt) {
 				files: {
 					"tmp/section_bake.html": "test/fixtures/section_bake.html"
 				}
+			},
+
+			render_bake: {
+				options: {
+					foo: false,
+					bar: true
+				},
+
+				files: {
+					"tmp/render_bake.html": "test/fixtures/render_bake.html"
+				}
 			}
 		}
 
