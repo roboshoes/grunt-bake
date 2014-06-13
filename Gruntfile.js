@@ -221,6 +221,16 @@ module.exports = function(grunt) {
 				files: {
 					"tmp/render_bake.html": "test/fixtures/render_bake.html"
 				}
+			},
+
+			multiple_bake: {
+				options: {
+					content: "test/fixtures/content.json",
+				},
+
+				files: {
+					"tmp/multiple_bake.html": "test/fixtures/multiple_bake.html"
+				}
 			}
 		}
 

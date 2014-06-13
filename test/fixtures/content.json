@@ -18,5 +18,24 @@
 		"info": {
 			"author": "Mathias"
 		}
+	},
+	"siteTitle": "Hello World",
+	"teamPage": {
+		"title": "Meet Our Team",
+		"main_content": "This page lists all team members",
+		"team": {
+			"bob": {
+				"name": "Bob",
+				"bio": "Bob bio..."
+			},
+			"alice": {
+				"name": "Alice",
+				"bio": "Alice bio..."
+			},
+			"carol": {
+				"name": "Carol",
+				"bio": "Carol bio..."
+			}
+		}
 	}
 }
