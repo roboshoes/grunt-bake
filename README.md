@@ -128,7 +128,7 @@ Type: `Function`
 Default value: default process procedure
 
 A Function which is used to process the template before putting it into the file. If `process` is defined as `null` or `false` the includes won't be processed at all.
-The default process uses two curly braces as marker, such as `{{json.value.name}}`. However the the parse regex is costumizable using `options.parsePattern`.
+The default process uses two curly braces as marker, such as `{{json.value.name}}`. However the parse regex is costumizable using `options.parsePattern`.
 
 The function gets passed two arguments:
 * `String`: representing the template to parse.
@@ -307,7 +307,7 @@ This bake task will create _app/index.html_:
 </html>
 ```
 
-Additionally the the `_if` statement also works with inlining the bake content.
+Additionally the `_if` statement also works with inlining the bake content.
 
 ```html
 <html>
