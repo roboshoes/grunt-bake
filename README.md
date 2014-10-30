@@ -479,8 +479,8 @@ _dist/index.html_:
 
 
 
-#### Costum process
-This example shows the use of a costum process funtion.
+#### Custom process
+This example shows the use of a custom process funtion.
 
 ```js
 
@@ -505,7 +505,7 @@ grunt.initConfig( {
 } )
 ```
 
-### Continues development
+### Continuous development
 
 For ease of development just add the `bake` task to your watch list. The static page will be baked everytime you change the template.
 
