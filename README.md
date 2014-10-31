@@ -480,7 +480,7 @@ _dist/index.html_:
 
 
 #### Custom process
-This example shows the use of a custom process funtion.
+This example shows the use of a custom process function.
 
 ```js
 
