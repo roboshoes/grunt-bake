@@ -507,7 +507,7 @@ grunt.initConfig( {
 
 ### Continuous development
 
-For ease of development just add the `bake` task to your watch list. The static page will be baked everytime you change the template.
+For ease of development just add the `bake` task to your watch list. The static page will be baked every time you change the template.
 
 ```javascript
 watch: {
