@@ -221,6 +221,18 @@ module.exports = function(grunt) {
 				files: {
 					"tmp/render_bake.html": "test/fixtures/render_bake.html"
 				}
+			},
+
+			html_include_bake: {
+				options: {
+					content: {
+						foo: "<span>Foo</span>"
+					}
+				},
+
+				files: {
+					"tmp/html_include_bake.html": "test/fixtures/html_include_bake.html"
+				}
 			}
 		}
 

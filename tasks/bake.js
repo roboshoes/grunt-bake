@@ -54,7 +54,7 @@ module.exports = function( grunt ) {
 
 		// Regex to parse bake tags. The regex returns file path as match.
 
-		var regex = /(\n?)([ |\t]*)<!--\(\s?bake\s+([\w\/.\-]+)\s?([^>]*)\)-->/g;
+		var regex = /(\n?)([ |\t]*)<!--\(\s?bake\s+([\w\/.\-]+)\s?([^]*?)\)-->/g;
 		var regexInline = /(?:[ |\t]*<!--\(\s?bake-start\s+([^>]*)\)-->)\n?([\s\S]+?)(?:[ |\t]*<!--\(\s?bake-end\s?\)-->)/g;
 
 		// Regex to parse attributes.
