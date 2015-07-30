@@ -145,7 +145,11 @@ Determines the base directory for includes that are specified with an absolute p
 
 `<!--(bake /includes/footer.html)-->` relative to the basePath (level of Gruntfile by default)
 
+#### options.semanticIf
+Type: `Bool` | `Array` | `Function`
+Default value: false
 
+Set to `true` enables support for _no_/_yes_ and _off_/_on_ in `_if` statements. Alternatively false values can be defined via Array or a callback can be used for evaluation.
 
 ### Usage Examples
 
