@@ -103,6 +103,14 @@ module.exports = function( grunt ) {
 			return values;
 		}
 
+		// Helper method to check if a value represents false
+
+		function isFalse( value ) {
+			var untrues = ["false", "no"];
+			var string = String(value).toLowerCase();
+
+			return ( value === undefined || value === false || untrues.indexOf( string ) !== -1 );
+		}
 
 		// Helper method to resolve nested placeholder names like: "home.footer.text"
 
@@ -125,7 +133,7 @@ module.exports = function( grunt ) {
 			}
 
 			var current = mout.object.get( values, name );
-			var returnValue = current === false || current === undefined ? false : true;
+			var returnValue = !isFalse(current);
 
 			return invert ? ! returnValue : returnValue;
 		}
