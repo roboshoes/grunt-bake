@@ -107,22 +107,22 @@ module.exports = function( grunt ) {
 		// Helper method to check if a value represents false
 
 		function isFalse( value ) {
-			var string = String(value).toLowerCase();
+			var string = String( value ).toLowerCase();
 
-			if( value === undefined || value === false || string === 'false' ) {
+			if ( value === undefined || value === false || string === 'false' ) {
 				return true;
 			}
 
-			if( options.semanticIf === true ) {
-				return mout.array.indexOf(['no', 'off'], string) !== -1;
+			if ( options.semanticIf === true ) {
+				return mout.array.indexOf( [ "no", "off" ], string ) !== -1;
 			}
 
-			if( mout.lang.isArray( options.semanticIf ) ) {
-				return mout.array.indexOf(options.semanticIf, string) !== -1;
+			if ( mout.lang.isArray( options.semanticIf ) ) {
+				return mout.array.indexOf( options.semanticIf, string ) !== -1;
 			}
 
-			if( mout.lang.isFunction( options.semanticIf ) ) {
-				return options.semanticIf(value);
+			if ( mout.lang.isFunction( options.semanticIf ) ) {
+				return options.semanticIf( value );
 			}
 
 			return false;
@@ -149,7 +149,7 @@ module.exports = function( grunt ) {
 			}
 
 			var current = mout.object.get( values, name );
-			var returnValue = !isFalse(current);
+			var returnValue = !isFalse( current );
 
 			return invert ? ! returnValue : returnValue;
 		}
