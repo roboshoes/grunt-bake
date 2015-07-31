@@ -23,6 +23,7 @@ module.exports = function( grunt ) {
 		var options = this.options( {
 			content: null,
 			section: null,
+			semanticIf: false,
 			basePath: "",
 			parsePattern: /\{\{\s*([\.\-\w]*)\s*\}\}/g
 		} );
@@ -103,6 +104,29 @@ module.exports = function( grunt ) {
 			return values;
 		}
 
+		// Helper method to check if a value represents false
+
+		function isFalse( value ) {
+			var string = String(value).toLowerCase();
+
+			if( value === undefined || value === false || string === 'false' ) {
+				return true;
+			}
+
+			if( options.semanticIf === true ) {
+				return mout.array.indexOf(['no', 'off'], string) !== -1;
+			}
+
+			if( mout.lang.isArray( options.semanticIf ) ) {
+				return mout.array.indexOf(options.semanticIf, string) !== -1;
+			}
+
+			if( mout.lang.isFunction( options.semanticIf ) ) {
+				return options.semanticIf(value);
+			}
+
+			return false;
+		}
 
 		// Helper method to resolve nested placeholder names like: "home.footer.text"
 
@@ -125,7 +149,7 @@ module.exports = function( grunt ) {
 			}
 
 			var current = mout.object.get( values, name );
-			var returnValue = current === false || current === undefined ? false : true;
+			var returnValue = !isFalse(current);
 
 			return invert ? ! returnValue : returnValue;
 		}
