@@ -18,5 +18,18 @@
 		"info": {
 			"author": "Mathias"
 		}
-	}
+	},
+
+    "rooms": [
+        {
+            "width": "9",
+            "depth": "5",
+            "height": "2"
+        },
+        {
+            "width": "4",
+            "depth": "2",
+            "height": "2.4"
+        }
+    ]
 }

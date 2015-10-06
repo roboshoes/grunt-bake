@@ -23,7 +23,8 @@ exports.bake = {
 			"tmp/object_bake.html": "test/expected/object_bake.html",
 			"tmp/section_bake.html": "test/expected/section_bake.html",
 			"tmp/render_bake.html": "test/expected/render_bake.html",
-			"tmp/html_include_bake.html": "test/expected/html_include_bake.html"
+			"tmp/html_include_bake.html": "test/expected/html_include_bake.html",
+			"tmp/function_content_bake.html": "test/expected/function_content_bake.html"
 		};
 
 		test.expect( mout.object.size( files ) );

@@ -109,7 +109,7 @@ module.exports = function( grunt ) {
 		function isFalse( value ) {
 			var string = String( value ).toLowerCase();
 
-			if ( value === undefined || value === false || string === 'false' ) {
+			if ( value === undefined || value === false || string === "false" ) {
 				return true;
 			}
 
@@ -394,7 +394,7 @@ module.exports = function( grunt ) {
 			var values;
 			if ( mout.lang.isString( options.content ) ) {
 				values = grunt.file.readJSON( options.content );
-			} else if( mout.lang.isFunction( options.content ) ) {
+			} else if ( mout.lang.isFunction( options.content ) ) {
 				values = options.content();
 			} else {
 				values = options.content ? options.content : {};

@@ -233,6 +233,26 @@ module.exports = function(grunt) {
 				files: {
 					"tmp/html_include_bake.html": "test/fixtures/html_include_bake.html"
 				}
+			},
+
+			function_content_bake: {
+				options: {
+					content: function() {
+						var data = grunt.file.readJSON( "test/fixtures/content.json" );
+
+						data.rooms = data.rooms.map( function( room ) {
+							room.volume = room.width * room.depth * room.height;
+
+							return room;
+						} );
+
+						return data;
+					}
+				},
+
+				files: {
+					"tmp/function_content_bake.html": "test/fixtures/function_content_bake.html"
+				}
 			}
 		}
 
