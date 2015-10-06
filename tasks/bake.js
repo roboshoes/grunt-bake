@@ -394,6 +394,8 @@ module.exports = function( grunt ) {
 			var values;
 			if ( mout.lang.isString( options.content ) ) {
 				values = grunt.file.readJSON( options.content );
+			} else if( mout.lang.isFunction( options.content ) ) {
+				values = options.content();
 			} else {
 				values = options.content ? options.content : {};
 			}
