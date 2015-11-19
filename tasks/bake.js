@@ -193,12 +193,39 @@ module.exports = function( grunt ) {
 		// Handle _if attributes in inline arguments
 
 		function validateIf( inlineValues, values ) {
+
 			if ( "_if" in inlineValues ) {
 
 				var value = inlineValues[ "_if" ];
 				delete inlineValues[ "_if" ];
 
+				var operator = getOperator( value );
+
+				if ( operator ) {
+					var parts = value.split( operator );
+
+					var left = mout.string.rtrim( parts[ 0 ] );
+					var right = mout.string.ltrim( parts[ 1 ] ).replace( /'/g, "" );
+
+					var contentValue = resolveName( left, values );
+
+					if ( operator === "==" && contentValue === right ) return false;
+					else if ( operator === "!=" && contentValue !== right ) return false;
+
+					return true;
+				}
+
 				if ( ! hasValue( value, values ) ) return true;
+			}
+
+			return false;
+		}
+
+		function getOperator( string ) {
+			var operators = [ "==", "!=" ];
+
+			for ( var i = 0; i < operators.length; i++ ) {
+				if ( string.indexOf( operators[ i ] ) > -1 ) return operators[ i ];
 			}
 
 			return false;
