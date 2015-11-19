@@ -1,4 +1,8 @@
-# grunt-bake [![Build Status](https://travis-ci.org/MathiasPaumgarten/grunt-bake.png?branch=master)](https://travis-ci.org/MathiasPaumgarten/grunt-bake)
+# grunt-bake
+
+[![Build Status](https://travis-ci.org/MathiasPaumgarten/grunt-bake.svg?branch=master)](https://travis-ci.org/MathiasPaumgarten/grunt-bake)
+[![Downloads](https://img.shields.io/npm/dm/grunt-bake.svg)](https://www.npmjs.com/package/grunt-bake)
+[![Version](https://img.shields.io/npm/v/grunt-bake.svg)](https://www.npmjs.com/package/grunt-bake)
 
 > Bake static pages for production while using modular files while in development.
 
