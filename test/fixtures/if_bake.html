@@ -12,5 +12,12 @@
 		<!--(bake-end)-->
 
 		<!--(bake includes/include-two.html _if="!bar")-->
+
+		<!--(bake-start _if="title == 'Apple Pie'")-->
+		<h1>{{title}}</h1>
+		<!--(bake-end)-->
+
+		<!--(bake includes/include-two.html _if="title != 'Orange Pie'")-->
+		<!--(bake includes/include-one.html _if="title == 'Orange Pie'")-->
 	</body>
 </html>
