@@ -25,7 +25,8 @@ module.exports = function( grunt ) {
 			section: null,
 			semanticIf: false,
 			basePath: "",
-			parsePattern: /\{\{\s*([\.\-\w]*)\s*\}\}/g
+			filters: {},
+			parsePattern: /\{\{\s*([\.\-\w]*(\s\|\s*[\-\w]+)?)\s*\}\}/g
 		} );
 
 		if ( options.basePath.substr( -1 , 1 ) !== "/" && options.basePath.length > 0 ) {
@@ -40,8 +41,24 @@ module.exports = function( grunt ) {
 		// This process method is used when no process function is supplied.
 
 		function defaultProcess( template, content ) {
-			return template.replace( options.parsePattern, function( match, key ) {
-				return resolveName( key, content );
+			return template.replace( options.parsePattern, function( match, inner ) {
+				var parts = inner.split('|');
+
+				var key = mout.string.trim(parts.shift());
+				var filterName = mout.string.trim(parts.shift());
+
+				var res = resolveName( key, content );
+
+				if( ! mout.lang.isEmpty(filterName) ) {
+
+					if( mout.object.has( options.filters, filterName ) ) {
+						res = options.filters[filterName](res);
+					} else {
+						grunt.log.error('Unknown filter:' + filterName);
+					}
+				}
+
+				return res;
 			} );
 		}
 
