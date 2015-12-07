@@ -159,6 +159,9 @@ Registers callbacks that can be used as transforms in the tempalte with `{{myvar
 transforms: {
 	upper: function(str) {
 		return String(str).toUpperCase();
+	},
+	nl2br: function(str) {
+		// ...
 	}
 }
 ```
