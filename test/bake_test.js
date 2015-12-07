@@ -24,7 +24,11 @@ exports.bake = {
 			"tmp/section_bake.html": "test/expected/section_bake.html",
 			"tmp/render_bake.html": "test/expected/render_bake.html",
 			"tmp/html_include_bake.html": "test/expected/html_include_bake.html",
-			"tmp/function_content_bake.html": "test/expected/function_content_bake.html"
+			"tmp/function_content_bake.html": "test/expected/function_content_bake.html",
+			"tmp/transform_pass_through.html": "test/expected/transform_pass_through.html",
+			"tmp/transform_single.html": "test/expected/transform_single.html",
+			"tmp/transform_multiple.html": "test/expected/transform_multiple.html",
+			"tmp/transform_deep.html": "test/expected/transform_deep.html"
 		};
 
 		test.expect( mout.object.size( files ) );
