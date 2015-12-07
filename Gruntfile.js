@@ -64,6 +64,7 @@ module.exports = function(grunt) {
 		},
 
 		bake: {
+
 			default_bake: {
 				files: {
 					"tmp/default_bake.html": "test/fixtures/default_bake.html"
@@ -253,7 +254,82 @@ module.exports = function(grunt) {
 				files: {
 					"tmp/function_content_bake.html": "test/fixtures/function_content_bake.html"
 				}
-			}
+			},
+
+			transform_pass_through: {
+				options: {
+					content: {
+						content: "Hallo Welt!"
+					},
+					transforms: {
+						noop: function(str) {
+							return str
+						}
+					}
+				},
+
+				files: {
+					"tmp/transform_pass_through.html": "test/fixtures/transform_pass_through.html"
+				}
+			},
+
+			transform_single: {
+				options: {
+					content: {
+						content: "Hallo Welt!"
+					},
+					transforms: {
+						upper: function(str) {
+							return String(str).toUpperCase();
+						}
+					}
+				},
+
+				files: {
+					"tmp/transform_single.html": "test/fixtures/transform_single.html"
+				}
+			},
+
+			transform_multiple: {
+				options: {
+					content: {
+						content: "Hallo\nWelt!"
+					},
+					transforms: {
+						nl2br: function(str) {
+							return String(str).replace(/([\r\n]+)/g, '<br />');
+						},
+						upper: function(str) {
+							return String(str).toUpperCase();
+						}
+					}
+				},
+
+				files: {
+					"tmp/transform_multiple.html": "test/fixtures/transform_multiple.html"
+				}
+			},
+
+			transform_deep: {
+				options: {
+					content: {
+						sub: {
+							sub: {
+								content: "Hallo Welt!"
+							}
+						}
+					},
+					transforms: {
+						upper: function(str) {
+							return String(str).toUpperCase();
+						}
+					}
+				},
+
+				files: {
+					"tmp/transform_deep.html": "test/fixtures/transform_deep.html"
+				}
+			},
 		}
 
 	} );

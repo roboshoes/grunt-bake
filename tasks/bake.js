@@ -25,8 +25,9 @@ module.exports = function( grunt ) {
 			section: null,
 			semanticIf: false,
 			basePath: "",
-			filters: {},
-			parsePattern: /\{\{\s*([\.\-\w]*(\s\|\s*[\-\w]+)?)\s*\}\}/g
+			transforms: {},
+			parsePattern: /\{\{\s*([^\}]+)\s*\}\}/g,
+			transformGutter: '|'
 		} );
 
 		if ( options.basePath.substr( -1 , 1 ) !== "/" && options.basePath.length > 0 ) {
@@ -39,31 +40,43 @@ module.exports = function( grunt ) {
 		// =======================
 
 		// This process method is used when no process function is supplied.
-
 		function defaultProcess( template, content ) {
 			return template.replace( options.parsePattern, function( match, inner ) {
-				var parts = inner.split('|');
 
-				var key = mout.string.trim(parts.shift());
-				var filterName = mout.string.trim(parts.shift());
+				// remove whitespace
+				var transforms = mout.array.map( inner.split( options.transformGutter ), function( str ) {
+					return mout.string.trim( str );
+				});
 
-				var res = resolveName( key, content );
+				// the first value is our variable key and not a transfrom
+				var key = transforms.shift();
+				var resolved = resolveName( key, content );
 
-				if( ! mout.lang.isEmpty(filterName) ) {
-
-					if( mout.object.has( options.filters, filterName ) ) {
-						res = options.filters[filterName](res);
-					} else {
-						grunt.log.error('Unknown filter:' + filterName);
-					}
-				}
-
-				return res;
+				return mout.array.reduce( transforms, applyTransform, resolved );
 			} );
 		}
 
 		if ( ! options.hasOwnProperty( "process" ) ) {
 			options.process = defaultProcess;
+		}
+
+		function applyTransform( content, transform ) {
+			// check if transform is registred
+			if( ! mout.object.has( options.transforms, transform ) ) {
+				grunt.log.error( "Unknown transform: " + transform );
+
+				return content;
+			}
+
+			// check if transform is valid callback
+			if( ! mout.lang.isFunction( options.transforms[transform] ) ) {
+				grunt.log.error( "Transform is not a function: " + transform );
+
+				return content;
+			}
+
+			// apply transform
+			return options.transforms[transform].call( null, content );
 		}
 
 		// ===========
