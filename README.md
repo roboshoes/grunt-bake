@@ -153,7 +153,7 @@ Determines the base directory for includes that are specified with an absolute p
 Type: `Object`
 Default value: {}
 
-Registers callbacks that can be used as transforms in the tempalte with `{{myvar | upper}}`. It is possible to chain transforms like `{{myvar | upper | nl2br}}`.
+Registers callbacks that can be used as transforms in the template with `{{myvar | upper}}`. It is possible to chain transforms like `{{myvar | upper | nl2br}}`.
 
 ```js
 transforms: {
