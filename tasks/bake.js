@@ -109,7 +109,7 @@ module.exports = function( grunt ) {
 		function isFalse( value ) {
 			var string = String( value ).toLowerCase();
 
-			if ( value === undefined || value === false || string === "false" ) {
+			if ( value === "" || value === undefined || value === false || string === "false" ) {
 				return true;
 			}
 
@@ -215,7 +215,22 @@ module.exports = function( grunt ) {
 					return true;
 				}
 
-				if ( ! hasValue( value, values ) ) return true;
+				if ( ! hasValue( value, values ) ) {
+
+					return true;
+
+				} else if ( value[ 0 ] === "!" ) {
+
+					var name = value.substr( 1 );
+
+					return ! isFalse( resolveName( name, values ) );
+
+				} else if ( isFalse( resolveName( value, values ) ) ) {
+
+					return true;
+
+				}
+
 			}
 
 			return false;
