@@ -27,7 +27,7 @@ module.exports = function( grunt ) {
 			basePath: "",
 			transforms: {},
 			parsePattern: /\{\{\s*([^\}]+)\s*\}\}/g,
-			transformGutter: '|'
+			transformGutter: "|"
 		} );
 
 		if ( options.basePath.substr( -1 , 1 ) !== "/" && options.basePath.length > 0 ) {
@@ -44,7 +44,7 @@ module.exports = function( grunt ) {
 			return template.replace( options.parsePattern, function( match, inner ) {
 
 				// remove whitespace
-				var transforms = mout.array.map( inner.split( options.transformGutter ), function( str ) {
+				var transforms = inner.split( options.transformGutter ).map( function( str ) {
 					return mout.string.trim( str );
 				});
 
@@ -52,7 +52,7 @@ module.exports = function( grunt ) {
 				var key = transforms.shift();
 				var resolved = resolveName( key, content );
 
-				return mout.array.reduce( transforms, applyTransform, resolved );
+				return transforms.reduce( applyTransform, resolved );
 			} );
 		}
 
