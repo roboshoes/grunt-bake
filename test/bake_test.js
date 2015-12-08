@@ -31,7 +31,8 @@ exports.bake = {
 			"tmp/transform_multiple.html": "test/expected/transform_multiple.html",
 			"tmp/transform_deep.html": "test/expected/transform_deep.html",
 			"tmp/foreach_meta.html": "test/expected/foreach_meta.html",
-			"tmp/multiline_bake.html": "test/expected/multiline_bake.html"
+			"tmp/multiline_bake.html": "test/expected/multiline_bake.html",
+			"tmp/var_as_array_key.html": "test/expected/var_as_array_key.html"
 		};
 
 		test.expect( mout.object.size( files ) );

@@ -358,9 +358,35 @@ module.exports = function(grunt) {
 				files: {
 					"tmp/multiline_bake.html": "test/fixtures/multiline_bake.html"
 				}
+			},
+			var_as_array_key: {
+				options: {
+					content: {
+						"pages": {
+							"page1": {
+								"title": "Page 1"
+							},
+							"page2": {
+								"title": "Page 2"
+							},
+							"page3": {
+								"title": "Page 3"
+							},
+							"page4": {
+								"title": "Page 4"
+							},
+							"page5": {
+								"title": "Page 5"
+							}
+						}
+					}
+				},
+
+				files: {
+					"tmp/var_as_array_key.html": "test/fixtures/var_as_array_key.html"
+				}
 			}
 		}
-
 	} );
 
 	grunt.loadTasks( "tasks" );

@@ -204,6 +204,10 @@ module.exports = function( grunt ) {
 		// Helper method to resolve nested placeholder names like: "home.footer.text"
 
 		function resolveName( name, values ) {
+			name = name.replace( /\[([^\]]+)\]/g, function( match, inner ) {
+				return "." + resolveName( inner, values );
+			});
+
 			return mout.object.get( values, name ) || "";
 		}
 
