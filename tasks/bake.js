@@ -359,9 +359,18 @@ module.exports = function( grunt ) {
 				var fragment = "";
 				var newline = "";
 				var oldValue = values[ forEachName ];
+				var total = forEachValues.length;
 
 				forEachValues.forEach( function( value, index ) {
 					values[ forEachName ] = value;
+
+					// assign meta vars with information about current iteration
+					values[ forEachName + "@index" ] = String( index );
+					values[ forEachName + "@iteration" ] = String( index + 1 );
+					values[ forEachName + "@first" ] = String( index === 0 );
+					values[ forEachName + "@last" ] = String( ( total - 1 ) === index );
+					values[ forEachName + "@total" ] = String( total );
+
 					newline = index > 0 ? "\n" : "";
 
 					fragment += newline + parse( includeContent, includePath, values );
@@ -403,9 +412,17 @@ module.exports = function( grunt ) {
 				var fragment = "";
 				var newline = "";
 				var oldValue = values[ forEachName ];
+				var total = forEachValues.length;
 
 				forEachValues.forEach( function( value, index ) {
 					values[ forEachName ] = value;
+
+					// assign meta vars with information about current iteration
+					values[ forEachName + "@index" ] = String( index );
+					values[ forEachName + "@iteration" ] = String( index + 1 );
+					values[ forEachName + "@first" ] = String( index === 0 );
+					values[ forEachName + "@last" ] = String( ( total - 1 ) === index );
+					values[ forEachName + "@total" ] = String( total );
 
 					newline = mout.lang.isFunction( options.process ) ? options.process( includeContent, values ) : includeContent;
 

@@ -186,6 +186,12 @@ module.exports = function(grunt) {
 				}
 			},
 
+			foreach_meta: {
+				files: {
+					"tmp/foreach_meta.html": "test/fixtures/foreach_meta.html"
+				}
+			},
+
 			no_process_bake: {
 				options: {
 					process: false
