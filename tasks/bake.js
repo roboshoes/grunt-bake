@@ -367,8 +367,8 @@ module.exports = function( grunt ) {
 					// assign meta vars with information about current iteration
 					values[ forEachName + "@index" ] = String( index );
 					values[ forEachName + "@iteration" ] = String( index + 1 );
-					values[ forEachName + "@first" ] = String( index === 0 );
-					values[ forEachName + "@last" ] = String( ( total - 1 ) === index );
+					values[ forEachName + "@first" ] = ( index === 0 );
+					values[ forEachName + "@last" ] = ( ( total - 1 ) === index );
 					values[ forEachName + "@total" ] = String( total );
 
 					newline = index > 0 ? "\n" : "";
@@ -420,8 +420,8 @@ module.exports = function( grunt ) {
 					// assign meta vars with information about current iteration
 					values[ forEachName + "@index" ] = String( index );
 					values[ forEachName + "@iteration" ] = String( index + 1 );
-					values[ forEachName + "@first" ] = String( index === 0 );
-					values[ forEachName + "@last" ] = String( ( total - 1 ) === index );
+					values[ forEachName + "@first" ] = ( index === 0 );
+					values[ forEachName + "@last" ] = ( ( total - 1 ) === index );
 					values[ forEachName + "@total" ] = String( total );
 
 					newline = mout.lang.isFunction( options.process ) ? options.process( includeContent, values ) : includeContent;
