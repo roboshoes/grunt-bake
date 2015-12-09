@@ -187,6 +187,13 @@ module.exports = function(grunt) {
 			},
 
 			foreach_meta: {
+				options: {
+					transforms: {
+						visibleBool: function(state) {
+							return state ? 'is true' : 'is false';
+						}
+					}
+				},
 				files: {
 					"tmp/foreach_meta.html": "test/fixtures/foreach_meta.html"
 				}
