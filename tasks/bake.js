@@ -237,14 +237,11 @@ module.exports = function( grunt ) {
 					var left = mout.string.rtrim( parts[ 0 ] );
 					var right = mout.string.ltrim( parts[ 1 ] ).replace( /'/g, "" );
 
-					var leftResolved = resolveName( left, values );
-					var rightResolved = resolveName( right, values );
+					if( mout.object.has( values, left ) ) left = resolveName( left, values );
+					if( mout.object.has( values, right ) ) right = resolveName( right, values );
 
-					if( leftResolved === "" ) leftResolved = left;
-					if( rightResolved === "" ) rightResolved = right;
-
-					if ( operator === "==" && leftResolved === rightResolved ) return false;
-					else if ( operator === "!=" && leftResolved !== rightResolved ) return false;
+					if ( operator === "==" && left === right ) return false;
+					else if ( operator === "!=" && left !== right ) return false;
 
 					return true;
 				}
