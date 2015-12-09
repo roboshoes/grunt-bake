@@ -149,6 +149,30 @@ Determines the base directory for includes that are specified with an absolute p
 
 `<!--(bake /includes/footer.html)-->` relative to the basePath (level of Gruntfile by default)
 
+#### options.transforms
+Type: `Object`
+Default value: {}
+
+Registers callbacks that can be used as transforms in the template with `{{myvar | upper}}`. It is possible to chain transforms like `{{myvar | upper | nl2br}}`.
+
+```js
+transforms: {
+	upper: function(str) {
+		return String(str).toUpperCase();
+	},
+	nl2br: function(str) {
+		// ...
+	}
+}
+```
+
+#### options.transformGutter
+Type: `String`
+Default value: '|'
+
+Sequence used to split transforms.
+
+
 #### options.semanticIf
 Type: `Bool` | `Array` | `Function`
 Default value: false
