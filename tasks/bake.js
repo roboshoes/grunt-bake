@@ -83,10 +83,9 @@ module.exports = function( grunt ) {
 		// -- UTILS --
 		// ===========
 
-		// Regex to parse bake tags. The regex returns file path as match.
+		// Regex to parse bake tags. Retuns linebreak, indent, type, and signature
 
-		var regex = /(\n?)([ |\t]*)<!--\(\s?bake\s+([\w\/.\-]+)\s?([^]*?)\)-->/g;
-		var regexInline = /(?:[ |\t]*<!--\(\s?bake-start\s+([^>]*)\)-->)\n?([\s\S]+?)(?:[ |\t]*<!--\(\s?bake-end\s?\)-->)/g;
+		var regex = /(\n?)([ |\t]*)<!--\(\s?bake(-start|-end)?([^]*?)\)-->/;
 
 		// Regex to parse attributes.
 
@@ -97,6 +96,9 @@ module.exports = function( grunt ) {
 
 		var arrayRegex = /\[([\w\.\,\-]*)\]/;
 
+		// Regex to detect includePath / attributes in signature
+
+		var signatureRegex = /^([^_]{1}[^\s]+)\s?(.*)$/;
 
 		// Method to check wether file exists and warn if not.
 
@@ -132,6 +134,33 @@ module.exports = function( grunt ) {
 			}
 
 			return values;
+		}
+
+		// Parses a bake call signature (extract filepath and arguments)
+
+		function parseSignature( signature ) {
+			var match;
+			var result;
+
+			// trim whitespace from signature otherwise reqular expression test may fail
+			signature = signature.trim();
+
+			if( match = signatureRegex.exec( signature ) ) {
+				result = {
+					includePath: match[1],
+					attributes: match[2],
+					signature: signature
+				};
+
+			} else {
+				result = {
+					includePath: "",
+					attributes: signature,
+					signature: signature
+				};
+			}
+
+			return result;
 		}
 
 		// Helper method to check if a value represents false
@@ -333,85 +362,35 @@ module.exports = function( grunt ) {
 			else return directory( filePath ) + "/" + includePath;
 		}
 
-		function replace( linebreak, indent, includePath, attributes, filePath, values ) {
-
+		function replaceFile( linebreak, indent, includePath, attributes, filePath, values ) {
 			includePath = preparePath( includePath, filePath );
 
-			var inlineValues = parseInlineValues( attributes );
-			var section = validateSection( inlineValues, values );
-
-			if ( section !== null ) {
-				values = values[ section ];
-			}
-
-			if ( validateIf( inlineValues, values ) ) return "";
-			if ( validateRender( inlineValues ) ) return "";
-
-			var forEachValues = [];
-			var forEachName = validateForEach( inlineValues, values, forEachValues );
 			var includeContent = grunt.file.read( includePath );
 
-			values = mout.object.merge( values, inlineValues );
-
-			includeContent = applyIndent( indent, includeContent );
-
-			if ( forEachValues.length > 0 ) {
-
-				var fragment = "";
-				var newline = "";
-				var oldValue = values[ forEachName ];
-				var total = forEachValues.length;
-
-				forEachValues.forEach( function( value, index ) {
-					values[ forEachName ] = value;
-
-					// assign meta vars with information about current iteration
-					values[ forEachName + "@index" ] = String( index );
-					values[ forEachName + "@iteration" ] = String( index + 1 );
-					values[ forEachName + "@first" ] = ( index === 0 );
-					values[ forEachName + "@last" ] = ( ( total - 1 ) === index );
-					values[ forEachName + "@total" ] = String( total );
-
-					newline = index > 0 ? "\n" : "";
-
-					fragment += newline + parse( includeContent, includePath, values );
-				} );
-
-				if ( oldValue === undefined ) values[ forEachName ] = oldValue;
-				else delete values[ forEachName ];
-
-				return linebreak + fragment;
-
-			} else {
-
-				return linebreak + parse( includeContent, includePath, values );
-
-			}
-
+			return replaceString( includeContent, linebreak, indent, includePath, attributes, values );
 		}
 
-		function inlineReplace( attributes, content, filePath, values ) {
-
+		function replaceString( includeContent, linebreak, indent, includePath, attributes, values ) {
 			var inlineValues = parseInlineValues( attributes );
-
-			if ( validateRender( inlineValues ) ) return "";
-			if ( validateIf( inlineValues, values ) ) return "";
-
-			var forEachValues = [];
-			var forEachName = validateForEach( inlineValues, values, forEachValues );
-			var includeContent = content.trimRight();
 			var section = validateSection( inlineValues, values );
 
 			if ( section !== null ) {
 				values = values[ section ];
 			}
 
+			if ( validateIf( inlineValues, values ) ) return "";
+			if ( validateRender( inlineValues ) ) return "";
+
+			var forEachValues = [];
+			var forEachName = validateForEach( inlineValues, values, forEachValues );
+
 			values = mout.object.merge( values, inlineValues );
+
+			includeContent = applyIndent( indent, includeContent);
 
 			if ( forEachValues.length > 0 ) {
 
 				var fragment = "";
-				var newline = "";
 				var oldValue = values[ forEachName ];
 				var total = forEachValues.length;
 
@@ -425,9 +404,7 @@ module.exports = function( grunt ) {
 					values[ forEachName + "@last" ] = ( ( total - 1 ) === index );
 					values[ forEachName + "@total" ] = String( total );
 
-					newline = mout.lang.isFunction( options.process ) ? options.process( includeContent, values ) : includeContent;
-
-					fragment += ( index > 0 ? "\n" : "" ) + newline;
+					fragment += linebreak + parse( includeContent, includePath, values );
 				} );
 
 				if ( oldValue === undefined ) values[ forEachName ] = oldValue;
@@ -437,7 +414,7 @@ module.exports = function( grunt ) {
 
 			} else {
 
-				return parse( includeContent, filePath, values );
+				return linebreak + parse( includeContent, includePath, values );
 
 			}
 		}
@@ -447,24 +424,83 @@ module.exports = function( grunt ) {
 		// -- RECURSIVE PARSE --
 		// =====================
 
-		// Recursivly search for includes and create one file.
+		// extract bake sections.
+		// For inline-bake it searches for matching closing tags and returns inline content and other information
+
+		function extractSection( content ) {
+			var depth = 0;			// tracks how difference between found opening and closing tags
+			var start = 0;			// character position in `content` where inner-content starts
+			var pos = 0;			// current character position within _original_ content
+			var len = 0;			// length section (= spacing plus bake-tag) we currently evaluate
+			var remain = content;	// content left for further extraction
+			var section = {};
+
+			do {
+				// grap first section
+				var res = remain.match( regex );
+
+				// stop if no sections is found
+				if(!res) break;
+
+				len = res[0].length;
+				pos += res.index;
+
+				// init our section
+				if( depth === 0 ) {
+
+					// starts contains position _after_ bake-tag, hence start of inline-content (if inline tag)
+					start = pos + len;
+
+					section = mout.object.merge( section, parseSignature( res[4] ), {
+						before: content.slice( 0, pos ),
+						linebreak: res[1],
+						indent: res[2]
+					} );
+				}
+
+				// only use content that is ahead for futher evaluation
+				remain = remain.slice( res.index + len );
+
+				// increase / descrease depth when coming across inline-tags
+				depth += (res[3] === "-start");
+				depth -= (res[3] === "-end");
+
+				// when depth is 0 again we reached the closing tag
+				if( depth === 0 ) {
+					return mout.object.merge( section, {
+						inner: content.slice( start, pos ),
+						after: content.slice( pos + len )
+					} );
+				}
+
+				pos += len;
+
+			} while(true);
+
+			return null;
+		}
+
+
+		// Recursivly search for bake-tags and create one file.
 
 		function parse( fileContent, filePath, values ) {
 
-			fileContent = fileContent.replace( regexInline, function( match, attributes, content ) {
-				return inlineReplace( attributes, content, filePath, values );
-			} );
+			var section = extractSection( fileContent );
 
-			if ( mout.lang.isFunction( options.process ) ) {
-				fileContent = options.process( fileContent, values );
+			if( section ) {
+				fileContent = section.before;
+
+				if(section.inner) {
+					// note: innersections do not need additional identation or line-breaks, hence set to empty string
+					fileContent += replaceString( section.inner, "", "", section.includePath, section.attributes, values );
+				} else {
+					fileContent += replaceFile( section.linebreak, section.indent, section.includePath, section.attributes, filePath, values );
+				}
+
+				fileContent += parse( section.after, filePath, values );
 			}
 
-			fileContent = fileContent.replace( regex, function( match, linebreak, indent, includePath, attributes ) {
-				return replace( linebreak, indent, includePath, attributes, filePath, values );
-			} );
-
-
-			return fileContent;
+			return mout.lang.isFunction( options.process ) ? options.process( fileContent, values ) : fileContent;
 		}
 
 

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+	<head></head>
+	<body>
+		<ul>
+		<!--(bake-start _foreach="name:[Lisa, Martin, Joe]")-->
+			<li>{{name}} <!--(bake-start _if="name == 'Martin'")-->(This is Martin)<!--(bake-end)--></li>
+		<!--(bake-end)-->
+		</ul>
+
+		<dl>
+		<!--(bake-start _foreach="group:groups")-->
+			<dt>{{group.name}}</dt>
+			<dd>
+			<!--(bake-start _foreach="member:group.members")-->
+				{{member}}<br />
+			<!--(bake-end)-->
+			</dd>
+		<!--(bake-end)-->
+		</dl>
+	</body>
+</html>

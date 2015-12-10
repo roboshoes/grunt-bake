@@ -120,6 +120,16 @@ module.exports = function(grunt) {
 				}
 			},
 
+			inline_recursive_bake: {
+				options: {
+					content: "test/fixtures/content.json"
+				},
+
+				files: {
+					"tmp/inline_recursive_bake.html": "test/fixtures/inline_recursive_bake.html"
+				}
+			},
+
 			inline_bake: {
 				options: {
 					content: "test/fixtures/content.json",

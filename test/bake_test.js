@@ -12,6 +12,7 @@ exports.bake = {
 			"tmp/advanced_bake.html": "test/expected/advanced_bake.html",
 			"tmp/costum_process_bake.html": "test/expected/costum_process_bake.html",
 			"tmp/recursive_bake.html": "test/expected/recursive_bake.html",
+			"tmp/inline_recursive_bake.html": "test/expected/inline_recursive_bake.html",
 			"tmp/inline_bake.html": "test/expected/inline_bake.html",
 			"tmp/absolute_path_bake.html": "test/expected/default_bake.html",
 			"tmp/default_absolute_path_bake.html": "test/expected/default_bake.html",
