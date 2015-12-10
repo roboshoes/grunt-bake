@@ -353,6 +353,12 @@ module.exports = function(grunt) {
 					"tmp/transform_deep.html": "test/fixtures/transform_deep.html"
 				}
 			},
+
+			multiline_bake: {
+				files: {
+					"tmp/multiline_bake.html": "test/fixtures/multiline_bake.html"
+				}
+			}
 		}
 
 	} );

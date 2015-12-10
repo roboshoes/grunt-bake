@@ -98,7 +98,7 @@ module.exports = function( grunt ) {
 
 		// Regex to detect includePath / attributes in signature
 
-		var signatureRegex = /^([^_]{1}[^\s]+)\s?(.*)$/;
+		var signatureRegex = /^([^_]{1}[^\s]+)\s?([\S\s]*)$/;
 
 		// Method to check wether file exists and warn if not.
 
