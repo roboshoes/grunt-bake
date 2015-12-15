@@ -430,6 +430,33 @@ Just like the `_if` statement the `_foreach` also works with inlined content:
 </html>
 ```
 
+Bake automatically supplies meta information for each loop, like current index. Values can be accessed by the defined key followed by `@index`, `@iteration`, `@first`, `@last`, or `@total`.
+
+```html
+<html>
+	<body>
+		<ul>
+		<!--(bake-start _foreach="name:[Robert, Susan, Carl]")-->
+			<li><a href="#anchor-{{name@iteration}}">{{name}}</a></li>
+		<!--(bake-end)-->
+		</ul>
+	</body>
+</html>
+```
+
+This will render the following:
+
+```html
+<html>
+	<body>
+		<ul>
+			<li><a href="#anchor-1">Robert</a></li>
+			<li><a href="#anchor-2">Susan</a></li>
+			<li><a href="#anchor-3">Carl</a></li>
+		</ul>
+	</body>
+</html>
+```
 
 #### Inline Section statement
 

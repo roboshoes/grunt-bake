@@ -12,6 +12,7 @@ exports.bake = {
 			"tmp/advanced_bake.html": "test/expected/advanced_bake.html",
 			"tmp/costum_process_bake.html": "test/expected/costum_process_bake.html",
 			"tmp/recursive_bake.html": "test/expected/recursive_bake.html",
+			"tmp/inline_recursive_bake.html": "test/expected/inline_recursive_bake.html",
 			"tmp/inline_bake.html": "test/expected/inline_bake.html",
 			"tmp/absolute_path_bake.html": "test/expected/default_bake.html",
 			"tmp/default_absolute_path_bake.html": "test/expected/default_bake.html",
@@ -28,7 +29,9 @@ exports.bake = {
 			"tmp/transform_pass_through.html": "test/expected/transform_pass_through.html",
 			"tmp/transform_single.html": "test/expected/transform_single.html",
 			"tmp/transform_multiple.html": "test/expected/transform_multiple.html",
-			"tmp/transform_deep.html": "test/expected/transform_deep.html"
+			"tmp/transform_deep.html": "test/expected/transform_deep.html",
+			"tmp/foreach_meta.html": "test/expected/foreach_meta.html",
+			"tmp/multiline_bake.html": "test/expected/multiline_bake.html"
 		};
 
 		test.expect( mout.object.size( files ) );
