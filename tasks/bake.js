@@ -492,7 +492,7 @@ module.exports = function( grunt ) {
 
 				if(section.inner) {
 					// note: innersections do not need additional identation or line-breaks, hence set to empty string
-					fileContent += replaceString( section.inner, "", "", section.includePath, section.attributes, values );
+					fileContent += replaceString( section.inner, "", "", filePath, section.attributes, values );
 				} else {
 					fileContent += replaceFile( section.linebreak, section.indent, section.includePath, section.attributes, filePath, values );
 				}
