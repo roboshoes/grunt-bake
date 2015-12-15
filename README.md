@@ -38,22 +38,22 @@ Setup the `bake` task like so:
 
 ```js
 grunt.initConfig( {
-	bake: {
-		your_target: {
-			options: {
-				// Task-specific options go here.
-			},
+    bake: {
+        your_target: {
+            options: {
+                // Task-specific options go here.
+            },
 
-			files: {
-				// files go here, like so:
+            files: {
+                // files go here, like so:
 
-				"dist/index.html": "app/index.html",
-				"dist/mobile.html": "app/mobile.html"
+                "dist/index.html": "app/index.html",
+                "dist/mobile.html": "app/mobile.html"
 
-				// etc ...
-			}
-		},
-	},
+                // etc ...
+            }
+        },
+    },
 } )
 ```
 
@@ -61,11 +61,11 @@ With a `app/index.html` file like this one:
 
 ```html
 <html>
-	<head></head>
-	<body>
-		<!--(bake includes/container.html)-->
-		<!--(bake includes/footer.html)-->
-	</body>
+    <head></head>
+    <body>
+        <!--(bake includes/container.html)-->
+        <!--(bake includes/footer.html)-->
+    </body>
 </html>
 ```
 
@@ -89,23 +89,23 @@ Given a content JSON like such:
 
 ```json
 {
-	"en": {
-		"title": "Book",
+    "en": {
+        "title": "Book",
 
-		"info": {
-			"author": "Joe Do",
-			"job": "Writer"
-		}
-	},
+        "info": {
+            "author": "Joe Do",
+            "job": "Writer"
+        }
+    },
 
-	"de": {
-		"title": "Buch",
+    "de": {
+        "title": "Buch",
 
-		"info": {
-			"author": "Joe Do",
-			"job": "Schreiber"
-		}
-	}
+        "info": {
+            "author": "Joe Do",
+            "job": "Schreiber"
+        }
+    }
 }
 ```
 
@@ -116,8 +116,8 @@ This could be used to parse a template like such:
 ```html
 <div>{{title}}</div>
 <div>
-	<span>{{info.author}}</span>
-	<span>{{info.job}}</span>
+    <span>{{info.author}}</span>
+    <span>{{info.job}}</span>
 </div>
 ```
 
@@ -157,12 +157,12 @@ Registers callbacks that can be used as transforms in the template with `{{myvar
 
 ```js
 transforms: {
-	upper: function(str) {
-		return String(str).toUpperCase();
-	},
-	nl2br: function(str) {
-		// ...
-	}
+    upper: function(str) {
+        return String(str).toUpperCase();
+    },
+    nl2br: function(str) {
+        // ...
+    }
 }
 ```
 
@@ -186,21 +186,21 @@ This example shows a simple baking process with all default options.
 
 ```js
 grunt.initConfig( {
-	bake: {
-		build: {
-			files: {
-				"app/index.html": "app/base.html"
-			}
-		}
-	}
+    bake: {
+        build: {
+            files: {
+                "app/index.html": "app/base.html"
+            }
+        }
+    }
 } )
 ```
 _app/base.html_:
 ```html
 <html>
-	<body>
-		<!--(bake includes/container.html)-->
-	</body>
+    <body>
+        <!--(bake includes/container.html)-->
+    </body>
 </html>
 ```
 
@@ -212,9 +212,9 @@ _app/includes/container.html_:
 This bake task will create _app/index.html_:
 ```html
 <html>
-	<body>
-		<div id="container"></div>
-	</body>
+    <body>
+        <div id="container"></div>
+    </body>
 </html>
 ```
 
@@ -224,18 +224,18 @@ This example shows how to use the bake process to parse the templates with a pro
 
 ```js
 grunt.initConfig( {
-	bake: {
-		build: {
-			options: {
-				content: "app/content.json",
-				section: "en"
-			}
+    bake: {
+        build: {
+            options: {
+                content: "app/content.json",
+                section: "en"
+            }
 
-			files: {
-				"app/index.html": "app/base.html"
-			}
-		}
-	}
+            files: {
+                "app/index.html": "app/base.html"
+            }
+        }
+    }
 } )
 ```
 
@@ -243,22 +243,22 @@ _app/content.json_:
 
 ```json
 {
-	"en": {
-		"title": "Hello World"
-	},
+    "en": {
+        "title": "Hello World"
+    },
 
-	"de": {
-		"title": "Hallo Welt"
-	}
+    "de": {
+        "title": "Hallo Welt"
+    }
 }
 ```
 
 _app/base.html_:
 ```html
 <html>
-	<body>
-		<!--(bake includes/container.html)-->
-	</body>
+    <body>
+        <!--(bake includes/container.html)-->
+    </body>
 </html>
 ```
 
@@ -270,9 +270,9 @@ _app/includes/container.html_:
 This bake task will create _app/index.html_:
 ```html
 <html>
-	<body>
-		<div id="container">Hello World</div>
-	</body>
+    <body>
+        <div id="container">Hello World</div>
+    </body>
 </html>
 ```
 
@@ -286,9 +286,9 @@ Same scenario as above.
 _app/base.html_:
 ```html
 <html>
-	<body>
-		<!--(bake includes/container.html title="Salut Monde" name="Mathias")-->
-	</body>
+    <body>
+        <!--(bake includes/container.html title="Salut Monde" name="Mathias")-->
+    </body>
 </html>
 ```
 
@@ -301,10 +301,10 @@ _app/includes/container.html_:
 This bake task will create _app/index.html_:
 ```html
 <html>
-	<body>
-		<div id="container">Salut monde</div>
-		<span>Mathias</span>
-	</body>
+    <body>
+        <div id="container">Salut monde</div>
+        <span>Mathias</span>
+    </body>
 </html>
 ```
 
@@ -319,11 +319,11 @@ __Note: This is a simple implementation of the equals operator and is based sole
 _app/base.html_:
 ```html
 <html>
-	<body>
-		<!--(bake includes/container.html _if="name")-->
+    <body>
+        <!--(bake includes/container.html _if="name")-->
 
-		<!--(bake includes/other.html _if="foo == 'bar'")-->
-	</body>
+        <!--(bake includes/other.html _if="foo == 'bar'")-->
+    </body>
 </html>
 ```
 
@@ -336,17 +336,17 @@ _app/content.json_:
 
 ```json
 {
-	"foo": "bar"
+    "foo": "bar"
 }
 ```
 
 This bake task will create _app/index.html_:
 ```html
 <html>
-	<body>
+    <body>
 
-		<span>bar</span>
-	</body>
+        <span>bar</span>
+    </body>
 </html>
 ```
 
@@ -354,11 +354,11 @@ Additionally the `_if` statement also works with inlining the bake content.
 
 ```html
 <html>
-	<body>
-		<!--(bake-start _if="name")-->
-		<h1>{{name}}</h1>
-		<!--(bake-end)-->
-	</body>
+    <body>
+        <!--(bake-start _if="name")-->
+        <h1>{{name}}</h1>
+        <!--(bake-end)-->
+    </body>
 </html>
 ```
 
@@ -371,15 +371,15 @@ It accepts an inline syntax: `_foreach="name:[mike, drew, steve]"` as well as a 
 _app/base.html_:
 ```html
 <html>
-	<body>
-		<ul class="first">
-			<!--(bake includes/li.html _foreach="name:[mike, drew, steve]")-->
-		</ul>
+    <body>
+        <ul class="first">
+            <!--(bake includes/li.html _foreach="name:[mike, drew, steve]")-->
+        </ul>
 
-		<ul class="second">
-			<!--(bake includes/li.html _foreach="name:authors.names")-->
-		</ul>
-	</body>
+        <ul class="second">
+            <!--(bake includes/li.html _foreach="name:authors.names")-->
+        </ul>
+    </body>
 </html>
 ```
 
@@ -391,28 +391,28 @@ _app/includes/li.html_:
 _app/content.json_:
 ```json
 {
-	"authors": {
-		"names": [ "jenna", "carla", "susy" ]
-	}
+    "authors": {
+        "names": [ "jenna", "carla", "susy" ]
+    }
 }
 ```
 
 This bake task will create _app/index.html_:
 ```html
 <html>
-	<body>
-		<ul class="first">
-			<li>mike</li>
-			<li>drew</li>
-			<li>steve</li>
-		</ul>
+    <body>
+        <ul class="first">
+            <li>mike</li>
+            <li>drew</li>
+            <li>steve</li>
+        </ul>
 
-		<ul class="second">
-			<li>jenna</li>
-			<li>carla</li>
-			<li>susy</li>
-		</ul>
-	</body>
+        <ul class="second">
+            <li>jenna</li>
+            <li>carla</li>
+            <li>susy</li>
+        </ul>
+    </body>
 </html>
 ```
 
@@ -420,13 +420,13 @@ Just like the `_if` statement the `_foreach` also works with inlined content:
 
 ```html
 <html>
-	<body>
-		<ul>
-		<!--(bake-start _foreach="name:[robert, susan, carl]")-->
-			<li>{{name}}</li>
-		<!--(bake-end)-->
-		</ul>
-	</body>
+    <body>
+        <ul>
+        <!--(bake-start _foreach="name:[robert, susan, carl]")-->
+            <li>{{name}}</li>
+        <!--(bake-end)-->
+        </ul>
+    </body>
 </html>
 ```
 
@@ -438,10 +438,10 @@ The `_section` attribute, when used inline, allows to use a specific subcontent 
 _app/base.html_:
 ```html
 <html>
-	<body>
-		<!--(bake includes/file.html _section="home")-->
-		<!--(bake includes/file.html _section="about")-->
-	</body>
+    <body>
+        <!--(bake includes/file.html _section="home")-->
+        <!--(bake includes/file.html _section="about")-->
+    </body>
 </html>
 ```
 
@@ -454,26 +454,26 @@ _app/includes/file.html_:
 With the following content file
 ```json
 {
-	"home": {
-		"title": "Home",
-		"content": "This is home"
-	},
-	"about": {
-		"title": "About",
-		"content": "This is about"
-	}
+    "home": {
+        "title": "Home",
+        "content": "This is home"
+    },
+    "about": {
+        "title": "About",
+        "content": "This is about"
+    }
 }
 ```
 
 This will render the following:
 ```html
 <html>
-	<body>
-		<h1>Home</h1>
-		<p>This is home</p>
-		<h1>About</h1>
-		<p>This is about</p>
-	</body>
+    <body>
+        <h1>Home</h1>
+        <p>This is home</p>
+        <h1>About</h1>
+        <p>This is about</p>
+    </body>
 </html>
 ```
 
@@ -489,24 +489,24 @@ and a `false` value will skip the template.
 _app/base.html_:
 ```html
 <html>
-	<body>
-		<!--(bake includes/file.html _render="baseline")-->
-	</body>
+    <body>
+        <!--(bake includes/file.html _render="baseline")-->
+    </body>
 </html>
 ```
 
 With the following grunt task:
 ```js
 bake: {
-	your_target: {
-		options: {
-			baseline: false
-		},
+    your_target: {
+        options: {
+            baseline: false
+        },
 
-		files: {
-			"dist/index.html": "app/base.html"
-		}
-	},
+        files: {
+            "dist/index.html": "app/base.html"
+        }
+    },
 }
 ```
 
@@ -515,8 +515,8 @@ This will create:
 _dist/index.html_:
 ```html
 <html>
-	<body>
-	</body>
+    <body>
+    </body>
 </html>
 ```
 
@@ -528,23 +528,23 @@ This example shows the use of a custom process function.
 ```js
 
 var processFunction( source, content ) {
-	return source + "<br>";
+    return source + "<br>";
 }
 
 grunt.initConfig( {
-	bake: {
-		build: {
-			options: {
-				content: "app/content.json",
-				section: "en",
-				process: processFunction
-			}
+    bake: {
+        build: {
+            options: {
+                content: "app/content.json",
+                section: "en",
+                process: processFunction
+            }
 
-			files: {
-				"app/index.html": "app/base.html"
-			}
-		}
-	}
+            files: {
+                "app/index.html": "app/base.html"
+            }
+        }
+    }
 } )
 ```
 
@@ -554,9 +554,9 @@ For ease of development just add the `bake` task to your watch list. The static 
 
 ```javascript
 watch: {
-	bake: {
-		files: [ "app/includes/**" ],
-		tasks: "bake:build"
-	}
+    bake: {
+        files: [ "app/includes/**" ],
+        tasks: "bake:build"
+    }
 }
 ```
