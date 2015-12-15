@@ -1,0 +1,12 @@
+<dl>
+	<!--(bake-start _foreach="name:[robert, susan, carl]")-->
+	<dt>{{name}}</dt>
+	<dd>
+		Index: {{name@index}}<br>
+		Iteration: {{name@iteration}}<br>
+		First: {{name@first | visibleBool}}<br>
+		Last: {{name@last | visibleBool}}<br>
+		Total: {{name@total}}
+	</dd>
+	<!--(bake-end)-->
+</dl>

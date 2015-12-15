@@ -120,6 +120,16 @@ module.exports = function(grunt) {
 				}
 			},
 
+			inline_recursive_bake: {
+				options: {
+					content: "test/fixtures/content.json"
+				},
+
+				files: {
+					"tmp/inline_recursive_bake.html": "test/fixtures/inline_recursive_bake.html"
+				}
+			},
+
 			inline_bake: {
 				options: {
 					content: "test/fixtures/content.json",
@@ -183,6 +193,19 @@ module.exports = function(grunt) {
 
 				files: {
 					"tmp/foreach-inline_bake.html": "test/fixtures/foreach-inline_bake.html"
+				}
+			},
+
+			foreach_meta: {
+				options: {
+					transforms: {
+						visibleBool: function(state) {
+							return state ? 'is true' : 'is false';
+						}
+					}
+				},
+				files: {
+					"tmp/foreach_meta.html": "test/fixtures/foreach_meta.html"
 				}
 			},
 
@@ -330,6 +353,12 @@ module.exports = function(grunt) {
 					"tmp/transform_deep.html": "test/fixtures/transform_deep.html"
 				}
 			},
+
+			multiline_bake: {
+				files: {
+					"tmp/multiline_bake.html": "test/fixtures/multiline_bake.html"
+				}
+			}
 		}
 
 	} );
