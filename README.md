@@ -434,13 +434,13 @@ Bake automatically supplies meta information for each loop, like current index. 
 
 ```html
 <html>
-	<body>
-		<ul>
-		<!--(bake-start _foreach="name:[Robert, Susan, Carl]")-->
-			<li><a href="#anchor-{{name@iteration}}">{{name}}</a></li>
-		<!--(bake-end)-->
-		</ul>
-	</body>
+    <body>
+        <ul>
+        <!--(bake-start _foreach="name:[Robert, Susan, Carl]")-->
+            <li><a href="#anchor-{{name@iteration}}">{{name}}</a></li>
+        <!--(bake-end)-->
+        </ul>
+    </body>
 </html>
 ```
 
@@ -448,13 +448,13 @@ This will render the following:
 
 ```html
 <html>
-	<body>
-		<ul>
-			<li><a href="#anchor-1">Robert</a></li>
-			<li><a href="#anchor-2">Susan</a></li>
-			<li><a href="#anchor-3">Carl</a></li>
-		</ul>
-	</body>
+    <body>
+        <ul>
+            <li><a href="#anchor-1">Robert</a></li>
+            <li><a href="#anchor-2">Susan</a></li>
+            <li><a href="#anchor-3">Carl</a></li>
+        </ul>
+    </body>
 </html>
 ```
 

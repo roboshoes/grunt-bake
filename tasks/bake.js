@@ -30,8 +30,22 @@ module.exports = function( grunt ) {
 			transformGutter: "|"
 		} );
 
+
+		// normalize basePath
+
 		if ( options.basePath.substr( -1 , 1 ) !== "/" && options.basePath.length > 0 ) {
 			options.basePath = options.basePath + "/";
+		}
+
+
+		// normalize content
+
+		if ( mout.lang.isString( options.content ) ) {
+			options.content = grunt.file.readJSON( options.content );
+		} else if ( mout.lang.isFunction( options.content ) ) {
+			options.content = options.content();
+		} else {
+			options.content = options.content ? options.content : {};
 		}
 
 
@@ -221,12 +235,12 @@ module.exports = function( grunt ) {
 				return content;
 			}
 
-			var lines = content.split( "\n" );
-			var prepedLines = lines.map( function( line ) {
-				return indent + line;
-			} );
-
-			return prepedLines.join( "\n" );
+			return content
+				.split( "\n" )
+				.map( function( line ) {
+					return indent + line;
+				} )
+				.join( "\n" );
 		}
 
 
@@ -430,52 +444,46 @@ module.exports = function( grunt ) {
 		function extractSection( content ) {
 			var depth = 0;			// tracks how difference between found opening and closing tags
 			var start = 0;			// character position in `content` where inner-content starts
-			var pos = 0;			// current character position within _original_ content
-			var len = 0;			// length section (= spacing plus bake-tag) we currently evaluate
+			var position = 0;			// current character position within _original_ content
+			var length = 0;			// length section (= spacing plus bake-tag) we currently evaluate
 			var remain = content;	// content left for further extraction
 			var section = {};
 
 			do {
-				// grap first section
-				var res = remain.match( regex );
 
-				// stop if no sections is found
-				if(!res) break;
+				var result = remain.match( regex );
 
-				len = res[0].length;
-				pos += res.index;
+				if( ! result ) break;
 
-				// init our section
+				length = result[ 0 ].length;
+				position += result.index;
+
 				if( depth === 0 ) {
 
-					// starts contains position _after_ bake-tag, hence start of inline-content (if inline tag)
-					start = pos + len;
+					start = position + length;
 
-					section = mout.object.merge( section, parseSignature( res[4] ), {
-						before: content.slice( 0, pos ),
-						linebreak: res[1],
-						indent: res[2]
+					section = mout.object.merge( section, parseSignature( result[ 4 ] ), {
+						before: content.slice( 0, position ),
+						linebreak: result[ 1 ],
+						indent: result[ 2 ]
 					} );
 				}
 
-				// only use content that is ahead for futher evaluation
-				remain = remain.slice( res.index + len );
+				remain = remain.slice( result.index + length );
 
-				// increase / descrease depth when coming across inline-tags
-				depth += (res[3] === "-start");
-				depth -= (res[3] === "-end");
+				depth += (result[ 3 ] === "-start");
+				depth -= (result[ 3 ] === "-end");
 
-				// when depth is 0 again we reached the closing tag
 				if( depth === 0 ) {
 					return mout.object.merge( section, {
-						inner: content.slice( start, pos ),
-						after: content.slice( pos + len )
+						inner: content.slice( start, position ),
+						after: content.slice( position + length )
 					} );
 				}
 
-				pos += len;
+				position += length;
 
-			} while(true);
+			} while( true );
 
 			return null;
 		}
@@ -491,7 +499,6 @@ module.exports = function( grunt ) {
 				fileContent = section.before;
 
 				if(section.inner) {
-					// note: innersections do not need additional identation or line-breaks, hence set to empty string
 					fileContent += replaceString( section.inner, "", "", filePath, section.attributes, values );
 				} else {
 					fileContent += replaceFile( section.linebreak, section.indent, section.includePath, section.attributes, filePath, values );
@@ -517,26 +524,17 @@ module.exports = function( grunt ) {
 
 			if ( ! checkFile( src ) ) return;
 
-			var values;
-			if ( mout.lang.isString( options.content ) ) {
-				values = grunt.file.readJSON( options.content );
-			} else if ( mout.lang.isFunction( options.content ) ) {
-				values = options.content();
-			} else {
-				values = options.content ? options.content : {};
-			}
-
 			if ( options.section ) {
 
-				if ( ! values[ options.section ] ) {
+				if ( ! options.content[ options.section ] ) {
 					grunt.log.error( "content doesn't have section " + options.section );
 				}
 
-				values = values[ options.section ];
+				options.content = options.content[ options.section ];
 			}
 
 			var srcContent = grunt.file.read( src );
-			var destContent = parse( srcContent, src, values );
+			var destContent = parse( srcContent, src, options.content );
 
 			grunt.file.write( dest, destContent );
 			grunt.log.ok( "File \"" + dest + "\" created." );
