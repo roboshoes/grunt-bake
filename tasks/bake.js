@@ -204,7 +204,13 @@ module.exports = function( grunt ) {
 		// Helper method to resolve nested placeholder names like: "home.footer.text"
 
 		function resolveName( name, values ) {
-			return mout.object.get( values, name ) || "";
+			name = name.replace( /\[([^\]]+)\]/g, function( match, inner ) {
+				return "." + resolveName( inner, values );
+			});
+
+			var value = mout.object.get( values, name );
+
+			return value !== undefined ? value : "";
 		}
 
 
@@ -412,11 +418,11 @@ module.exports = function( grunt ) {
 					values[ forEachName ] = value;
 
 					// assign meta vars with information about current iteration
-					values[ forEachName + "@index" ] = String( index );
-					values[ forEachName + "@iteration" ] = String( index + 1 );
+					values[ forEachName + "@index" ] = index;
+					values[ forEachName + "@iteration" ] = index + 1;
 					values[ forEachName + "@first" ] = ( index === 0 );
 					values[ forEachName + "@last" ] = ( ( total - 1 ) === index );
-					values[ forEachName + "@total" ] = String( total );
+					values[ forEachName + "@total" ] = total;
 
 					fragment += linebreak + parse( includeContent, includePath, values );
 				} );
