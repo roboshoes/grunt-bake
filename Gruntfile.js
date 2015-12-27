@@ -168,6 +168,16 @@ module.exports = function(grunt) {
 				}
 			},
 
+			semantic_if: {
+				options: {
+					semanticIf: true
+				},
+
+				files: {
+					"tmp/semantic_if.html": "test/fixtures/semantic_if.html"
+				}
+			},
+
 			format_bake: {
 				files: {
 					"tmp/format_bake.html": "test/fixtures/format_bake.html"

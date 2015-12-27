@@ -17,6 +17,7 @@ exports.bake = {
 			"tmp/absolute_path_bake.html": "test/expected/default_bake.html",
 			"tmp/default_absolute_path_bake.html": "test/expected/default_bake.html",
 			"tmp/if_bake.html": "test/expected/if_bake.html",
+			"tmp/semantic_if.html": "test/expected/semantic_if.html",
 			"tmp/format_bake.html": "test/expected/format_bake.html",
 			"tmp/foreach_bake.html": "test/expected/foreach_bake.html" ,
 			"tmp/foreach-inline_bake.html": "test/expected/foreach-inline_bake.html",
