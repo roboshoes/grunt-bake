@@ -323,6 +323,40 @@ module.exports = function(grunt) {
 				}
 			},
 
+			transform_params: {
+				options: {
+					content: {
+						content: {
+							"string": "Bake",
+							"array": [
+								"Jim",
+								"John",
+								"James",
+								"Jonathan"
+							]
+						}
+					},
+					transforms: {
+						repeat: function( string, times ) {
+							return String( string ).repeat( times );
+						},
+						replace: function( string, searchvalue, newvalue ) {
+							return String( string ).replace( searchvalue, newvalue );
+						},
+						max: function( array, limit ) {
+							return array.slice( 0, limit );
+						},
+						join: function( array, glue ) {
+							return array.join( glue );
+						}
+					}
+				},
+
+				files: {
+					"tmp/transform_params.html": "test/fixtures/transform_params.html"
+				}
+			},
+
 			transform_multiple: {
 				options: {
 					content: {

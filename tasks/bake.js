@@ -27,7 +27,6 @@ module.exports = function( grunt ) {
 			basePath: "",
 			transforms: {},
 			parsePattern: /\{\{\s*([^\}]+)\s*\}\}/g,
-			transformGutter: "|",
 			removeUndefined: true
 		} );
 
@@ -49,7 +48,6 @@ module.exports = function( grunt ) {
 			options.content = options.content ? options.content : {};
 		}
 
-
 		// =======================
 		// -- DEFAULT PROCESSOR --
 		// =======================
@@ -58,13 +56,25 @@ module.exports = function( grunt ) {
 		function defaultProcess( template, content ) {
 			return template.replace( options.parsePattern, function( match, inner ) {
 
-				// remove whitespace
-				var transforms = inner.split( options.transformGutter ).map( function( str ) {
-					return mout.string.trim( str );
+				// extract transforms from placeholder
+				var transforms = inner.match( transformsRegex ).map( function( str ) {
+
+					// remove whitespace, otherwise transforms and variable key may not be found
+					str = mout.string.trim( str );
+
+					// extract name of transform and transform parameters, and clear quotes
+					var parts = str.match( paramsRegex ).map( function( str ) {
+						return mout.string.trim( str, "'" );
+					});
+
+					return {
+						name: parts[0],
+						params: parts.slice(1)
+					};
 				});
 
-				// the first value is our variable key and not a transfrom
-				var key = transforms.shift();
+				// the first value is the set that contains our variable key, and not a transfrom
+				var key = transforms.shift().name;
 				var resolved = resolveName( key, content );
 
 				if( resolved === undefined && !options.removeUndefined ) {
@@ -80,22 +90,24 @@ module.exports = function( grunt ) {
 		}
 
 		function applyTransform( content, transform ) {
+			var name = transform.name;
+
 			// check if transform is registred
-			if( ! mout.object.has( options.transforms, transform ) ) {
-				grunt.log.error( "Unknown transform: " + transform );
+			if( ! mout.object.has( options.transforms, name ) ) {
+				grunt.log.error( "Unknown transform: " + name );
 
 				return content;
 			}
 
 			// check if transform is valid callback
-			if( ! mout.lang.isFunction( options.transforms[ transform ] ) ) {
-				grunt.log.error( "Transform is not a function: " + transform );
+			if( ! mout.lang.isFunction( options.transforms[ name ] ) ) {
+				grunt.log.error( "Transform is not a function: " + name );
 
 				return content;
 			}
 
-			// apply transform
-			return options.transforms[transform].call( null, content );
+			// apply transform, handler is calles with signature ( variableContent, param1, param2, ..., paramN )
+			return options.transforms[ name ].apply( null, [ content ].concat( transform.params ) );
 		}
 
 		// ===========
@@ -110,6 +122,14 @@ module.exports = function( grunt ) {
 
 		var attributesRegex = /([\S_]+)="([^"]+)"/g;
 
+		// Regex to parse transforms including their parameters from placeholders
+
+		var transformsRegex = /(?:'[^']*'|[^\|])+/g;
+
+		// Regex to parse parameters from transforms
+
+		var paramsRegex = /(?:'[^']*'|[^:])+/g;
+
 		// Regex to detect array syntax.
 
 		var arrayRegex = /\[([\w\.\,\-]*)\]/;
@@ -118,7 +138,7 @@ module.exports = function( grunt ) {
 
 		var signatureRegex = /^((?!_\S+=)[^\s]+)\s?([\S\s]*)$/;
 
-		//
+		// Regex to serach for variable names
 
 		var ifRegex = /([a-z_$][0-9a-z_$@]*)|(?:"([^"]*)")|(?:'([^']*)')/gi;
 

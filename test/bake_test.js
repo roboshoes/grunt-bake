@@ -29,6 +29,7 @@ exports.bake = {
 			"tmp/function_content_bake.html": "test/expected/function_content_bake.html",
 			"tmp/transform_pass_through.html": "test/expected/transform_pass_through.html",
 			"tmp/transform_single.html": "test/expected/transform_single.html",
+			"tmp/transform_params.html": "test/expected/transform_params.html",
 			"tmp/transform_multiple.html": "test/expected/transform_multiple.html",
 			"tmp/transform_deep.html": "test/expected/transform_deep.html",
 			"tmp/foreach_meta.html": "test/expected/foreach_meta.html",
