@@ -408,7 +408,7 @@ module.exports = function( grunt ) {
 
 			includeContent = applyIndent( indent, includeContent);
 
-			if ( forEachValues.length > 0 ) {
+			if( forEachName && forEachValues.length > 0 ) {
 
 				var fragment = "";
 				var oldValue = values[ forEachName ];
@@ -432,10 +432,13 @@ module.exports = function( grunt ) {
 
 				return fragment;
 
-			} else {
+			} else if( !forEachName ) {
 
 				return linebreak + parse( includeContent, includePath, values );
 
+			} else {
+
+				return "";
 			}
 		}
 
