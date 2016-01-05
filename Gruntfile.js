@@ -199,8 +199,8 @@ module.exports = function(grunt) {
 			foreach_meta: {
 				options: {
 					transforms: {
-						visibleBool: function(state) {
-							return state ? 'is true' : 'is false';
+						visibleBool: function( state ) {
+							return state ? "is true" : "is false";
 						}
 					}
 				},
@@ -285,8 +285,8 @@ module.exports = function(grunt) {
 						content: "Hallo Welt!"
 					},
 					transforms: {
-						noop: function(str) {
-							return str
+						noop: function( string ) {
+							return string;
 						}
 					}
 				},
@@ -302,8 +302,8 @@ module.exports = function(grunt) {
 						content: "Hallo Welt!"
 					},
 					transforms: {
-						upper: function(str) {
-							return String(str).toUpperCase();
+						upper: function( string ) {
+							return String( string ).toUpperCase();
 						}
 					}
 				},
@@ -319,11 +319,11 @@ module.exports = function(grunt) {
 						content: "Hallo\nWelt!"
 					},
 					transforms: {
-						nl2br: function(str) {
-							return String(str).replace(/([\r\n]+)/g, '<br />');
+						nl2br: function( string ) {
+							return String( string ).replace( /([\r\n]+)/g, "<br />" );
 						},
-						upper: function(str) {
-							return String(str).toUpperCase();
+						upper: function( string ) {
+							return String( string ).toUpperCase();
 						}
 					}
 				},
@@ -343,8 +343,8 @@ module.exports = function(grunt) {
 						}
 					},
 					transforms: {
-						upper: function(str) {
-							return String(str).toUpperCase();
+						upper: function( string ) {
+							return String( string ).toUpperCase();
 						}
 					}
 				},
