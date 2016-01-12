@@ -70,7 +70,7 @@ module.exports = function( grunt ) {
 				// check if key exists and leave pattern untouched if specified in options
 				// due to support for vairables as array keys (see #41) we need to check if we could resolve
 				// something, because mout.object.has() can not resolve keys.
-				if( resolved === "" && !mout.object.has( content, key )  && !options.removeUndefinedVars ) {
+				if( resolved === "" && !mout.object.has( content, key )  && !options.removeUndefined ) {
 					return match;
 				}
 
