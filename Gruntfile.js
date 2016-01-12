@@ -354,6 +354,24 @@ module.exports = function(grunt) {
 				}
 			},
 
+			keep_undefined_vars: {
+				options: {
+					content: {
+						defined: "Hallo Welt!"
+					},
+					transforms: {
+						upper: function( string ) {
+							return String( string ).toUpperCase();
+						}
+					},
+					removeUndefined: false
+				},
+
+				files: {
+					"tmp/keep_undefined_vars.html": "test/fixtures/keep_undefined_vars.html"
+				}
+			},
+
 			multiline_bake: {
 				files: {
 					"tmp/multiline_bake.html": "test/fixtures/multiline_bake.html"

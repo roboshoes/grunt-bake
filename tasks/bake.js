@@ -27,7 +27,8 @@ module.exports = function( grunt ) {
 			basePath: "",
 			transforms: {},
 			parsePattern: /\{\{\s*([^\}]+)\s*\}\}/g,
-			transformGutter: "|"
+			transformGutter: "|",
+			removeUndefined: true
 		} );
 
 
@@ -65,6 +66,13 @@ module.exports = function( grunt ) {
 				// the first value is our variable key and not a transfrom
 				var key = transforms.shift();
 				var resolved = resolveName( key, content );
+
+				// check if key exists and leave pattern untouched if specified in options
+				// due to support for vairables as array keys (see #41) we need to check if we could resolve
+				// something, because mout.object.has() can not resolve keys.
+				if( resolved === "" && !mout.object.has( content, key )  && !options.removeUndefinedVars ) {
+					return match;
+				}
 
 				return transforms.reduce( applyTransform, resolved );
 			} );

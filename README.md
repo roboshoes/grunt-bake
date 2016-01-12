@@ -179,6 +179,14 @@ Default value: false
 
 Set to `true` enables support for _no_/_yes_ and _off_/_on_ in `_if` statements. Alternatively false values can be defined via Array or a callback can be used for evaluation.
 
+
+#### options.removeUndefined
+Type: `Bool`
+Default value: `true`
+
+Set to `false`, placeholders that could not be resolved (= no matching key in `content`) will be kept untouched in the output.
+
+
 ### Usage Examples
 
 #### Simple bake
