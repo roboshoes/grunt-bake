@@ -107,7 +107,7 @@ module.exports = function( grunt ) {
 
 		// Regex to parse bake tags. Retuns linebreak, indent, type, and signature
 
-		var regex = /(\n?)([ \t]*)<!--\(\s?bake(-start|-end)?([^]*?)\)-->/;
+		var regex = /(\n?)([ \t]*)<!--\(\s?bake(-start|-end)?([\S\s]*?)\)-->/;
 
 		// Regex to parse attributes.
 
