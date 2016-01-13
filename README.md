@@ -573,7 +573,7 @@ grunt.initConfig( {
                 content: "app/content.json",
                 section: "en",
                 process: processFunction
-            }
+            },
 
             files: {
                 "app/index.html": "app/base.html"
@@ -595,3 +595,8 @@ watch: {
     }
 }
 ```
+
+
+## Changelog
+
+`1.3.0` __1-13-2016__ adds support for parsing file paths in bake tag.
