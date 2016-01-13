@@ -33,7 +33,8 @@ exports.bake = {
 			"tmp/foreach_meta.html": "test/expected/foreach_meta.html",
 			"tmp/multiline_bake.html": "test/expected/multiline_bake.html",
 			"tmp/var_as_array_key.html": "test/expected/var_as_array_key.html",
-			"tmp/keep_undefined_vars.html": "test/expected/keep_undefined_vars.html"
+			"tmp/keep_undefined_vars.html": "test/expected/keep_undefined_vars.html",
+			"tmp/path_with_placeholder.html": "test/expected/path_with_placeholder.html"
 		};
 
 		test.expect( mout.object.size( files ) );

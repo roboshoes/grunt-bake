@@ -377,6 +377,7 @@ module.exports = function(grunt) {
 					"tmp/multiline_bake.html": "test/fixtures/multiline_bake.html"
 				}
 			},
+
 			var_as_array_key: {
 				options: {
 					content: {
@@ -403,7 +404,18 @@ module.exports = function(grunt) {
 				files: {
 					"tmp/var_as_array_key.html": "test/fixtures/var_as_array_key.html"
 				}
-			}
+			},
+
+			path_with_placeholder: {
+				options: {
+					content: {
+						filename: "include-one"
+					}
+				},
+				files: {
+					"tmp/path_with_placeholder.html": "test/fixtures/path_with_placeholder.html"
+				}
+			},
 		}
 	} );
 

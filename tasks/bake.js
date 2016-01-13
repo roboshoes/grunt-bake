@@ -384,14 +384,18 @@ module.exports = function( grunt ) {
 			return null;
 		}
 
-		function preparePath( includePath, filePath ) {
+		function preparePath( includePath, filePath, values ) {
+
+			// replace placeholders within the include path
+			includePath = processContent( includePath, values );
+
 			if ( includePath[ 0 ] === "/" )
 				return options.basePath + includePath.substr( 1 );
 			else return directory( filePath ) + "/" + includePath;
 		}
 
 		function replaceFile( linebreak, indent, includePath, attributes, filePath, values ) {
-			includePath = preparePath( includePath, filePath );
+			includePath = preparePath( includePath, filePath, values );
 
 			var includeContent = grunt.file.read( includePath );
 
@@ -524,9 +528,14 @@ module.exports = function( grunt ) {
 				fileContent += parse( section.after, filePath, values );
 			}
 
-			return mout.lang.isFunction( options.process ) ? options.process( fileContent, values ) : fileContent;
+			return processContent( fileContent, values );
 		}
 
+		// Run process function if processor-function is defined
+
+		function processContent( content, values ) {
+			return mout.lang.isFunction( options.process ) ? options.process( content, values ) : content;
+		}
 
 		// ==========
 		// -- BAKE --
