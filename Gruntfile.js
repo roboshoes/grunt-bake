@@ -417,7 +417,7 @@ module.exports = function(grunt) {
 				}
 			},
 
-			include_with_placeholder_var: {
+			recursive_path_with_placeholder: {
 				options: {
 					content: {
 						filename: "include-four.html"

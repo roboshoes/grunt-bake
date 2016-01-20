@@ -410,6 +410,11 @@ module.exports = function( grunt ) {
 				values = values[ section ];
 			}
 
+			// resolve placeholders within inline values so these can be used in subsequent grunt-tags (see #67)
+			inlineValues = mout.object.map( inlineValues, function( value ) {
+				return processContent( value, values );
+			});
+
 			if ( validateIf( inlineValues, values ) ) return "";
 			if ( validateRender( inlineValues ) ) return "";
 
