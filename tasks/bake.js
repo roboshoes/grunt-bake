@@ -68,7 +68,7 @@ module.exports = function( grunt ) {
 				var resolved = resolveName( key, content );
 
 				// check if key exists and leave pattern untouched if specified in options
-				// due to support for vairables as array keys (see #41) we need to check if we could resolve
+				// due to support for variables as array keys (see #41) we need to check if we could resolve
 				// something, because mout.object.has() can not resolve keys.
 				if( resolved === "" && !mout.object.has( content, key )  && !options.removeUndefined ) {
 					return match;
@@ -91,7 +91,7 @@ module.exports = function( grunt ) {
 			}
 
 			// check if transform is valid callback
-			if( ! mout.lang.isFunction( options.transforms[transform] ) ) {
+			if( ! mout.lang.isFunction( options.transforms[ transform ] ) ) {
 				grunt.log.error( "Transform is not a function: " + transform );
 
 				return content;

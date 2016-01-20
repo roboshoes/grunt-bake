@@ -599,4 +599,5 @@ watch: {
 
 ## Changelog
 
-`1.3.0` __1-13-2016__ adds support for parsing file paths in bake tag.
+`1.3.1`    __1-20-2016__    adds support for parsing values in inline variables.
+`1.3.0`    __1-13-2016__    adds support for parsing file paths in bake tag.
