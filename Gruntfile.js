@@ -416,6 +416,17 @@ module.exports = function(grunt) {
 					"tmp/path_with_placeholder.html": "test/fixtures/path_with_placeholder.html"
 				}
 			},
+
+			include_with_placeholder_var: {
+				options: {
+					content: {
+						filename: "include-four.html"
+					}
+				},
+				files: {
+					"tmp/recursive_path_with_placeholder.html": "test/fixtures/recursive_path_with_placeholder.html"
+				}
+			}
 		}
 	} );
 

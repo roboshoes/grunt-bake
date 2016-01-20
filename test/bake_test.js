@@ -34,7 +34,8 @@ exports.bake = {
 			"tmp/multiline_bake.html": "test/expected/multiline_bake.html",
 			"tmp/var_as_array_key.html": "test/expected/var_as_array_key.html",
 			"tmp/keep_undefined_vars.html": "test/expected/keep_undefined_vars.html",
-			"tmp/path_with_placeholder.html": "test/expected/path_with_placeholder.html"
+			"tmp/path_with_placeholder.html": "test/expected/path_with_placeholder.html",
+			"tmp/recursive_path_with_placeholder.html": "test/expected/recursive_path_with_placeholder.html"
 		};
 
 		test.expect( mout.object.size( files ) );
