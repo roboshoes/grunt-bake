@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html>
+	<head></head>
+	<body>
+	<!--(bake-start _foreach="group:groups" _bake="extra_entry.html > extra-{{group@index}}-{{group.name | lowercase}}.html")-->
+		<a href="{{@link}}">Details for {{group.name}}</a>
+	<!--(bake-end)-->
+	</body>
+</html>
