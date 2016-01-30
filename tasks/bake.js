@@ -470,7 +470,7 @@ module.exports = function( grunt ) {
 		function extractSection( content ) {
 			var depth = 0;			// tracks how difference between found opening and closing tags
 			var start = 0;			// character position in `content` where inner-content starts
-			var position = 0;			// current character position within _original_ content
+			var position = 0;		// current character position within _original_ content
 			var length = 0;			// length section (= spacing plus bake-tag) we currently evaluate
 			var remain = content;	// content left for further extraction
 			var section = {};
