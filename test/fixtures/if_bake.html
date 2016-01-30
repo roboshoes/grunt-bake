@@ -19,5 +19,14 @@
 
 		<!--(bake includes/include-two.html _if="title != 'Orange Pie'")-->
 		<!--(bake includes/include-one.html _if="title == 'Orange Pie'")-->
+
+		<!--(bake includes/include-one.html _if="'Apple Pie' == title && bar")-->
+		<!--(bake includes/include-two.html _if="'Apple Pie' == title && !bar")-->
+
+		Index 0: <!--(bake-start _if="0%2 === 0")-->check<!--(bake-end)-->
+		Index 1: <!--(bake-start _if="1%2 === 0")-->check<!--(bake-end)-->
+		Index 2: <!--(bake-start _if="2%2 === 0")-->check<!--(bake-end)-->
+		Index 3: <!--(bake-start _if="3%2 === 0")-->check<!--(bake-end)-->
+		Index 4: <!--(bake-start _if="4%2 === 0")-->check<!--(bake-end)-->
 	</body>
 </html>
