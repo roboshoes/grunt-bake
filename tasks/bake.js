@@ -67,10 +67,7 @@ module.exports = function( grunt ) {
 				var key = transforms.shift();
 				var resolved = resolveName( key, content );
 
-				// check if key exists and leave pattern untouched if specified in options
-				// due to support for variables as array keys (see #41) we need to check if we could resolve
-				// something, because mout.object.has() can not resolve keys.
-				if( resolved === "" && !mout.object.has( content, key )  && !options.removeUndefined ) {
+				if( resolved === undefined && !options.removeUndefined ) {
 					return match;
 				}
 
@@ -113,7 +110,6 @@ module.exports = function( grunt ) {
 
 		var attributesRegex = /([\S_]+)="([^"]+)"/g;
 
-
 		// Regex to detect array syntax.
 
 		var arrayRegex = /\[([\w\.\,\-]*)\]/;
@@ -121,6 +117,10 @@ module.exports = function( grunt ) {
 		// Regex to detect includePath / attributes in signature
 
 		var signatureRegex = /^((?!_\S+=)[^\s]+)\s?([\S\s]*)$/;
+
+		//
+
+		var ifRegex = /([a-z_$][0-9a-z_$@]*)|(?:"([^"]*)")|(?:'([^']*)')/gi;
 
 		// Method to check wether file exists and warn if not.
 
@@ -185,60 +185,14 @@ module.exports = function( grunt ) {
 			return result;
 		}
 
-		// Helper method to check if a value represents false
-
-		function isFalse( value ) {
-			var string = String( value ).toLowerCase();
-
-			if ( value === "" || value === undefined || value === false || string === "false" ) {
-				return true;
-			}
-
-			if ( options.semanticIf === true ) {
-				return mout.array.indexOf( [ "no", "off" ], string ) !== -1;
-			}
-
-			if ( mout.lang.isArray( options.semanticIf ) ) {
-				return mout.array.indexOf( options.semanticIf, string ) !== -1;
-			}
-
-			if ( mout.lang.isFunction( options.semanticIf ) ) {
-				return options.semanticIf( value );
-			}
-
-			return false;
-		}
-
 		// Helper method to resolve nested placeholder names like: "home.footer.text"
 
 		function resolveName( name, values ) {
-			name = name.replace( /\[([^\]]+)\]/g, function( match, inner ) {
+			name = String( name ).replace( /\[([^\]]+)\]/g, function( match, inner ) {
 				return "." + resolveName( inner, values );
 			});
 
-			var value = mout.object.get( values, name );
-
-			return value !== undefined ? value : "";
-		}
-
-
-		// Helper that simply checks weather a value exists and is not `false`
-
-		function hasValue( name, values ) {
-
-			name = name.replace( / /g, "" );
-
-			var invert = false;
-
-			if ( name[ 0 ] === "!" ) {
-				name = name.substr( 1 );
-				invert = true;
-			}
-
-			var current = mout.object.get( values, name );
-			var returnValue = !isFalse( current );
-
-			return invert ? ! returnValue : returnValue;
+			return mout.object.get( values, name );
 		}
 
 
@@ -252,7 +206,8 @@ module.exports = function( grunt ) {
 			return content
 				.split( "\n" )
 				.map( function( line ) {
-					return indent + line;
+					// do not indent empty lines
+					return line.trim() !== "" ? ( indent + line ) : "";
 				} )
 				.join( "\n" );
 		}
@@ -269,13 +224,12 @@ module.exports = function( grunt ) {
 
 			else {
 				var array = resolveName( string, values );
-				if ( array === "" ) array = [];
+				if ( ! mout.lang.isArray( array ) ) array = [];
 
 				return array;
 			}
 
 		}
-
 
 		// Handle _if attributes in inline arguments
 
@@ -286,53 +240,40 @@ module.exports = function( grunt ) {
 				var value = inlineValues[ "_if" ];
 				delete inlineValues[ "_if" ];
 
-				var operator = getOperator( value );
+				var params = {};
 
-				if ( operator ) {
-					var parts = value.split( operator );
+				var condition = value.replace( ifRegex, function( match, varname ) {
+					if( ! varname ) return match;
 
-					var left = mout.string.rtrim( parts[ 0 ] );
-					var right = mout.string.ltrim( parts[ 1 ] ).replace( /'/g, "" );
+					var resolved = resolveName( varname, values );
 
-					if( mout.object.has( values, left ) ) left = resolveName( left, values );
-					if( mout.object.has( values, right ) ) right = resolveName( right, values );
+					// check for semantic falsy values
+					if ( options.semanticIf === true ) {
+						resolved = [ "no", "off" ].indexOf( resolved ) === -1;
 
-					if ( operator === "==" && left === right ) return false;
-					else if ( operator === "!=" && left !== right ) return false;
+					} else if ( mout.lang.isArray( options.semanticIf ) ) {
+						resolved = options.semanticIf.indexOf( resolved ) === -1;
 
-					return true;
+					} else if ( mout.lang.isFunction( options.semanticIf ) ) {
+						resolved = options.semanticIf( resolved );
+					}
+
+					params[varname] = resolved;
+
+					return "params." + varname;
+				});
+
+				try {
+					return ! eval( condition );
+
+				} catch( e ) {
+					grunt.log.error( "Invalid if condition: '" + value + "'" );
 				}
-
-				if ( ! hasValue( value, values ) ) {
-
-					return true;
-
-				} else if ( value[ 0 ] === "!" ) {
-
-					var name = value.substr( 1 );
-
-					return ! isFalse( resolveName( name, values ) );
-
-				} else if ( isFalse( resolveName( value, values ) ) ) {
-
-					return true;
-
-				}
-
 			}
 
 			return false;
 		}
 
-		function getOperator( string ) {
-			var operators = [ "==", "!=" ];
-
-			for ( var i = 0; i < operators.length; i++ ) {
-				if ( string.indexOf( operators[ i ] ) > -1 ) return operators[ i ];
-			}
-
-			return false;
-		}
 
 		// Handle _render attributes in inline arguments
 
