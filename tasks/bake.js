@@ -264,6 +264,8 @@ module.exports = function( grunt ) {
 				});
 
 				try {
+					/* jshint evil:true */
+
 					return ! eval( condition );
 
 				} catch( e ) {
