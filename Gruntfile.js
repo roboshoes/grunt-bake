@@ -338,7 +338,7 @@ module.exports = function(grunt) {
 					},
 					transforms: {
 						repeat: function( string, times ) {
-							return String( string ).repeat( times );
+							return new Array( parseInt( times, 10) + 1 ).join( String( string ) );
 						},
 						replace: function( string, searchvalue, newvalue ) {
 							return String( string ).replace( searchvalue, newvalue );
