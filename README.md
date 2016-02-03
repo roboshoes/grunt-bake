@@ -663,6 +663,7 @@ watch: {
 
 ## Changelog
 
+`1.5.0`    __2-2-2016__     adds support for _bake attribute.
 `1.4.1`    __2-2-2016__     fixes minor bug fix #72.
 `1.4.0`    __1-30-2016__    adds full JS support for evaluating _if.
 `1.3.1`    __1-20-2016__    adds support for parsing values in inline variables.
