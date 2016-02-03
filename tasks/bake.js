@@ -329,7 +329,7 @@ module.exports = function( grunt ) {
 
 		// Handle _bake attributes in inline arguments
 
-		function validateExtraBake( inlineValues ) {
+		function validateBake( inlineValues ) {
 			if ( "_bake" in inlineValues ) {
 
 				var signature = inlineValues[ "_bake" ];
@@ -378,7 +378,7 @@ module.exports = function( grunt ) {
 		function replaceString( includeContent, linebreak, indent, includePath, attributes, filePath, destFile, values ) {
 			var inlineValues = parseInlineValues( attributes );
 			var section = validateSection( inlineValues, values );
-			var extraBake = validateExtraBake( inlineValues );
+			var extraBake = validateBake( inlineValues );
 
 			if ( section !== null ) {
 				values = values[ section ];
