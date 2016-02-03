@@ -36,7 +36,12 @@ exports.bake = {
 			"tmp/var_as_array_key.html": "test/expected/var_as_array_key.html",
 			"tmp/keep_undefined_vars.html": "test/expected/keep_undefined_vars.html",
 			"tmp/path_with_placeholder.html": "test/expected/path_with_placeholder.html",
-			"tmp/recursive_path_with_placeholder.html": "test/expected/recursive_path_with_placeholder.html"
+			"tmp/recursive_path_with_placeholder.html": "test/expected/recursive_path_with_placeholder.html",
+			"tmp/extra_bake.html": "test/expected/extra_bake.html",
+			"tmp/extra_bake_multiple.html": "test/expected/extra_bake_multiple.html",
+			"tmp/extra-page.html": "test/expected/extra/extra-page.html",
+			"tmp/extra-0-a-team.html": "test/expected/extra/extra-0-a-team.html",
+			"tmp/extra-1-b-team.html": "test/expected/extra/extra-1-b-team.html"
 		};
 
 		test.expect( mout.object.size( files ) );

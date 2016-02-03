@@ -436,6 +436,26 @@ module.exports = function(grunt) {
 				files: {
 					"tmp/recursive_path_with_placeholder.html": "test/fixtures/recursive_path_with_placeholder.html"
 				}
+			},
+
+			extra_bake: {
+				files: {
+					"tmp/extra_bake.html": "test/fixtures/extra_bake.html"
+				}
+			},
+
+			extra_bake_multiple: {
+				options: {
+					content: "test/fixtures/content.json",
+					transforms: {
+						lowercase: function( string ) {
+							return String( string ).toLowerCase();
+						}
+					}
+				},
+				files: {
+					"tmp/extra_bake_multiple.html": "test/fixtures/extra_bake_multiple.html"
+				}
 			}
 		}
 	} );

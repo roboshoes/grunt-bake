@@ -327,6 +327,25 @@ module.exports = function( grunt ) {
 			return null;
 		}
 
+		// Handle _bake attributes in inline arguments
+
+		function validateExtraBake( inlineValues ) {
+			if ( "_bake" in inlineValues ) {
+
+				var signature = inlineValues[ "_bake" ];
+				delete inlineValues[ "_bake" ];
+
+				var set = signature.split( ">", 2 );
+
+				return {
+					src: mout.string.trim( set[0] ),
+					dest: mout.string.trim( set[1] )
+				};
+			}
+
+			return null;
+		}
+
 		function preparePath( includePath, filePath, values ) {
 
 			// replace placeholders within the include path
@@ -337,17 +356,29 @@ module.exports = function( grunt ) {
 			else return directory( filePath ) + "/" + includePath;
 		}
 
-		function replaceFile( linebreak, indent, includePath, attributes, filePath, values ) {
+		function processExtraBake( bake, filePath, destFile, values ) {
+			if( bake === null ) return;
+
+			var src = preparePath( bake.src, filePath, values );
+			var dest = preparePath( bake.dest, destFile, values );
+
+			values[ "@link" ] = processContent( bake.dest, values );
+
+			bakeFile( src, dest, values );
+		}
+
+		function replaceFile( linebreak, indent, includePath, attributes, filePath, destFile, values ) {
 			includePath = preparePath( includePath, filePath, values );
 
 			var includeContent = grunt.file.read( includePath );
 
-			return replaceString( includeContent, linebreak, indent, includePath, attributes, values );
+			return replaceString( includeContent, linebreak, indent, includePath, attributes, filePath, destFile, values );
 		}
 
-		function replaceString( includeContent, linebreak, indent, includePath, attributes, values ) {
+		function replaceString( includeContent, linebreak, indent, includePath, attributes, filePath, destFile, values ) {
 			var inlineValues = parseInlineValues( attributes );
 			var section = validateSection( inlineValues, values );
+			var extraBake = validateExtraBake( inlineValues );
 
 			if ( section !== null ) {
 				values = values[ section ];
@@ -384,7 +415,9 @@ module.exports = function( grunt ) {
 					values[ forEachName + "@last" ] = ( ( total - 1 ) === index );
 					values[ forEachName + "@total" ] = total;
 
-					fragment += linebreak + parse( includeContent, includePath, values );
+					processExtraBake( extraBake, filePath, destFile, values );
+
+					fragment += linebreak + parse( includeContent, includePath, destFile, values );
 				} );
 
 				if ( oldValue === undefined ) values[ forEachName ] = oldValue;
@@ -394,14 +427,15 @@ module.exports = function( grunt ) {
 
 			} else if( !forEachName ) {
 
-				return linebreak + parse( includeContent, includePath, values );
+				processExtraBake( extraBake, filePath, destFile, values );
+
+				return linebreak + parse( includeContent, includePath, destFile, values );
 
 			} else {
 
 				return "";
 			}
 		}
-
 
 		// =====================
 		// -- RECURSIVE PARSE --
@@ -460,7 +494,7 @@ module.exports = function( grunt ) {
 
 		// Recursivly search for bake-tags and create one file.
 
-		function parse( fileContent, filePath, values ) {
+		function parse( fileContent, filePath, destFile, values ) {
 
 			var section = extractSection( fileContent );
 
@@ -468,12 +502,12 @@ module.exports = function( grunt ) {
 				fileContent = section.before;
 
 				if(section.inner) {
-					fileContent += replaceString( section.inner, "", "", filePath, section.attributes, values );
+					fileContent += replaceString( section.inner, "", "", filePath, section.attributes, filePath, destFile, values );
 				} else {
-					fileContent += replaceFile( section.linebreak, section.indent, section.includePath, section.attributes, filePath, values );
+					fileContent += replaceFile( section.linebreak, section.indent, section.includePath, section.attributes, filePath, destFile, values );
 				}
 
-				fileContent += parse( section.after, filePath, values );
+				fileContent += parse( section.after, filePath, destFile, values );
 			}
 
 			return processContent( fileContent, values );
@@ -488,6 +522,15 @@ module.exports = function( grunt ) {
 		// ==========
 		// -- BAKE --
 		// ==========
+
+		function bakeFile( src, dest, content ) {
+
+			var srcContent = grunt.file.read( src );
+			var destContent = parse( srcContent, src, dest, content );
+
+			grunt.file.write( dest, destContent );
+			grunt.log.ok( "File \"" + dest + "\" created." );
+		}
 
 		// Loop over files and create baked files.
 
@@ -507,12 +550,7 @@ module.exports = function( grunt ) {
 				options.content = options.content[ options.section ];
 			}
 
-			var srcContent = grunt.file.read( src );
-			var destContent = parse( srcContent, src, options.content );
-
-			grunt.file.write( dest, destContent );
-			grunt.log.ok( "File \"" + dest + "\" created." );
-
+			bakeFile( src, dest, options.content );
 		} );
 	} );
 };

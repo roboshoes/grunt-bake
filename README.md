@@ -555,6 +555,70 @@ _dist/index.html_:
 </html>
 ```
 
+#### Bake extra pages (e.g. detail pages)
+
+Another special inline attribute is the `_bake` attribute. This keyword expects a specific syntax which allows to dynamically create additional files. It accepts the syntax: `_bake="template.html > target.html"`.
+
+The following example will create two additional files named `info-John.html` and `info-Jane.html` which will be baked using `app/detail.html` with corresponding values from `app/content.json`. For linking to genereated files a `@link` variable is available.
+
+_app/detail.html_:
+```html
+<html>
+    <body>
+        <h1>My name is {{member.name}}</h1>
+        <p>I am a {{member.profession}}</p>
+    </body>
+</html>
+```
+
+_app/base.html_:
+```html
+<html>
+    <body>
+        <ul>
+            <!--(bake li.html _foreach="member:members" _bake="detail.html > member-{{member.name}}.html")-->
+        </ul>
+    </body>
+</html>
+
+```
+_app/li.html_:
+```html
+    <li><a href="{{@link}}">More about {{member.name}}</a></li>
+```
+
+_app/content.json_:
+```json
+{
+    "members": [
+        {
+            "name": "John",
+            "profession": "Dentist"
+        },
+        {
+            "name": "Jane",
+            "profession": "Pilot"
+        }
+    ]
+}
+```
+
+**Alternative `app/base.html` with inline-section instead of additional `app/li.html` file:**
+
+_app/base.html_:
+```html
+<html>
+    <body>
+        <ul>
+            <!--(bake-start _foreach="member:members" _bake="detail.html > member-{{member.name}}.html")-->
+                <li><a href="{{@link}}">More about {{member.name}}</a></li>
+            <!--(bake-end)-->
+        </ul>
+    </body>
+</html>
+```
+
+_app/detail.html_ and _app/content.json_ same as above.
 
 
 #### Custom process
