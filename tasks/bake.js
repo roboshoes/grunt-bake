@@ -120,7 +120,7 @@ module.exports = function( grunt ) {
 
 		//
 
-		var ifRegex = /([a-z_$][0-9a-z_$@]*)|(?:"([^"]*)")|(?:'([^']*)')/gi;
+		var ifRegex = /([a-z_$][0-9a-z_$@\.]*)|(?:"([^"]*)")|(?:'([^']*)')/gi;
 
 		// Method to check wether file exists and warn if not.
 
@@ -260,7 +260,7 @@ module.exports = function( grunt ) {
 
 					params[varname] = resolved;
 
-					return "params." + varname;
+					return "params['" + varname + "']";
 				});
 
 				try {

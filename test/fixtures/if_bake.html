@@ -28,5 +28,13 @@
 		Index 2: <!--(bake-start _if="2%2 === 0")-->check<!--(bake-end)-->
 		Index 3: <!--(bake-start _if="3%2 === 0")-->check<!--(bake-end)-->
 		Index 4: <!--(bake-start _if="4%2 === 0")-->check<!--(bake-end)-->
+
+		<!--(bake-start _if="info.author")-->
+		<h2>Author</h2>
+		<!--(bake-end)-->
+
+		<!--(bake-start _if="!info.author")-->
+		<h2>No Author</h2>
+		<!--(bake-end)-->
 	</body>
 </html>
