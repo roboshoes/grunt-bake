@@ -133,7 +133,6 @@ module.exports = function( grunt ) {
 			return true;
 		}
 
-
 		// Returns the directory path from a file path
 
 		function directory( path ) {
@@ -144,6 +143,13 @@ module.exports = function( grunt ) {
 			return segments.join( "/" );
 		}
 
+		// Returns the filename from a file path
+
+		function filename( path ) {
+			var segments = path.split( "/" );
+
+			return segments.pop();
+		}
 
 		// Parses attribute string.
 
@@ -362,7 +368,17 @@ module.exports = function( grunt ) {
 			var src = preparePath( bake.src, filePath, values );
 			var dest = preparePath( bake.dest, destFile, values );
 
+			// inject variable to link to dynamically processed file
 			values[ "@link" ] = processContent( bake.dest, values );
+
+			// compute the depth of the destination path
+			var parentDirsCount = bake.dest.split( "/" ).length - 1;
+
+			// create a prefix for building a link to parent folder
+			var parentDirsString = new Array( parentDirsCount + 1 ).join( "../" );
+
+			// inject variable to link to file that triggered the dynamic creation, from dynamically processed file
+			values[ "@referrer" ] = parentDirsString + filename( destFile );
 
 			bakeFile( src, dest, values );
 		}

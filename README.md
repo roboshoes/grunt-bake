@@ -559,7 +559,7 @@ _dist/index.html_:
 
 Another special inline attribute is the `_bake` attribute. This keyword expects a specific syntax which allows to dynamically create additional files. It accepts the syntax: `_bake="template.html > target.html"`.
 
-The following example will create two additional files named `info-John.html` and `info-Jane.html` which will be baked using `app/detail.html` with corresponding values from `app/content.json`. For linking to genereated files a `@link` variable is available.
+The following example will create two additional files named `info-John.html` and `info-Jane.html` which will be baked using `app/detail.html` with corresponding values from `app/content.json`. For linking to genereated files a `@link` variable is available. For linking the originating file from generated files a `@referrer` variable is available.
 
 _app/detail.html_:
 ```html
@@ -567,6 +567,9 @@ _app/detail.html_:
     <body>
         <h1>My name is {{member.name}}</h1>
         <p>I am a {{member.profession}}</p>
+        <p>
+            <a href="{{@referrer}}">Back to team</a>
+        </p>
     </body>
 </html>
 ```
