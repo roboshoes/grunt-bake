@@ -175,8 +175,8 @@ module.exports = function( grunt ) {
 
 			if( match = signatureRegex.exec( signature ) ) {
 				result = {
-					includePath: match[1],
-					attributes: match[2],
+					includePath: match[ 1 ],
+					attributes: match[ 2 ],
 					signature: signature
 				};
 
@@ -264,7 +264,7 @@ module.exports = function( grunt ) {
 						resolved = options.semanticIf( resolved );
 					}
 
-					params[varname] = resolved;
+					params[ varname ] = resolved;
 
 					return "params['" + varname + "']";
 				});

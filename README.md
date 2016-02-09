@@ -666,6 +666,7 @@ watch: {
 
 ## Changelog
 
+`1.5.1`    __2-9-2016__     adds @referrer attribute to _bake.
 `1.5.0`    __2-2-2016__     adds support for _bake attribute.
 `1.4.1`    __2-2-2016__     fixes minor bug fix #72.
 `1.4.0`    __1-30-2016__    adds full JS support for evaluating _if.
