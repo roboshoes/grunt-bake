@@ -398,6 +398,22 @@ module.exports = function(grunt) {
 				}
 			},
 
+			transform_foreach: {
+				options: {
+					content: "test/fixtures/content.json",
+					section: "en",
+					transforms: {
+						max: function( array, limit ) {
+							return ( array || [] ).slice( 0, limit );
+						}
+					}
+				},
+
+				files: {
+					"tmp/transform_foreach.html": "test/fixtures/transform_foreach.html"
+				}
+			},
+
 			keep_undefined_vars: {
 				options: {
 					content: {

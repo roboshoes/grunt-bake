@@ -252,7 +252,7 @@ module.exports = function( grunt ) {
 				return string.match( arrayRegex )[ 1 ].split( "," );
 
 			else {
-				var array = resolveName( string, values );
+				var array = processPlaceholder( string, values );
 				if ( ! mout.lang.isArray( array ) ) array = [];
 
 				return array;
@@ -343,14 +343,15 @@ module.exports = function( grunt ) {
 
 			if ( "_foreach" in inlineValues ) {
 
-				var pair = inlineValues[ "_foreach" ].split( ":" );
+				var set = inlineValues[ "_foreach" ].split( ":" );
 				delete inlineValues[ "_foreach" ];
 
-				getArrayValues( pair[ 1 ], values ).forEach( function( value ) {
+				// as transforms may contain colons, join rest of list to recreate original string
+				getArrayValues( set.slice(1).join( ":" ), values ).forEach( function( value ) {
 					array.push( value );
 				} );
 
-				return pair[ 0 ];
+				return set[ 0 ];
 			}
 
 			return null;
