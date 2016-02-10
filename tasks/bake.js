@@ -34,7 +34,7 @@ module.exports = function( grunt ) {
 		// warning about removed parameter
 
 		if ( options.transformGutter !== undefined ) {
-			grunt.log.error( "Parameter 'transformGutter' is no longer supported. See #71 for details." );
+			grunt.log.error( "Parameter `transformGutter` is no longer supported and defaults to `|`. See #71 for details." );
 		}
 
 		// normalize basePath
