@@ -166,12 +166,16 @@ transforms: {
 }
 ```
 
-#### options.transformGutter
-Type: `String`
-Default value: '|'
+Transforms support parameters like `{{myvar | replace:'A':'B'}}`. Parameters are handed into the callback as additional parameters.
 
-Sequence used to split transforms.
-
+```js
+transforms: {
+    // str => content of myvar,  searchvalue => 'A',  newvalue => 'B'
+    replace: function(str, searchvalue, newvalue) {
+        return String(str).replace(searchvalue, newvalue);
+    }
+}
+```
 
 #### options.semanticIf
 Type: `Bool` | `Array` | `Function`

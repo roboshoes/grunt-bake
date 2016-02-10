@@ -27,17 +27,21 @@ module.exports = function( grunt ) {
 			basePath: "",
 			transforms: {},
 			parsePattern: /\{\{\s*([^\}]+)\s*\}\}/g,
-			transformGutter: "|",
 			removeUndefined: true
 		} );
 
+
+		// warning about removed parameter
+
+		if ( options.transformGutter !== undefined ) {
+			grunt.log.error( "Parameter 'transformGutter' is no longer supported. See #71 for details." );
+		}
 
 		// normalize basePath
 
 		if ( options.basePath.substr( -1 , 1 ) !== "/" && options.basePath.length > 0 ) {
 			options.basePath = options.basePath + "/";
 		}
-
 
 		// normalize content
 
@@ -49,7 +53,6 @@ module.exports = function( grunt ) {
 			options.content = options.content ? options.content : {};
 		}
 
-
 		// =======================
 		// -- DEFAULT PROCESSOR --
 		// =======================
@@ -57,45 +60,68 @@ module.exports = function( grunt ) {
 		// This process method is used when no process function is supplied.
 		function defaultProcess( template, content ) {
 			return template.replace( options.parsePattern, function( match, inner ) {
+				var processed = processPlaceholder( inner, content );
 
-				// remove whitespace
-				var transforms = inner.split( options.transformGutter ).map( function( str ) {
-					return mout.string.trim( str );
-				});
-
-				// the first value is our variable key and not a transfrom
-				var key = transforms.shift();
-				var resolved = resolveName( key, content );
-
-				if( resolved === undefined && !options.removeUndefined ) {
+				if( processed === undefined && !options.removeUndefined ) {
 					return match;
 				}
 
-				return transforms.reduce( applyTransform, resolved );
-			} );
+				return processed;
+			});
 		}
 
 		if ( ! options.hasOwnProperty( "process" ) ) {
 			options.process = defaultProcess;
 		}
 
+		function processPlaceholder( placeholder, values ) {
+			// extract transforms from placeholder
+			var transforms = placeholder.match( transformsRegex ).map( function( str ) {
+
+				// remove whitespace, otherwise transforms and variable key may not be found
+				str = mout.string.trim( str );
+
+				// extract name of transform and transform parameters, and clear quotes
+				var parts = str.match( paramsRegex ).map( function( str ) {
+					return mout.string.trim( str, "'" );
+				});
+
+				return {
+					name: parts[0],
+					params: parts.slice(1)
+				};
+			});
+
+			// the first value is the set that contains our variable key, and not a transfrom
+			var key = transforms.shift().name;
+			var resolved = resolveName( key, values );
+
+			return transforms.reduce( applyTransform, resolved );
+		}
+
 		function applyTransform( content, transform ) {
+			var name = transform.name;
+
+			if( content === undefined ) {
+				return;
+			}
+
 			// check if transform is registred
-			if( ! mout.object.has( options.transforms, transform ) ) {
-				grunt.log.error( "Unknown transform: " + transform );
+			if( ! mout.object.has( options.transforms, name ) ) {
+				grunt.log.error( "Unknown transform: " + name );
 
 				return content;
 			}
 
 			// check if transform is valid callback
-			if( ! mout.lang.isFunction( options.transforms[ transform ] ) ) {
-				grunt.log.error( "Transform is not a function: " + transform );
+			if( ! mout.lang.isFunction( options.transforms[ name ] ) ) {
+				grunt.log.error( "Transform is not a function: " + name );
 
 				return content;
 			}
 
-			// apply transform
-			return options.transforms[transform].call( null, content );
+			// apply transform, handler is calles with signature ( variableContent, param1, param2, ..., paramN )
+			return options.transforms[ name ].apply( null, [ content ].concat( transform.params ) );
 		}
 
 		// ===========
@@ -110,6 +136,14 @@ module.exports = function( grunt ) {
 
 		var attributesRegex = /([\S_]+)="([^"]+)"/g;
 
+		// Regex to parse transforms including their parameters from placeholders
+
+		var transformsRegex = /(?:'[^']*'|[^\|])+/g;
+
+		// Regex to parse parameters from transforms
+
+		var paramsRegex = /(?:'[^']*'|[^:])+/g;
+
 		// Regex to detect array syntax.
 
 		var arrayRegex = /\[([\w\.\,\-]*)\]/;
@@ -118,7 +152,7 @@ module.exports = function( grunt ) {
 
 		var signatureRegex = /^((?!_\S+=)[^\s]+)\s?([\S\s]*)$/;
 
-		//
+		// Regex to serach for variable names
 
 		var ifRegex = /([a-z_$][0-9a-z_$@\.]*)|(?:"([^"]*)")|(?:'([^']*)')/gi;
 
@@ -229,7 +263,7 @@ module.exports = function( grunt ) {
 				return string.match( arrayRegex )[ 1 ].split( "," );
 
 			else {
-				var array = resolveName( string, values );
+				var array = processPlaceholder( string, values );
 				if ( ! mout.lang.isArray( array ) ) array = [];
 
 				return array;
@@ -320,14 +354,15 @@ module.exports = function( grunt ) {
 
 			if ( "_foreach" in inlineValues ) {
 
-				var pair = inlineValues[ "_foreach" ].split( ":" );
+				var set = inlineValues[ "_foreach" ].split( ":" );
 				delete inlineValues[ "_foreach" ];
 
-				getArrayValues( pair[ 1 ], values ).forEach( function( value ) {
+				// as transforms may contain colons, join rest of list to recreate original string
+				getArrayValues( set.slice(1).join( ":" ), values ).forEach( function( value ) {
 					array.push( value );
 				} );
 
-				return pair[ 0 ];
+				return set[ 0 ];
 			}
 
 			return null;
