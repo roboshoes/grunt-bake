@@ -323,6 +323,40 @@ module.exports = function(grunt) {
 				}
 			},
 
+			transform_params: {
+				options: {
+					content: {
+						content: {
+							"string": "Bake",
+							"array": [
+								"Jim",
+								"John",
+								"James",
+								"Jonathan"
+							]
+						}
+					},
+					transforms: {
+						repeat: function( string, times ) {
+							return new Array( parseInt( times, 10) + 1 ).join( String( string ) );
+						},
+						replace: function( string, searchvalue, newvalue ) {
+							return String( string ).replace( searchvalue, newvalue );
+						},
+						max: function( array, limit ) {
+							return array.slice( 0, limit );
+						},
+						join: function( array, glue ) {
+							return array.join( glue );
+						}
+					}
+				},
+
+				files: {
+					"tmp/transform_params.html": "test/fixtures/transform_params.html"
+				}
+			},
+
 			transform_multiple: {
 				options: {
 					content: {
@@ -361,6 +395,22 @@ module.exports = function(grunt) {
 
 				files: {
 					"tmp/transform_deep.html": "test/fixtures/transform_deep.html"
+				}
+			},
+
+			transform_foreach: {
+				options: {
+					content: "test/fixtures/content.json",
+					section: "en",
+					transforms: {
+						max: function( array, limit ) {
+							return ( array || [] ).slice( 0, limit );
+						}
+					}
+				},
+
+				files: {
+					"tmp/transform_foreach.html": "test/fixtures/transform_foreach.html"
 				}
 			},
 
