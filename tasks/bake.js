@@ -31,12 +31,17 @@ module.exports = function( grunt ) {
 		} );
 
 
+		// warning about removed parameter
+
+		if ( options.transformGutter !== undefined ) {
+			grunt.log.error( "Parameter 'transformGutter' is no longer supported. See #71 for details." );
+		}
+
 		// normalize basePath
 
 		if ( options.basePath.substr( -1 , 1 ) !== "/" && options.basePath.length > 0 ) {
 			options.basePath = options.basePath + "/";
 		}
-
 
 		// normalize content
 
