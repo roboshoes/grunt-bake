@@ -53,6 +53,15 @@ module.exports = function( grunt ) {
 			options.content = options.content ? options.content : {};
 		}
 
+		if ( options.section ) {
+
+			if ( ! options.content[ options.section ] ) {
+				grunt.log.error( "content doesn't have section " + options.section );
+			}
+
+			options.content = options.content[ options.section ];
+		}
+
 		// =======================
 		// -- DEFAULT PROCESSOR --
 		// =======================
@@ -591,15 +600,6 @@ module.exports = function( grunt ) {
 			var dest = file.dest;
 
 			if ( ! checkFile( src ) ) return;
-
-			if ( options.section ) {
-
-				if ( ! options.content[ options.section ] ) {
-					grunt.log.error( "content doesn't have section " + options.section );
-				}
-
-				options.content = options.content[ options.section ];
-			}
 
 			bakeFile( src, dest, options.content );
 		} );
