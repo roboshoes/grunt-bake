@@ -82,6 +82,18 @@ module.exports = function(grunt) {
 				}
 			},
 
+			advanced_bake_multi: {
+				options: {
+					content: "test/fixtures/content.json",
+					section: "en"
+				},
+
+				files: {
+					"tmp/advanced_bake_multi_one.html": "test/fixtures/advanced_bake_multi_one.html",
+					"tmp/advanced_bake_multi_two.html": "test/fixtures/advanced_bake_multi_two.html"
+				}
+			},
+
 			object_bake: {
 				options: {
 					content: {
