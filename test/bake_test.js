@@ -10,6 +10,8 @@ exports.bake = {
 		var files = {
 			"tmp/default_bake.html": "test/expected/default_bake.html",
 			"tmp/advanced_bake.html": "test/expected/advanced_bake.html",
+			"tmp/advanced_bake_multi_one.html": "test/expected/advanced_bake_multi_one.html",
+			"tmp/advanced_bake_multi_two.html": "test/expected/advanced_bake_multi_two.html",
 			"tmp/costum_process_bake.html": "test/expected/costum_process_bake.html",
 			"tmp/recursive_bake.html": "test/expected/recursive_bake.html",
 			"tmp/inline_recursive_bake.html": "test/expected/inline_recursive_bake.html",
