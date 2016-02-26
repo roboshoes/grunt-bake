@@ -33,9 +33,7 @@ module.exports = function(grunt) {
 			}
 		},
 
-		clean: {
-			tests: [ "tmp" ],
-		},
+		clean: [ "tmp" ],
 
 		nodeunit: {
 			tests: [ "test/*_test.js" ],
