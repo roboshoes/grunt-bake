@@ -441,7 +441,7 @@ module.exports = function( grunt ) {
 			var extraBake = validateBake( inlineValues );
 
 			if ( section !== null ) {
-				values = values[ section ];
+				values = mout.object.get( values, section );
 			}
 
 			// resolve placeholders within inline values so these can be used in subsequent grunt-tags (see #67)

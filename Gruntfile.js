@@ -247,6 +247,12 @@ module.exports = function(grunt) {
 						},
 						about: {
 							title: "About"
+						},
+						books: {
+							theDarkTower: {
+								author: "Stephen King",
+								title: "The Dark Tower"
+							}
 						}
 					}
 				},

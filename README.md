@@ -670,6 +670,7 @@ watch: {
 
 ## Changelog
 
+* `1.6.3`    __2-26-2016__    Allow inline section attribute to have multiple leves.
 * `1.6.2`    __2-26-2016__    Update dependecies.
 * `1.6.1`    __2-11-2016__    fixes error for options.section on multiple files.
 * `1.6.0`    __2-10-2016__    adds support for parameters in transforms. Also introduces a breaking change away from transformGutter.
