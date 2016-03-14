@@ -522,6 +522,12 @@ module.exports = function(grunt) {
 				files: {
 					"tmp/extra_bake_multiple.html": "test/fixtures/extra_bake_multiple.html"
 				}
+			},
+
+			escape_bake : {
+				files: {
+					"tmp/escape_bake.html": "test/fixtures/escape_bake.html"
+				}
 			}
 		}
 	} );
