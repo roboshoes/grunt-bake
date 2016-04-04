@@ -396,6 +396,20 @@ module.exports = function( grunt ) {
 			return null;
 		}
 
+		// Handle _assign attributes in inline arguments
+
+		function validateAssign( inlineValues ) {
+			if ( "_assign" in inlineValues ) {
+
+				var value = inlineValues[ "_assign" ];
+				delete inlineValues[ "_assign" ];
+
+				return value;
+			}
+
+			return null;
+		}
+
 		function preparePath( includePath, filePath, values ) {
 
 			// replace placeholders within the include path
@@ -435,13 +449,15 @@ module.exports = function( grunt ) {
 			return replaceString( includeContent, linebreak, indent, includePath, attributes, filePath, destFile, values );
 		}
 
-		function replaceString( includeContent, linebreak, indent, includePath, attributes, filePath, destFile, values ) {
+		function replaceString( includeContent, linebreak, indent, includePath, attributes, filePath, destFile, parentValues ) {
+			var values = parentValues;
 			var inlineValues = parseInlineValues( attributes );
 			var section = validateSection( inlineValues, values );
 			var extraBake = validateBake( inlineValues );
+			var assign = validateAssign( inlineValues );
 
 			if ( section !== null ) {
-				values = mout.object.get( values, section );
+				values = mout.object.get( parentValues, section );
 			}
 
 			// resolve placeholders within inline values so these can be used in subsequent grunt-tags (see #67)
@@ -451,13 +467,14 @@ module.exports = function( grunt ) {
 
 			if ( validateIf( inlineValues, values ) ) return "";
 			if ( validateRender( inlineValues ) ) return "";
-
 			var forEachValues = [];
 			var forEachName = validateForEach( inlineValues, values, forEachValues );
 
 			values = mout.object.merge( values, inlineValues );
 
 			includeContent = applyIndent( indent, includeContent);
+
+			var content = ""; // result of current bake-section
 
 			if( forEachName && forEachValues.length > 0 ) {
 
@@ -483,18 +500,26 @@ module.exports = function( grunt ) {
 				if ( oldValue === undefined ) values[ forEachName ] = oldValue;
 				else delete values[ forEachName ];
 
-				return fragment;
+				content = fragment;
 
 			} else if( !forEachName ) {
 
 				processExtraBake( extraBake, filePath, destFile, values );
 
-				return linebreak + parse( includeContent, includePath, destFile, values );
+				content = linebreak + parse( includeContent, includePath, destFile, values );
 
 			} else {
 
+				content = "";
+			}
+
+			if( assign !== null ) {
+				parentValues[ assign ] = mout.string.ltrim( content );
+
 				return "";
 			}
+
+			return content;
 		}
 
 		// =====================

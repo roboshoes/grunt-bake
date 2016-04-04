@@ -559,6 +559,38 @@ _dist/index.html_:
 </html>
 ```
 
+#### Inline _assign statement
+
+The `_assign` statement determines to save included content into a variable instead of placing it directly. The variables name is defined by `_assign`-value.
+
+_app/base.html_:
+```html
+<html>
+    <body>
+        <!--(bake includes/file.html _assign="foo")-->
+        {{foo}}
+        <p>{{foo}}</p>
+    </body>
+</html>
+```
+
+_app/includes/file.html_:
+```html
+<span>Hello World</span>
+```
+
+This will create:
+
+_dist/index.html_:
+```html
+<html>
+    <body>
+        <span>Hello World</span>
+        <p><span>Hello World</span></p>
+    </body>
+</html>
+```
+
 #### Bake extra pages (e.g. detail pages)
 
 Another special inline attribute is the `_bake` attribute. This keyword expects a specific syntax which allows to dynamically create additional files. It accepts the syntax: `_bake="template.html > target.html"`.
