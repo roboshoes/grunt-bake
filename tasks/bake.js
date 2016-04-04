@@ -71,8 +71,8 @@ module.exports = function( grunt ) {
 			return template.replace( options.parsePattern, function( match, inner ) {
 				var processed = processPlaceholder( inner, content );
 
-				if( processed === undefined && !options.removeUndefined ) {
-					return match;
+				if( processed === undefined ) {
+					processed = ( ! options.removeUndefined ? match : "" );
 				}
 
 				return processed;
