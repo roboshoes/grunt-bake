@@ -410,6 +410,20 @@ module.exports = function( grunt ) {
 			return null;
 		}
 
+		// Handle _process attributes in inline arguments
+
+		function validateProcess( inlineValues ) {
+			if ( "_process" in inlineValues ) {
+
+				var value = inlineValues[ "_process" ];
+				delete inlineValues[ "_process" ];
+
+				return String(value).toLowerCase() === 'true' ;
+			}
+
+			return true;
+		}
+
 		function preparePath( includePath, filePath, values ) {
 
 			// replace placeholders within the include path
@@ -455,6 +469,7 @@ module.exports = function( grunt ) {
 			var section = validateSection( inlineValues, values );
 			var extraBake = validateBake( inlineValues );
 			var assign = validateAssign( inlineValues );
+			var doProcess = validateProcess( inlineValues );
 
 			if ( section !== null ) {
 				values = mout.object.get( parentValues, section );
@@ -476,7 +491,10 @@ module.exports = function( grunt ) {
 
 			var content = ""; // result of current bake-section
 
-			if( forEachName && forEachValues.length > 0 ) {
+			if( !doProcess ) {
+				content = linebreak + includeContent;
+
+			} else if( forEachName && forEachValues.length > 0 ) {
 
 				var fragment = "";
 				var oldValue = values[ forEachName ];
@@ -516,7 +534,7 @@ module.exports = function( grunt ) {
 			if( assign !== null ) {
 				parentValues[ assign ] = mout.string.ltrim( content );
 
-				return "";
+				content = "";
 			}
 
 			return content;

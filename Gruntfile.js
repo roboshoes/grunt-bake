@@ -528,6 +528,12 @@ module.exports = function(grunt) {
 				files: {
 					"tmp/assign_bake.html": "test/fixtures/assign_bake.html"
 				}
+			},
+
+			inline_no_process: {
+				files: {
+					"tmp/inline_no_process.html": "test/fixtures/inline_no_process.html"
+				}
 			}
 		}
 	} );
