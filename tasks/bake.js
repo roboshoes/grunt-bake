@@ -561,9 +561,10 @@ module.exports = function( grunt ) {
 			if( section ) {
 				fileContent = section.before;
 
-				if(section.inner) {
+				if( section.inner ) {
 					fileContent += replaceString( section.inner, "", "", filePath, section.attributes, filePath, destFile, values );
-				} else {
+
+				} else if( section.includePath ) {
 					fileContent += replaceFile( section.linebreak, section.indent, section.includePath, section.attributes, filePath, destFile, values );
 				}
 
