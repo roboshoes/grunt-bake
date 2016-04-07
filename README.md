@@ -734,6 +734,7 @@ watch: {
 
 ## Changelog
 
+* `1.7.0`    __4-7-2016__     Adds _process and _assign attributes.
 * `1.6.4`    __4-4-2016__     Bug fixes.
 * `1.6.3`    __2-26-2016__    Allow inline section attribute to have multiple leves.
 * `1.6.2`    __2-26-2016__    Update dependecies.
