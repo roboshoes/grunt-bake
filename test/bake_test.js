@@ -45,7 +45,9 @@ exports.bake = {
 			"tmp/extra_bake_multiple.html": "test/expected/extra_bake_multiple.html",
 			"tmp/extra-page.html": "test/expected/extra/extra-page.html",
 			"tmp/extra-0-a-team.html": "test/expected/extra/extra-0-a-team.html",
-			"tmp/extra-1-b-team.html": "test/expected/extra/extra-1-b-team.html"
+			"tmp/extra-1-b-team.html": "test/expected/extra/extra-1-b-team.html",
+			"tmp/assign_bake.html": "test/expected/assign_bake.html",
+			"tmp/inline_no_process.html": "test/expected/inline_no_process.html"
 		};
 
 		test.expect( mout.object.size( files ) );
