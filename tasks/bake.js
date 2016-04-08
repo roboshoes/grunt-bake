@@ -512,7 +512,7 @@ module.exports = function( grunt ) {
 
 					processExtraBake( extraBake, filePath, destFile, values );
 
-					fragment += linebreak + parse( includeContent, includePath, destFile, values );
+					fragment += linebreak + processContent( parse( includeContent, includePath, destFile, values ), values );
 				} );
 
 				if ( oldValue === undefined ) values[ forEachName ] = oldValue;
@@ -524,7 +524,7 @@ module.exports = function( grunt ) {
 
 				processExtraBake( extraBake, filePath, destFile, values );
 
-				content = linebreak + parse( includeContent, includePath, destFile, values );
+				content = linebreak + processContent( parse( includeContent, includePath, destFile, values ), values );
 
 			} else {
 
@@ -602,7 +602,7 @@ module.exports = function( grunt ) {
 			var section = extractSection( fileContent );
 
 			if( section ) {
-				fileContent = section.before;
+				fileContent = processContent( section.before, values );
 
 				if( section.inner ) {
 					fileContent += replaceString( section.inner, "", "", filePath, section.attributes, filePath, destFile, values );
@@ -612,9 +612,12 @@ module.exports = function( grunt ) {
 				}
 
 				fileContent += parse( section.after, filePath, destFile, values );
+
+			} else {
+				return processContent( fileContent, values );
 			}
 
-			return processContent( fileContent, values );
+			return fileContent;
 		}
 
 		// Run process function if processor-function is defined
