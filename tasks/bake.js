@@ -524,7 +524,7 @@ module.exports = function( grunt ) {
 
 				processExtraBake( extraBake, filePath, destFile, values );
 
-				content = linebreak + processContent( parse( includeContent, includePath, destFile, values ), values );
+				content = linebreak + parse( processContent( includeContent, values ), includePath, destFile, values );
 
 			} else {
 
