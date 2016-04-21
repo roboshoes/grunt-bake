@@ -734,6 +734,7 @@ watch: {
 
 ## Changelog
 
+* `1.7.2`    __4-20-2016__    Resolves recursion issues in _process and _assign.
 * `1.7.1`    __4-8-2016__     Fix for issue with _process.
 * `1.7.0`    __4-7-2016__     Adds _process and _assign attributes.
 * `1.6.4`    __4-4-2016__     Bug fixes.
