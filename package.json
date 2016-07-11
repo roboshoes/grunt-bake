@@ -42,6 +42,7 @@
 		"mout": "~0.11.1"
 	},
 	"devDependencies": {
+		"eol": "^0.2.0",
 		"grunt-contrib-jshint": "~1.0.0",
 		"grunt-contrib-clean": "~1.0.0",
 		"grunt-contrib-nodeunit": "^0.4.1",
