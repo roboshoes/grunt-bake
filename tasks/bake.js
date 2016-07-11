@@ -9,6 +9,7 @@
 "use strict";
 
 var mout = require( "mout" );
+var eol  = require("eol");
 
 module.exports = function( grunt ) {
 
@@ -251,14 +252,19 @@ module.exports = function( grunt ) {
 			if ( ! indent || indent.length < 1 ) {
 				return content;
 			}
-
-			return content
-				.split( "\n" )
-				.map( function( line ) {
-					// do not indent empty lines
-					return line.trim() !== "" ? ( indent + line ) : "";
-				} )
-				.join( "\n" );
+            
+            return eol.crlf(
+                content
+                    .split("\n")
+                    .map(
+                        function (line)
+                        {
+                            // do not indent empty lines
+                            return line.trim() !== "" ? ( indent + line ) : "";
+                        }
+                    )
+                    .join("\n")
+            );
 		}
 
 
