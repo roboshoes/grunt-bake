@@ -71,12 +71,12 @@ module.exports = function( grunt ) {
 			return template.replace( options.parsePattern, function( match, inner ) {
 				var processed = processPlaceholder( inner, content );
 
-				if( processed === undefined ) {
+				if ( processed === undefined ) {
 					processed = ( ! options.removeUndefined ? match : "" );
 				}
 
 				return processed;
-			});
+			} );
 		}
 
 		if ( ! options.hasOwnProperty( "process" ) ) {
@@ -189,9 +189,7 @@ module.exports = function( grunt ) {
 		// Returns the filename from a file path
 
 		function filename( path ) {
-			var segments = path.split( "/" );
-
-			return segments.pop();
+			return path.split( "/" ).pop();
 		}
 
 		// Parses attribute string.
@@ -480,6 +478,10 @@ module.exports = function( grunt ) {
 				return processContent( value, values );
 			});
 
+			// inject system variables
+			inlineValues.__filename = filePath;
+			inlineValues.__timestamp = Date.now();
+
 			if ( validateIf( inlineValues, values ) ) return "";
 			if ( validateRender( inlineValues ) ) return "";
 			var forEachValues = [];
@@ -494,7 +496,7 @@ module.exports = function( grunt ) {
 			if( !doProcess ) {
 				content = linebreak + includeContent;
 
-			} else if( forEachName && forEachValues.length > 0 ) {
+			} else if ( forEachName && forEachValues.length > 0 ) {
 
 				var fragment = "";
 				var oldValue = values[ forEachName ];

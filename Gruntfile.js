@@ -534,6 +534,12 @@ module.exports = function(grunt) {
 				files: {
 					"tmp/inline_no_process.html": "test/fixtures/inline_no_process.html"
 				}
+			},
+
+			default_variables: {
+				files: {
+					"tmp/default_variables.html": "test/fixtures/default_variables.html"
+				}
 			}
 		}
 	} );
@@ -546,7 +552,23 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks( "grunt-contrib-watch" );
 	grunt.loadNpmTasks( "grunt-jsonlint" );
 
-	grunt.registerTask( "test", [ "clean", "bake", "nodeunit" ] );
+	grunt.registerTask( "test", [ "clean", "setup", "bake", "nodeunit", "teardown" ] );
 	grunt.registerTask( "default", [ "jsonlint", "jshint", "test" ] );
 
+
+	// Stubbing methods for testing purposes. Because we are good little developers
+	// we clean up after ourselves.
+	var realDateNow;
+
+	grunt.registerTask( "setup", function() {
+		realDateNow = Date.now;
+
+		Date.now = function() {
+			return 123456789;
+		};
+	} );
+
+	grunt.registerTask( "teardown", function() {
+		Date.now = realDateNow;
+	} );
 };
