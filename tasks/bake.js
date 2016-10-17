@@ -312,6 +312,7 @@ module.exports = function( grunt ) {
 
 				try {
 					/* jshint evil:true */
+					/* eslint-disable no-eval */
 
 					return ! eval( condition );
 
@@ -476,11 +477,7 @@ module.exports = function( grunt ) {
 			// resolve placeholders within inline values so these can be used in subsequent grunt-tags (see #67)
 			inlineValues = mout.object.map( inlineValues, function( value ) {
 				return processContent( value, values );
-			});
-
-			// inject system variables
-			inlineValues.__filename = filePath;
-			inlineValues.__timestamp = Date.now();
+			} );
 
 			if ( validateIf( inlineValues, values ) ) return "";
 			if ( validateRender( inlineValues ) ) return "";
@@ -501,6 +498,7 @@ module.exports = function( grunt ) {
 				var fragment = "";
 				var oldValue = values[ forEachName ];
 				var total = forEachValues.length;
+
 
 				forEachValues.forEach( function( value, index ) {
 					values[ forEachName ] = value;
@@ -579,8 +577,8 @@ module.exports = function( grunt ) {
 
 				remain = remain.slice( result.index + length );
 
-				depth += (result[ 3 ] === "-start");
-				depth -= (result[ 3 ] === "-end");
+				depth += ( result[ 3 ] === "-start" );
+				depth -= ( result[ 3 ] === "-end" );
 
 				if( depth === 0 ) {
 					return mout.object.merge( section, {
@@ -650,7 +648,16 @@ module.exports = function( grunt ) {
 
 			if ( ! checkFile( src ) ) return;
 
-			bakeFile( src, dest, options.content );
+			var content = mout.object.merge( options.content, {
+				__bake: {
+					filename: src,
+					srcFilename: src,
+					destFilename: dest,
+					timestamp: Date.now()
+				}
+			} );
+
+			bakeFile( src, dest, content );
 		} );
 	} );
 };
