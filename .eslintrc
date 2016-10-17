@@ -1,0 +1,29 @@
+{
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module"
+    },
+    "env": {
+        "browser": true,
+        "node": true,
+        "es6": true
+    },
+    "extends": "eslint:recommended",
+    "rules": {
+        "semi": 2,
+        "camelcase": 2,
+        "no-extra-semi": 2,
+        "valid-typeof": 2,
+        "no-unreachable": 2,
+        "no-dupe-keys": 2,
+        "array-callback-return": 2,
+        "no-caller": 2,
+        "eqeqeq": 2,
+        "block-scoped-var": 2,
+        "no-eval": 2,
+        "no-extra-bind": 2,
+        "prefer-spread": 2,
+        "no-console": 0,
+        "no-constant-condition": 0
+    }
+}
