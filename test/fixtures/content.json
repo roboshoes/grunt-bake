@@ -11,6 +11,10 @@
 			"baz",
 			"superman"
 		],
+		"object": {
+			"name": "John Dough",
+			"place": "Some place"
+		},
 		"empty": []
 	},
 

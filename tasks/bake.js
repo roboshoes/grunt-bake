@@ -165,6 +165,10 @@ module.exports = function( grunt ) {
 
 		var ifRegex = /([a-z_$][0-9a-z_$@\.]*)|(?:"([^"]*)")|(?:'([^']*)')/gi;
 
+		// Regex to evaluate foreach object loops
+
+		var forEachRegex = /([\w]+)\s+as\s+([\w]+)\s*=>\s*([\w]+)/g;
+
 		// Method to check wether file exists and warn if not.
 
 		function checkFile( src ) {
@@ -222,7 +226,6 @@ module.exports = function( grunt ) {
 					attributes: match[ 2 ],
 					signature: signature
 				};
-
 			} else {
 				result = {
 					includePath: "",
@@ -314,6 +317,7 @@ module.exports = function( grunt ) {
 
 				try {
 					/* jshint evil:true */
+					/* eslint-disable no-eval */
 
 					return ! eval( condition );
 
@@ -363,11 +367,25 @@ module.exports = function( grunt ) {
 
 			if ( "_foreach" in inlineValues ) {
 
+				// test for object syntax `object as key => value`
+				var match;
+
+				if ( match = forEachRegex.exec( inlineValues[ "_foreach" ] ) ) {
+
+					var object = {
+						keyName: match[ 2 ],
+						valueName: match[ 3 ],
+						values: values[ match[ 1 ] ]
+					};
+
+					return object;
+				}
+
 				var set = inlineValues[ "_foreach" ].split( ":" );
 				delete inlineValues[ "_foreach" ];
 
 				// as transforms may contain colons, join rest of list to recreate original string
-				getArrayValues( set.slice(1).join( ":" ), values ).forEach( function( value ) {
+				getArrayValues( set.slice( 1 ).join( ":" ), values ).forEach( function( value ) {
 					array.push( value );
 				} );
 
@@ -478,27 +496,48 @@ module.exports = function( grunt ) {
 			// resolve placeholders within inline values so these can be used in subsequent grunt-tags (see #67)
 			inlineValues = mout.object.map( inlineValues, function( value ) {
 				return processContent( value, values );
-			});
+			} );
 
 			if ( validateIf( inlineValues, values ) ) return "";
 			if ( validateRender( inlineValues ) ) return "";
+
 			var forEachValues = [];
 			var forEachName = validateForEach( inlineValues, values, forEachValues );
 
 			values = mout.object.merge( values, inlineValues );
 
-			includeContent = applyIndent( indent, includeContent);
+			includeContent = applyIndent( indent, includeContent );
 
 			var content = ""; // result of current bake-section
+			var fragment = ""; // repeated bake section for loops
+			var total;
+			var oldValue;
 
-			if( !doProcess ) {
+			if ( ! doProcess ) {
 				content = linebreak + includeContent;
 
-			} else if( forEachName && forEachValues.length > 0 ) {
+			} else if ( mout.lang.isObject( forEachName ) ) {
 
-				var fragment = "";
-				var oldValue = values[ forEachName ];
-				var total = forEachValues.length;
+				total = Object.keys( forEachName.values ).length;
+
+				for ( var key in forEachName.values ) {
+					values[ forEachName.keyName ] = key;
+					values[ forEachName.valueName ] = forEachName.values[ key ];
+
+					processExtraBake( extraBake, filePath, destFile, values );
+
+					fragment += linebreak + processContent( parse( includeContent, includePath, destFile, values ), values );
+
+					delete values[ forEachName.keyName ];
+					delete values[ forEachName.valueName ];
+				}
+
+				content = fragment;
+
+			} else if ( forEachName && forEachValues.length > 0 ) {
+
+				oldValue = values[ forEachName ];
+				total = forEachValues.length;
 
 				forEachValues.forEach( function( value, index ) {
 					values[ forEachName ] = value;
@@ -520,7 +559,7 @@ module.exports = function( grunt ) {
 
 				content = fragment;
 
-			} else if( !forEachName ) {
+			} else if ( ! forEachName ) {
 
 				processExtraBake( extraBake, filePath, destFile, values );
 
@@ -531,7 +570,7 @@ module.exports = function( grunt ) {
 				content = "";
 			}
 
-			if( assign !== null ) {
+			if ( assign !== null ) {
 				parentValues[ assign ] = mout.string.ltrim( content );
 
 				content = "";
