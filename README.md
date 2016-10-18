@@ -79,7 +79,7 @@ Default value: `null`
 
 A string value that determines the location of the JSON file that is used to fill the place holders. If a `Object` is specified it will be used as content. If a `Function` is specified its return (should be JSON) will be used as content.
 
-Additionally to the content provided, __bake__ comes with a set of default values that are attached to a `__bake` object which gets injected to the user content.
+Additionally to the content provided, __bake__ comes with a set of default values that are attached to a `__bake` object which gets injected to the user content. Even if no content is provided.
 
 ```js
 __bake.filename // the file path tbeing baked
@@ -756,6 +756,7 @@ watch: {
 
 ## Changelog
 
+* `1.8.0`    __4-20-2016__    Adds permanent variables under `__bake`.
 * `1.7.2`    __4-20-2016__    Resolves recursion issues in _process and _assign.
 * `1.7.1`    __4-8-2016__     Fix for issue with _process.
 * `1.7.0`    __4-7-2016__     Adds _process and _assign attributes.
