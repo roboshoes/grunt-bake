@@ -79,6 +79,28 @@ Default value: `null`
 
 A string value that determines the location of the JSON file that is used to fill the place holders. If a `Object` is specified it will be used as content. If a `Function` is specified its return (should be JSON) will be used as content.
 
+Additionally to the content provided, __bake__ comes with a set of default values that are attached to a `__bake` object which gets injected to the user content.
+
+```js
+__bake.filename // the file path tbeing baked
+__bake.srcFilename // same as __bake.filename
+__bake.destFilename // the file path it is being written to
+__bake.timestamp // a timestamp (milliseconds) at baking
+```
+
+These can be especially usefull in combnation with [transforms](#optionstransforms).
+
+```html
+<html>
+    <head></head>
+    <body>
+        <!--(bake-start)-->
+        {{__bake.destFilename}} was written at {{__base.timestamp | parseDate }}
+        <!--(bake-end)-->
+    </body>
+</html>
+```
+
 #### options.section
 Type: `String`
 Default value: `""`

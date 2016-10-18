@@ -12,6 +12,5 @@
 	"node": true,
 	"quotmark": "double",
 	"unused": true,
-	"noarg": true,
 	"trailing": true
 }
