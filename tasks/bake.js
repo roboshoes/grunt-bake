@@ -71,12 +71,12 @@ module.exports = function( grunt ) {
 			return template.replace( options.parsePattern, function( match, inner ) {
 				var processed = processPlaceholder( inner, content );
 
-				if( processed === undefined ) {
+				if ( processed === undefined ) {
 					processed = ( ! options.removeUndefined ? match : "" );
 				}
 
 				return processed;
-			});
+			} );
 		}
 
 		if ( ! options.hasOwnProperty( "process" ) ) {
@@ -193,9 +193,7 @@ module.exports = function( grunt ) {
 		// Returns the filename from a file path
 
 		function filename( path ) {
-			var segments = path.split( "/" );
-
-			return segments.pop();
+			return path.split( "/" ).pop();
 		}
 
 		// Parses attribute string.
@@ -539,6 +537,7 @@ module.exports = function( grunt ) {
 				oldValue = values[ forEachName ];
 				total = forEachValues.length;
 
+
 				forEachValues.forEach( function( value, index ) {
 					values[ forEachName ] = value;
 
@@ -616,8 +615,8 @@ module.exports = function( grunt ) {
 
 				remain = remain.slice( result.index + length );
 
-				depth += (result[ 3 ] === "-start");
-				depth -= (result[ 3 ] === "-end");
+				depth += ( result[ 3 ] === "-start" );
+				depth -= ( result[ 3 ] === "-end" );
 
 				if( depth === 0 ) {
 					return mout.object.merge( section, {
@@ -687,7 +686,16 @@ module.exports = function( grunt ) {
 
 			if ( ! checkFile( src ) ) return;
 
-			bakeFile( src, dest, options.content );
+			var content = mout.object.merge( options.content, {
+				__bake: {
+					filename: src,
+					srcFilename: src,
+					destFilename: dest,
+					timestamp: Date.now()
+				}
+			} );
+
+			bakeFile( src, dest, content );
 		} );
 	} );
 };
