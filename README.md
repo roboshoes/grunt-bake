@@ -71,6 +71,29 @@ With a `app/index.html` file like this one:
 
 The paths given are relative to the file being parsed.
 
+####Bower injections
+To support Bower injections via
+```shell
+$ bower install --save stuff
+```
+You need to change the **index.html** to **base.html**. 
+
+```javascript
+    // Automatically inject Bower components into the HTML file
+    wiredep: {
+      app: {
+        ignorePath: /^\/|\.\.\//,
+        src: ['<%= config.app %>/base.html'],
+        exclude: ['bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js']
+      },
+      sass: {
+        src: ['<%= config.app %>/styles/{,*/}*.{scss,sass}'],
+        ignorePath: /(\.\.\/){1,2}bower_components\//
+      }
+    },
+```
+
+
 ### Options
 
 #### options.content
