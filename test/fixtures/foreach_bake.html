@@ -9,5 +9,11 @@
 		<ul>
 			<!--(bake includes/li.html _foreach="value:items")-->
 		</ul>
+
+		<ul>
+			<!--(bake-start  _foreach="object as key => value")-->
+			<li>{{ key }} - {{ value }}</li>
+			<!--(bake-end)-->
+		</ul>
 	</body>
 </html>

@@ -33,13 +33,13 @@
 	],
 	"main": "Gruntfile.js",
 	"engines": {
-		"node": ">= 0.10.0"
+		"node": ">= 0.11.0"
 	},
 	"scripts": {
 		"test": "grunt test"
 	},
 	"dependencies": {
-		"mout": "~0.11.1"
+		"mout": "~1.0.0"
 	},
 	"devDependencies": {
 		"grunt-contrib-jshint": "~1.0.0",
