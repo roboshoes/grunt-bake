@@ -253,6 +253,12 @@ module.exports = function(grunt) {
 								author: "Stephen King",
 								title: "The Dark Tower"
 							}
+						},
+						shared: {
+							title: "Title",
+							info: {
+								author: "Test Author"
+							}
 						}
 					}
 				},
