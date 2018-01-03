@@ -213,6 +213,17 @@ Default value: `true`
 Set to `false`, placeholders that could not be resolved (= no matching key in `content`) will be kept untouched in the output.
 
 
+#### options.variableParsePattern
+Type: `Regex`
+Default value: `/\{\{!\s*([^\}]+)\s*\}\}/`
+
+This regex is used to parse the variable specified inline with the bake task. Any inline attribute that
+is not preficed with an unerscore such as `_if` and `_section` is considered a variable and is passed to
+the bake include. For more detail check out the section on [Inline Attributes](#inline-attributes).
+However, if you want to pass not a value but a reference to an different object you can do so by writing
+the inline value as `variable="{{!foo.bar}}"`. Mind the exclamation mark. Assuming `bar` is an object
+as well, this will give you a reference to bar instead of the string.
+
 ### Usage Examples
 
 #### Simple bake
@@ -756,6 +767,7 @@ watch: {
 
 ## Changelog
 
+* `1.9.0`    __1-2-2018__     Adds variableParsePattern for inline variables.
 * `1.8.0`    __4-20-2016__    Adds permanent variables under `__bake`.
 * `1.7.2`    __4-20-2016__    Resolves recursion issues in _process and _assign.
 * `1.7.1`    __4-8-2016__     Fix for issue with _process.
