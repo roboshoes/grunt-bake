@@ -27,6 +27,7 @@ module.exports = function( grunt ) {
 			basePath: "",
 			transforms: {},
 			parsePattern: /\{\{\s*([^\}]+)\s*\}\}/g,
+			variableParsePattern: /\{\{!\s*([^\}]+)\s*\}\}/,
 			removeUndefined: true
 		} );
 
@@ -451,7 +452,7 @@ module.exports = function( grunt ) {
 		}
 
 		function processExtraBake( bake, filePath, destFile, values ) {
-			if( bake === null ) return;
+			if ( bake === null ) return;
 
 			var src = preparePath( bake.src, filePath, values );
 			var dest = preparePath( bake.dest, destFile, values );
@@ -487,13 +488,18 @@ module.exports = function( grunt ) {
 			var assign = validateAssign( inlineValues );
 			var doProcess = validateProcess( inlineValues );
 
+
 			if ( section !== null ) {
 				values = mout.object.get( parentValues, section );
 			}
 
 			// resolve placeholders within inline values so these can be used in subsequent grunt-tags (see #67)
 			inlineValues = mout.object.map( inlineValues, function( value ) {
-				return processContent( value, values );
+				if ( options.variableParsePattern.test( value ) ) {
+					return mout.object.get( parentValues, options.variableParsePattern.exec( value )[ 1 ] );
+				} else {
+					return processContent( value, parentValues );
+				}
 			} );
 
 			if ( validateIf( inlineValues, values ) ) return "";

@@ -9,5 +9,11 @@
 		<!--(bake-start _section="home")-->
 		<span>{{title}}</span>
 		<!--(bake-end)-->
+
+		<!--(bake-start _section="home" meta="{{!shared}}"")-->
+		<span>{{title}}</span>
+		<span>{{meta.title}}</span>
+		<span>{{meta.info.author}}</span>
+		<!--(bake-end)-->
 	</body>
 </html>
