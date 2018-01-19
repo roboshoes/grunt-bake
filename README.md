@@ -218,7 +218,7 @@ Type: `Regex`
 Default value: `/\{\{!\s*([^\}]+)\s*\}\}/`
 
 This regex is used to parse the variable specified inline with the bake task. Any inline attribute that
-is not preficed with an unerscore such as `_if` and `_section` is considered a variable and is passed to
+is not preficed with an underscore such as `_if` and `_section` is considered a variable and is passed to
 the bake include. For more detail check out the section on [Inline Attributes](#inline-attributes).
 However, if you want to pass not a value but a reference to an different object you can do so by writing
 the inline value as `variable="{{!foo.bar}}"`. Mind the exclamation mark. Assuming `bar` is an object
