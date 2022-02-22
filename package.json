@@ -39,7 +39,7 @@
 		"test": "grunt test"
 	},
 	"dependencies": {
-		"mout": "~1.0.0"
+		"mout": "~1.2.3"
 	},
 	"devDependencies": {
 		"grunt-contrib-jshint": "~1.0.0",
